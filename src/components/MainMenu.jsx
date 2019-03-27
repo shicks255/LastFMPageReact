@@ -28,28 +28,22 @@ export default class MainMenu extends React.Component
     {
         let stateStrategies = this.state.strategies;
         let strategies = Object.keys(stateStrategies).map((value, index) => {
-            if (stateStrategies[value] === this.state.strategy)
-                return <option key={index} selected={true}>{stateStrategies[value]}</option>
-            else
-                return <option key={index}>{stateStrategies[value]}</option>
+            return <option key={index}>{stateStrategies[value]}</option>
         });
         let stateTimeFrames = this.state.timeFrames;
         let timeFrames = Object.keys(stateTimeFrames).map((value, index) => {
-            if (stateTimeFrames[value] === this.state.timeFrame)
-                return <option key={index} selected={true}>{stateTimeFrames[value]}</option>
-            else
-                return <option key={index}>{stateTimeFrames[value]}</option>
+            return <option key={index}>{stateTimeFrames[value]}</option>
         });
 
         return (
             <div className="box">
                 <label>Select</label>
-                <select onChange={(event) => this.changeStrategy(event)}>
+                <select defaultValue={this.state.strategy} onChange={(event) => this.changeStrategy(event)}>
                     {strategies}
                 </select>
                 <br/>
                 <label>Time Frame:</label>
-                <select onChange={(event) => this.changeTimeFrame(event)}>
+                <select defaultValue={this.state.timeFrame} onChange={(event) => this.changeTimeFrame(event)}>
                     {timeFrames}
                 </select>
             </div>
@@ -61,13 +55,33 @@ export default class MainMenu extends React.Component
         this.setState({
             strategy: optionEvent.target.value
         });
+
+        const strategyKey = Object.entries(this.state.strategies).find((val, index) => {
+            return val[1] === this.state.strategy;
+        });
+
+        const timeFrameKey = Object.entries(this.state.timeFrames).find((val, index) => {
+            return val[1] === this.state.timeFrame;
+        });
+
+        this.props.changeItems(strategyKey, timeFrameKey);
     }
 
     changeTimeFrame(optionEvent)
     {
         this.setState({
             timeFrame: optionEvent.target.value
-        })
+        });
+
+        const strategyKey = Object.entries(this.state.strategies).find((val, index) => {
+            return val[1] === this.state.strategy;
+        });
+
+        const timeFrameKey = Object.entries(this.state.timeFrames).find((val, index) => {
+           return val[1] === this.state.timeFrame;
+        });
+
+        this.props.changeItems(strategyKey, timeFrameKey);
     }
 
 }

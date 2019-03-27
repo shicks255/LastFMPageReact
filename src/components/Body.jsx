@@ -6,13 +6,22 @@ export default class Body extends React.Component
     constructor(props)
     {
         super(props);
+        this.state = {
+            strategy: "",
+            timeFrom: ""
+        }
     };
+
+    changeItems(strategy, timeFrame)
+    {
+        console.log(strategy, timeFrame)
+    }
 
 
     render()
     {
         return(
-            <MainMenu/>
+            <MainMenu changeItems={this.changeItems}/>
         )
     }
 
