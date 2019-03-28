@@ -9,10 +9,11 @@ export default class MainMenu extends React.Component
             strategies: {
                 "getTopArtists": "Top Artists",
                 "getTopAlbums": "Top Albums",
-                "getTopTracks": "Top Songs"
+                "getTopTracks": "Top Songs",
+                "getRecentTracks": "Recent Tracks"
             },
             timeFrames: {
-                "7days": "7 Days",
+                "7day": "7 Days",
                 "1month": "1 Month",
                 "3month": "3 Months",
                 "6month": "6 Months",
