@@ -4,7 +4,6 @@ import ArtistTable from "./ArtistTable";
 import AlbumTable from "./AlbumTable";
 import TrackTable from "./TrackTable";
 
-
 export default class Body extends React.Component
 {
     constructor(props)

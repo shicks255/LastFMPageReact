@@ -12,8 +12,12 @@ export default class AlbumTable extends React.Component {
             return(
                 <tr key={index}>
                     <td>{index+1}</td>
-                    <td><img src={val.image[1]['#text']} /></td>
-                    <td>{val.artist.name}</td>
+                    <td>
+                        <a href={val.url} target={'_blank'}>
+                            <img src={val.image[1]['#text']} />
+                        </a>
+                    </td>
+                    <td><a href={val.url} target={'_blank'}>{val.artist.name}</a></td>
                     <td>{val.name}</td>
                     <td>{val.playcount}</td>
                 </tr>
