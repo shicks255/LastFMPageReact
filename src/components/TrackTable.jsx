@@ -13,12 +13,15 @@ export default class TrackTable extends React.Component {
             let sec = val.duration - (min*60)
             let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
             let time = `${min}:${secString.substr(0,2)}`;
+
+            let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+
             return(
                 <tr key={index}>
                     <td>{index+1}</td>
                     <td>
                         <a href={val.url} target={'_blank'}>
-                            <img src={val.image[1]['#text']} />
+                            <img width={64} height={64} src={url} />
                         </a>
                     </td>
                     <td><a href={val.url} target={'_blank'}>{val.name}</a></td>
