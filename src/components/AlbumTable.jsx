@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class ArtistTable extends React.Component {
+export default class AlbumTable extends React.Component {
 
     constructor(props)
     {
@@ -8,11 +8,12 @@ export default class ArtistTable extends React.Component {
     }
 
     render(){
-        let content = this.props.artists.map((val, index) => {
+        let content = this.props.albums.map((val, index) => {
             return(
                 <tr key={index}>
                     <td>{index+1}</td>
                     <td><img src={val.image[1]['#text']} /></td>
+                    <td>{val.artist.name}</td>
                     <td>{val.name}</td>
                     <td>{val.playcount}</td>
                 </tr>
@@ -25,6 +26,7 @@ export default class ArtistTable extends React.Component {
                 <tr>
                     <td>Rank</td>
                     <td></td>
+                    <td>Artist</td>
                     <td>Name</td>
                     <td>Plays</td>
                 </tr>

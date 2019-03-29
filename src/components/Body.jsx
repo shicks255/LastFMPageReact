@@ -1,6 +1,8 @@
 import React from 'react';
 import MainMenu from "./MainMenu";
 import ArtistTable from "./ArtistTable";
+import AlbumTable from "./AlbumTable";
+import TrackTable from "./TrackTable";
 
 
 export default class Body extends React.Component
@@ -42,6 +44,7 @@ export default class Body extends React.Component
 
     changeItems(newValue, type)
     {
+        console.log(newValue);
         if (type === 'strategy')
         {
             const strategyKey = Object.entries(this.state.strategies).find((val, index) => {
@@ -104,10 +107,18 @@ export default class Body extends React.Component
 
     render()
     {
+        let content = ''
+        if (this.state.strategy === 'getTopArtists')
+            content = <ArtistTable artists={this.state.artists}/>
+        if (this.state.strategy === 'getTopAlbums')
+            content = <AlbumTable albums={this.state.albums}/>
+        if (this.state.strategy === 'getTopTracks')
+            content = <TrackTable tracks={this.state.tracks}/>
+
         return(
             <div>
                 <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
-                <ArtistTable artists={this.state.artists}/>
+                {content}
             </div>
         )
     }
