@@ -14,6 +14,8 @@ export default class Body extends React.Component
             albums: [],
             tracks: []
         }
+
+        this.changeItems = this.changeItems.bind(this);
     };
 
     getFullUrl()
@@ -25,10 +27,15 @@ export default class Body extends React.Component
 
     changeItems(strategy, timeFrame)
     {
-        console.log(strategy, timeFrame)
+        console.log('made it back to body');
+        console.log(this);
+        this.setState({
+            strategy: strategy[0],
+            timeFrame: timeFrame[0]
+        });
     }
 
-    componentDidMount()
+    callApi()
     {
         let url = this.getFullUrl()
         fetch(url)
@@ -40,6 +47,11 @@ export default class Body extends React.Component
                 },
                 err => {console.log(err)}
             )
+    }
+
+    componentDidMount()
+    {
+        this.callApi();
     }
 
     render()
