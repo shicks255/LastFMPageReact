@@ -51,7 +51,7 @@ export default class Body extends React.Component
             });
             this.setState({
                 strategy: strategyKey[0]
-            });
+            }, this.callApi);
         }
         if (type === 'timeFrame')
         {
@@ -60,43 +60,40 @@ export default class Body extends React.Component
             })
             this.setState({
                 timeFrame: timeFrameKey[0]
-            });
+            }, this.callApi);
         }
-        this.callApi();
     }
 
     callApi()
     {
-        setTimeout(() =>{
-            let url = this.getFullUrl()
-            fetch(url)
-                .then(res => res.json())
-                .then(
-                    res => {
-                        if (this.state.strategy === 'getTopArtists')
-                        {
-                            let topartists = res.topartists.artist;
-                            this.setState({artists: topartists})
-                        }
-                        if (this.state.strategy === 'getTopAlbums')
-                        {
-                            let topAlbums = res.topalbums.album;
-                            this.setState({albums: topAlbums});
-                        }
-                        if (this.state.strategy === 'getTopTracks')
-                        {
-                            let topTracks = res.toptracks.track;
-                            this.setState({tracks: topTracks});
-                        }
-                        if (this.state.strategy === 'getRecentTracks')
-                        {
-                            let recentTracks = res.recenttracks.track;
-                            this.setState({tracks: recentTracks});
-                        }
-                    },
-                    err => {console.log(err)}
-                )
-        }, 1);
+        let url = this.getFullUrl()
+        fetch(url)
+            .then(res => res.json())
+            .then(
+                res => {
+                    if (this.state.strategy === 'getTopArtists')
+                    {
+                        let topArtists = res.topartists.artist;
+                        this.setState({artists: topArtists})
+                    }
+                    if (this.state.strategy === 'getTopAlbums')
+                    {
+                        let topAlbums = res.topalbums.album;
+                        this.setState({albums: topAlbums});
+                    }
+                    if (this.state.strategy === 'getTopTracks')
+                    {
+                        let topTracks = res.toptracks.track;
+                        this.setState({tracks: topTracks});
+                    }
+                    if (this.state.strategy === 'getRecentTracks')
+                    {
+                        let recentTracks = res.recenttracks.track;
+                        this.setState({tracks: recentTracks});
+                    }
+                },
+                err => {console.log(err)}
+            );
     }
 
     componentDidMount()
