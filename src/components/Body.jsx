@@ -15,8 +15,7 @@ export default class Body extends React.Component
             strategies: {
                 "getTopArtists": "Top Artists",
                 "getTopAlbums": "Top Albums",
-                "getTopTracks": "Top Songs",
-                "getRecentTracks": "Recent Tracks"
+                "getTopTracks": "Top Songs"
             },
             timeFrames: {
                 "7day": "7 Days",
@@ -28,7 +27,8 @@ export default class Body extends React.Component
             },
             artists: [],
             albums: [],
-            tracks: []
+            tracks: [],
+            recentTracks: []
         }
 
         this.changeItems = this.changeItems.bind(this);
@@ -64,6 +64,22 @@ export default class Body extends React.Component
         }
     }
 
+    getRecentTracks()
+    {
+        let key = 'c349ab1fcb6b132ffb8d842e982458db';
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=shicks255&api_key=${key}&format=json`;
+        fetch(url)
+            .then(res => res.json())
+            .then(
+                res => {
+                    console.log(res);
+                    let recentTracks = res.recenttracks.track
+                    this.setState({recentTracks: recentTracks});
+                },
+                err => {console.log(err);}
+            )
+    }
+
     callApi()
     {
         let url = this.getFullUrl()
@@ -92,13 +108,31 @@ export default class Body extends React.Component
                         this.setState({tracks: recentTracks});
                     }
                 },
-                err => {console.log(err)}
+                err => {console.log(err);}
             );
     }
 
     componentDidMount()
     {
+        let promise1 = new Promise((resolve, reject) => {
+            console.log('calling api');
+            setTimeout(function(){}.bind(this), 10000);
+            this.callApi();
+            resolve(() => {});
+            console.log('done calling api')
+        });
+        let promise2 = new Promise((resolve, reject) => {
+            console.log('getting recent tracks');
+            this.getRecentTracks();
+            resolve(() => {});
+            console.log('done getting recent tracks');
+        });
+    }
+
+    componentDidMount1()
+    {
         this.callApi();
+        this.getRecentTracks();
     }
 
     render()
