@@ -3,6 +3,7 @@ import MainMenu from "./MainMenu";
 import ArtistTable from "./ArtistTable";
 import AlbumTable from "./AlbumTable";
 import TrackTable from "./TrackTable";
+import RecentTracksTable from "./RecentTracksTable";
 
 export default class Body extends React.Component
 {
@@ -72,7 +73,6 @@ export default class Body extends React.Component
             .then(res => res.json())
             .then(
                 res => {
-                    console.log(res);
                     let recentTracks = res.recenttracks.track
                     this.setState({recentTracks: recentTracks});
                 },
@@ -115,17 +115,12 @@ export default class Body extends React.Component
     componentDidMount()
     {
         let promise1 = new Promise((resolve, reject) => {
-            console.log('calling api');
-            setTimeout(function(){}.bind(this), 10000);
             this.callApi();
             resolve(() => {});
-            console.log('done calling api')
         });
         let promise2 = new Promise((resolve, reject) => {
-            console.log('getting recent tracks');
             this.getRecentTracks();
             resolve(() => {});
-            console.log('done getting recent tracks');
         });
     }
 
@@ -148,7 +143,12 @@ export default class Body extends React.Component
         return(
             <div>
                 <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
-                {content}
+                <div className={"columns"}>
+                    <div className={"column"}>
+                        <RecentTracksTable tracks={this.state.recentTracks}/>
+                    </div>
+                    <div className={"column"}>{content}</div>
+                </div>
             </div>
         )
     }
