@@ -29,7 +29,9 @@ export default class Body extends React.Component
             artists: [],
             albums: [],
             tracks: [],
-            recentTracks: []
+            recentTracks: [],
+            nowPlaying: "",
+
         }
 
         this.changeItems = this.changeItems.bind(this);
@@ -73,8 +75,16 @@ export default class Body extends React.Component
             .then(res => res.json())
             .then(
                 res => {
-                    let recentTracks = res.recenttracks.track
-                    this.setState({recentTracks: recentTracks});
+                    let recentTracks = res.recenttracks.track;
+                    let nowPlaying = recentTracks.find((val,index) => {
+                        if (val['@attr'] && val['@attr'].nowplaying == 'true')
+                            return val;
+                    });
+
+                    this.setState({
+                        recentTracks: recentTracks,
+                        nowPlaying: nowPlaying
+                    });
                 },
                 err => {console.log(err);}
             )
@@ -142,6 +152,14 @@ export default class Body extends React.Component
 
         return(
             <div>
+                <div className={"columns"}>
+                    <div className={'column is-half is-offset-one-quarter has-text-centered'}>
+                        <i className="fas fa-history fa-5x" style={{padding: "0 15px 0 15px"}}></i>
+                        <i className="fas fa-trophy fa-5x" style={{padding: "0 15px 0 15px"}}></i>
+                    </div>
+                    <div className={'column'}>
+                    </div>
+                </div>
                 <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
                 <div className={"columns"}>
                     <div className={"column"}>
