@@ -187,7 +187,7 @@ export default class Body extends React.Component
                     <div className={'column'}>
                 </div>
                 <div className={"columns"}>
-                    <div className={"column is-three-fifths is-offset-one-fifth"} >
+                    <div className={"column is-10 is-offset-1"} >
                         {content2}
                     </div>
                 </div>

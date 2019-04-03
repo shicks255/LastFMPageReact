@@ -28,3 +28,7 @@ code {
 .cicky.selected:hover{
   background-color: #00b89c;
 }
+
+.imageCell {
+  min-width: 55px;
+}
