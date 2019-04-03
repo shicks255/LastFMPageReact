@@ -32,3 +32,8 @@ code {
 .imageCell {
   min-width: 55px;
 }
+
+.gif {
+  height: 64px;
+  width: 96px;
+}
