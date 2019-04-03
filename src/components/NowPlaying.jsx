@@ -9,9 +9,9 @@ export default class NowPlaying extends React.Component {
 
     render()
     {
-        let content
+        let nowPlaying
         if (this.props.nowPlaying)
-            content =
+            nowPlaying =
                 <div>
                     <div className={"level"} style={{marginBottom: "0"}}>
                         <div className={"level-item"}>
@@ -27,7 +27,7 @@ export default class NowPlaying extends React.Component {
                 </div>
         return(
             <span>
-            {content}
+            {nowPlaying}
             </span>
         )
 

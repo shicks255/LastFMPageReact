@@ -8,7 +8,7 @@ export default class AlbumTable extends React.Component {
     }
 
     render(){
-        let content = this.props.albums.map((val, index) => {
+        let bigContent = this.props.albums.map((val, index) => {
             let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             return(
                 <tr key={index}>
@@ -27,7 +27,7 @@ export default class AlbumTable extends React.Component {
             )
         });
 
-        let content2 = this.props.albums.map((val, index) => {
+        let mobileContent = this.props.albums.map((val, index) => {
             let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             return(
                 <tr key={index}>
@@ -42,7 +42,8 @@ export default class AlbumTable extends React.Component {
                     <td>
                         <a href={val.url} target={'_blank'}>{val.artist.name}</a>
                         <br/>
-                        {val.name}</td>
+                        {val.name}
+                    </td>
                     <td>{val.playcount}</td>
                 </tr>
             )
@@ -62,7 +63,7 @@ export default class AlbumTable extends React.Component {
                     </thead>
 
                     <tbody>
-                    {content}
+                    {bigContent}
                     </tbody>
                 </table>
 
@@ -77,7 +78,7 @@ export default class AlbumTable extends React.Component {
                     </thead>
 
                     <tbody>
-                    {content2}
+                    {mobileContent}
                     </tbody>
                 </table>
             </div>

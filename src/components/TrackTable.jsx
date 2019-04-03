@@ -8,7 +8,7 @@ export default class TrackTable extends React.Component {
     }
 
     render(){
-        let content = this.props.tracks.map((val, index) => {
+        let bigContent = this.props.tracks.map((val, index) => {
             let min = Math.floor(val.duration / 60)
             let sec = val.duration - (min*60)
             let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
@@ -34,7 +34,7 @@ export default class TrackTable extends React.Component {
             )
         });
 
-        let content2 = this.props.tracks.map((val, index) => {
+        let mobileContent = this.props.tracks.map((val, index) => {
             let min = Math.floor(val.duration / 60)
             let sec = val.duration - (min*60)
             let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
@@ -77,7 +77,7 @@ export default class TrackTable extends React.Component {
                     </thead>
 
                     <tbody>
-                    {content}
+                    {bigContent}
                     </tbody>
                 </table>
                 <table className={'table is-striped is-hoverable is-fullwidth is-hidden-tablet'}>
@@ -91,7 +91,7 @@ export default class TrackTable extends React.Component {
                     </thead>
 
                     <tbody>
-                    {content2}
+                    {mobileContent}
                     </tbody>
                 </table>
             </div>

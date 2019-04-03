@@ -9,7 +9,7 @@ export default class RecentTracksTable extends React.Component {
 
     render()
     {
-        let content = this.props.tracks.map((track,index) => {
+        let bigContent = this.props.tracks.map((track,index) => {
             let url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             let date = track.date ? track.date.uts : "";
             let unixDate = new Date(date*1000);
@@ -29,7 +29,7 @@ export default class RecentTracksTable extends React.Component {
             }
         });
 
-        let content2 = this.props.tracks.map((track,index) => {
+        let mobileContent = this.props.tracks.map((track,index) => {
             let url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             let date = track.date ? track.date.uts : "";
             let unixDate = new Date(date*1000);
@@ -59,7 +59,7 @@ export default class RecentTracksTable extends React.Component {
                     <thead>
                     </thead>
                     <tbody>
-                    {content2}
+                    {mobileContent}
                     </tbody>
                 </table>
 
@@ -73,7 +73,7 @@ export default class RecentTracksTable extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {content}
+                    {bigContent}
                     </tbody>
                 </table>
             </div>
