@@ -17,7 +17,7 @@ export default class RecentTracksTable extends React.Component {
                 return(
                     <tr key={index}>
                         <td>
-                            <a href={""}>
+                            <a href={track.url} target={"_blank"}>
                                 <img className={'image'} height={64} width={64} src={url}/>
                             </a>
                         </td>
@@ -29,7 +29,7 @@ export default class RecentTracksTable extends React.Component {
             }
         });
         return(
-            <table className={"table"}>
+            <table className={"table is-fullwidth"}>
                 <thead>
                 <tr>
                     <td></td>

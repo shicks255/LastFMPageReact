@@ -12,3 +12,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.clicky {
+  cursor: pointer;
+  padding: 0 15px;
+}
+
+.clicky:hover {
+  background-color: lightblue;
+}
+
+.clicky.selected{
+  background-color: #00b89c;
+}
+.cicky.selected:hover{
+  background-color: #00b89c;
+}

@@ -26,7 +26,7 @@ export default class AlbumTable extends React.Component {
         });
 
         return(
-            <table>
+            <table className={'table is-fullwidth'}>
                 <thead>
                 <tr>
                     <td>Rank</td>

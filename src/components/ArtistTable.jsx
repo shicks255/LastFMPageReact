@@ -26,7 +26,7 @@ export default class ArtistTable extends React.Component {
         });
 
         return(
-            <table className={'table'}>
+            <table className={'table is-fullwidth'}>
                 <thead>
                 <tr>
                     <td>Rank</td>

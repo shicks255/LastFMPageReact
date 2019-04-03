@@ -33,7 +33,7 @@ export default class TrackTable extends React.Component {
         });
 
         return(
-            <table>
+            <table className={'table is-fullwidth'}>
                 <thead>
                 <tr>
                     <td>Rank</td>

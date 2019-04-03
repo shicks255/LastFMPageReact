@@ -4,6 +4,7 @@ import ArtistTable from "./ArtistTable";
 import AlbumTable from "./AlbumTable";
 import TrackTable from "./TrackTable";
 import RecentTracksTable from "./RecentTracksTable";
+import NowPlaying from "./NowPlaying";
 
 export default class Body extends React.Component
 {
@@ -31,7 +32,7 @@ export default class Body extends React.Component
             tracks: [],
             recentTracks: [],
             nowPlaying: "",
-
+            selected: 'recent'
         }
 
         this.changeItems = this.changeItems.bind(this);
@@ -46,7 +47,6 @@ export default class Body extends React.Component
 
     changeItems(newValue, type)
     {
-        console.log(newValue);
         if (type === 'strategy')
         {
             const strategyKey = Object.entries(this.state.strategies).find((val, index) => {
@@ -134,15 +134,19 @@ export default class Body extends React.Component
         });
     }
 
-    componentDidMount1()
+    clickButton(event)
     {
-        this.callApi();
-        this.getRecentTracks();
+        const selectedId = event.target.id;
+
+        if (selectedId === 'recentButton')
+            this.setState({selected: "recent"});
+        else if (selectedId === 'topButton')
+            this.setState({selected: "top"})
     }
 
     render()
     {
-        let content = ''
+        let content = '';
         if (this.state.strategy === 'getTopArtists')
             content = <ArtistTable artists={this.state.artists}/>
         if (this.state.strategy === 'getTopAlbums')
@@ -150,22 +154,42 @@ export default class Body extends React.Component
         if (this.state.strategy === 'getTopTracks')
             content = <TrackTable tracks={this.state.tracks}/>
 
+        let recentButton;
+        if (this.state.selected === 'recent')
+            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky selected"}></i>
+        else
+            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky"}></i>
+
+        let topButton;
+        if (this.state.selected === 'top')
+            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky selected"}></i>
+        else
+            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky"}></i>
+
+        let content2;
+        if (this.state.selected === 'top')
+            content2 = <div>
+                <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
+                {content}
+            </div>;
+        else
+            content2 = <RecentTracksTable tracks={this.state.recentTracks}/>
+
         return(
             <div>
+                <NowPlaying nowPlaying={this.state.nowPlaying}/>
                 <div className={"columns"}>
                     <div className={'column is-half is-offset-one-quarter has-text-centered'}>
-                        <i className="fas fa-history fa-5x" style={{padding: "0 15px 0 15px"}}></i>
-                        <i className="fas fa-trophy fa-5x" style={{padding: "0 15px 0 15px"}}></i>
+                        {recentButton}
+                        {topButton}
+                    </div>
                     </div>
                     <div className={'column'}>
-                    </div>
                 </div>
-                <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
                 <div className={"columns"}>
-                    <div className={"column"}>
-                        <RecentTracksTable tracks={this.state.recentTracks}/>
+                    <div className={"column is-three-fifths is-offset-one-fifth"} >
+                        {content2}
                     </div>
-                    <div className={"column"}>{content}</div>
                 </div>
             </div>
         )

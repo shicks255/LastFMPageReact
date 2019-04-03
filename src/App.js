@@ -7,17 +7,17 @@ import Footer from './components/Footer';
 import Body from "./components/Body";
 
 class App extends Component {
-  render() {
-    return (
-        <div>
-          <Header/>
-
-          <Body/>
-
-          <Footer/>
-        </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <Header/>
+                <div className={'container'}>
+                    <Body/>
+                </div>
+                <Footer/>
+            </div>
+        );
+    }
 }
 
 export default App;
