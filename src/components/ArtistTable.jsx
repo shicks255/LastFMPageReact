@@ -15,9 +15,11 @@ export default class ArtistTable extends React.Component {
                 <tr key={index}>
                     <td>{index+1}</td>
                     <td>
-                        <a target={'_blank'} href={val.url}>
-                            <img height={64} width={64} src={url} />
-                        </a>
+                        <div className={"imageCell"}>
+                            <a target={'_blank'} href={val.url}>
+                                <img height={64} width={64} src={url} />
+                            </a>
+                        </div>
                     </td>
                     <td><a target={'_blank'} href={val.url}>{val.name}</a></td>
                     <td>{val.playcount}</td>

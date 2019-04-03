@@ -146,13 +146,13 @@ export default class Body extends React.Component
 
     render()
     {
-        let content = '';
+        let topContent = '';
         if (this.state.strategy === 'getTopArtists')
-            content = <ArtistTable artists={this.state.artists}/>
+            topContent = <ArtistTable artists={this.state.artists}/>
         if (this.state.strategy === 'getTopAlbums')
-            content = <AlbumTable albums={this.state.albums}/>
+            topContent = <AlbumTable albums={this.state.albums}/>
         if (this.state.strategy === 'getTopTracks')
-            content = <TrackTable tracks={this.state.tracks}/>
+            topContent = <TrackTable tracks={this.state.tracks}/>
 
         let recentButton;
         if (this.state.selected === 'recent')
@@ -166,14 +166,14 @@ export default class Body extends React.Component
         else
             topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky"}></i>
 
-        let content2;
+        let mainContent;
         if (this.state.selected === 'top')
-            content2 = <div>
+            mainContent = <div>
                 <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
-                {content}
+                {topContent}
             </div>;
         else
-            content2 = <RecentTracksTable tracks={this.state.recentTracks}/>
+            mainContent = <RecentTracksTable tracks={this.state.recentTracks}/>
 
         return(
             <div>
@@ -188,7 +188,7 @@ export default class Body extends React.Component
                 </div>
                 <div className={"columns"}>
                     <div className={"column is-10 is-offset-1"} >
-                        {content2}
+                        {mainContent}
                     </div>
                 </div>
             </div>
