@@ -4,7 +4,6 @@ export default class NowPlaying extends React.Component {
     constructor(props)
     {
         super(props);
-
     }
 
     render()
@@ -24,6 +23,7 @@ export default class NowPlaying extends React.Component {
                             <img className={"image"} src={this.props.nowPlaying.image[0]['#text']}/> {this.props.nowPlaying.artist['#text']} - {this.props.nowPlaying.name}
                         </div>
                     </div>
+                    <br/>
                 </div>
         return(
             <span>
