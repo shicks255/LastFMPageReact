@@ -16,7 +16,7 @@ export default class Profile extends React.Component {
             <div className={"card is-horizontal columns"}>
                 <div className={"card-image column is-two-fifths is-centered"}>
                     <figure className={"image is-square"}>
-                        <img className={"image"} src={this.props.userAvatar}/>
+                        <img className={"image is-rounded"} src={this.props.userAvatar}/>
                     </figure>
                 </div>
                 <div className={"card-stacked column is-three-fifths is-narrow"}>
