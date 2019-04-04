@@ -12,7 +12,7 @@ export default class AlbumTable extends React.Component {
             let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             return(
                 <tr key={index}>
-                    <td>{index+1}</td>
+                    <td className={"alignRight"}>{index+1}.</td>
                     <td>
                         <div className={"imageCell"}>
                             <a href={val.url} target={'_blank'}>
@@ -20,9 +20,9 @@ export default class AlbumTable extends React.Component {
                             </a>
                         </div>
                     </td>
-                    <td><a href={val.url} target={'_blank'}>{val.artist.name}</a></td>
-                    <td>{val.name}</td>
-                    <td>{val.playcount}</td>
+                    <td><a href={val.url} target={'_blank'}><b>{val.artist.name}</b></a></td>
+                    <td><i>{val.name}</i></td>
+                    <td className={"alignRight"}>{val.playcount}</td>
                 </tr>
             )
         });
@@ -31,7 +31,7 @@ export default class AlbumTable extends React.Component {
             let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             return(
                 <tr key={index}>
-                    <td>{index+1}</td>
+                    <td className={"alignRight"}>{index+1}.</td>
                     <td>
                         <div className={"imageCell"}>
                             <a href={val.url} target={'_blank'}>
@@ -40,11 +40,11 @@ export default class AlbumTable extends React.Component {
                         </div>
                     </td>
                     <td>
-                        <a href={val.url} target={'_blank'}>{val.artist.name}</a>
+                        <a href={val.url} target={'_blank'}><b>{val.artist.name}</b></a>
                         <br/>
-                        {val.name}
+                        <i>{val.name}</i>
                     </td>
-                    <td>{val.playcount}</td>
+                    <td className={"alignRight"}>{val.playcount}</td>
                 </tr>
             )
         });
@@ -54,11 +54,11 @@ export default class AlbumTable extends React.Component {
                 <table className={'table is-striped is-hoverable is-fullwidth is-hidden-mobile'}>
                     <thead>
                     <tr>
-                        <td>Rank</td>
-                        <td></td>
-                        <td>Artist</td>
-                        <td>Name</td>
-                        <td>Plays</td>
+                        <th></th>
+                        <th></th>
+                        <th>Artist</th>
+                        <th>Name</th>
+                        <th>Plays</th>
                     </tr>
                     </thead>
 
@@ -70,10 +70,10 @@ export default class AlbumTable extends React.Component {
                 <table className={'table is-striped is-hoverable is-fullwidth is-hidden-tablet'}>
                     <thead>
                     <tr>
-                        <td>Rank</td>
-                        <td></td>
-                        <td></td>
-                        <td>Plays</td>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Plays</th>
                     </tr>
                     </thead>
 

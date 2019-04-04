@@ -5,6 +5,7 @@ import AlbumTable from "./AlbumTable";
 import TrackTable from "./TrackTable";
 import RecentTracksTable from "./RecentTracksTable";
 import NowPlaying from "./NowPlaying";
+import Profile from "./Profile";
 
 export default class Body extends React.Component
 {
@@ -32,7 +33,11 @@ export default class Body extends React.Component
             tracks: [],
             recentTracks: [],
             nowPlaying: "",
-            selected: 'recent'
+            selected: 'recent',
+            userAvatar: "",
+            playCount: 0,
+            registered: 0,
+            userName: "shicks255"
         }
 
         this.changeItems = this.changeItems.bind(this);
@@ -90,6 +95,25 @@ export default class Body extends React.Component
             )
     }
 
+    getUserInfo()
+    {
+        let key = 'c349ab1fcb6b132ffb8d842e982458db';
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=shicks255&api_key=${key}&format=json`;
+        fetch(url)
+            .then(res => res.json())
+            .then(
+                res => {
+                    console.log(res);
+                    this.setState({
+                        userAvatar: res.user.image[3]['#text'],
+                        playCount: res.user.playcount,
+                        registered: res.user.registered['#text']
+                    });
+                },
+                err => {console.log(err);}
+            )
+    }
+
     callApi()
     {
         let url = this.getFullUrl()
@@ -124,12 +148,16 @@ export default class Body extends React.Component
 
     componentDidMount()
     {
-        let promise1 = new Promise((resolve, reject) => {
+        let promise1 = new Promise((resolve) => {
             this.callApi();
             resolve(() => {});
         });
-        let promise2 = new Promise((resolve, reject) => {
+        let promise2 = new Promise((resolve) => {
             this.getRecentTracks();
+            resolve(() => {});
+        });
+        let promise3 = new Promise((resolve) => {
+            this.getUserInfo();
             resolve(() => {});
         });
     }
@@ -179,12 +207,20 @@ export default class Body extends React.Component
             <div>
                 <NowPlaying nowPlaying={this.state.nowPlaying}/>
                 <div className={"columns"}>
+                <div className={"column is-half is-offset-one-quarter has-text-centered"}>
+                    <Profile
+                        userAvatar={this.state.userAvatar}
+                        playCount={this.state.playCount}
+                        registered={this.state.registered}
+                        userName={this.state.userName}
+                    />
+                </div>
+            </div>
+                <div className={"columns"}>
                     <div className={'column is-half is-offset-one-quarter has-text-centered'}>
                         {recentButton}
                         {topButton}
                     </div>
-                    </div>
-                    <div className={'column'}>
                 </div>
                 <div className={"columns"}>
                     <div className={"column is-10 is-offset-1"} >

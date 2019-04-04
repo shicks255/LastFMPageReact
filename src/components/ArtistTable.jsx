@@ -13,7 +13,7 @@ export default class ArtistTable extends React.Component {
             let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             return(
                 <tr key={index}>
-                    <td>{index+1}</td>
+                    <td className={"alignRight"}>{index+1}.</td>
                     <td>
                         <div className={"imageCell"}>
                             <a target={'_blank'} href={val.url}>
@@ -21,7 +21,7 @@ export default class ArtistTable extends React.Component {
                             </a>
                         </div>
                     </td>
-                    <td><a target={'_blank'} href={val.url}>{val.name}</a></td>
+                    <td><a target={'_blank'} href={val.url}><b>{val.name}</b></a></td>
                     <td>{val.playcount}</td>
                 </tr>
             )
@@ -31,10 +31,10 @@ export default class ArtistTable extends React.Component {
             <table className={'table is-fullwidth'}>
                 <thead>
                 <tr>
-                    <td>Rank</td>
-                    <td></td>
-                    <td>Name</td>
-                    <td>Plays</td>
+                    <th></th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Plays</th>
                 </tr>
                 </thead>
 

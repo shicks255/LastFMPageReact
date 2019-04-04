@@ -22,8 +22,8 @@ export default class RecentTracksTable extends React.Component {
                             </a>
                         </td>
                         <td>{unixDate.toLocaleString()}</td>
-                        <td>{track.name}</td>
-                        <td>{track.artist['#text']}</td>
+                        <td><i>{track.name}</i></td>
+                        <td><b>{track.artist['#text']}</b></td>
                     </tr>
                 );
             }
@@ -44,9 +44,9 @@ export default class RecentTracksTable extends React.Component {
                         <td>
                             {unixDate.toLocaleString()}
                             <br/>
-                            {track.name}
+                            <i>{track.name}</i>
                             <br/>
-                            {track.artist['#text']}
+                            <b>{track.artist['#text']}</b>
                         </td>
                     </tr>
                 );
@@ -64,12 +64,12 @@ export default class RecentTracksTable extends React.Component {
                 </table>
 
                 <table className={"table is-striped is-hoverable is-fullwidth is-hidden-mobile"}>
-                    <thead>
+                    <thead className={"tableHead"}>
                     <tr>
-                        <td></td>
-                        <td>Date</td>
-                        <td>Name</td>
-                        <td>Artist</td>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Artist</th>
                     </tr>
                     </thead>
                     <tbody>

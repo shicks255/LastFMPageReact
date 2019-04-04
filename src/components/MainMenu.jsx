@@ -19,16 +19,18 @@ export default class MainMenu extends React.Component
         });
 
         return (
-            <div className="box">
-                <label>Select</label>
-                <select defaultValue={this.props.strategy} onChange={(event) => this.props.onChange(event.target.value, 'strategy')}>
-                    {strategies}
-                </select>
-                <br/>
-                <label>Time Frame:</label>
-                <select defaultValue={this.props.timeFrame} onChange={(event) => this.props.onChange(event.target.value, 'timeFrame')}>
-                    {timeFrames}
-                </select>
+            <div className={"columns"}>
+                <div className="box column is-half is-offset-one-quarter">
+                    <label>Select</label>
+                    <select defaultValue={this.props.strategy} onChange={(event) => this.props.onChange(event.target.value, 'strategy')}>
+                        {strategies}
+                    </select>
+                    <br/>
+                    <label>Time Frame:</label>
+                    <select defaultValue={this.props.timeFrame} onChange={(event) => this.props.onChange(event.target.value, 'timeFrame')}>
+                        {timeFrames}
+                    </select>
+                </div>
             </div>
         )
     }

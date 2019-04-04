@@ -18,7 +18,7 @@ export default class TrackTable extends React.Component {
 
             return(
                 <tr key={index}>
-                    <td>{index+1}</td>
+                    <td className={"alignRight"}>{index+1}.</td>
                     <td>
                         <div className={"imageCell"}>
                             <a href={val.url} target={'_blank'}>
@@ -44,7 +44,7 @@ export default class TrackTable extends React.Component {
 
             return(
                 <tr key={index}>
-                    <td>{index+1}</td>
+                    <td className={"alignRight"}>{index+1}.</td>
                     <td>
                         <a href={val.url} target={'_blank'}>
                             <img width={64} height={64} src={url} />
@@ -67,12 +67,12 @@ export default class TrackTable extends React.Component {
                 <table className={'table is-striped is-hoverable is-fullwidth is-hidden-mobile'}>
                     <thead>
                     <tr>
-                        <td>Rank</td>
-                        <td></td>
-                        <td>Name</td>
-                        <td>Artist</td>
-                        <td>Plays</td>
-                        <td>Length</td>
+                        <th></th>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Artist</th>
+                        <th>Plays</th>
+                        <th>Length</th>
                     </tr>
                     </thead>
 
@@ -83,10 +83,10 @@ export default class TrackTable extends React.Component {
                 <table className={'table is-striped is-hoverable is-fullwidth is-hidden-tablet'}>
                     <thead>
                     <tr>
-                        <td>Rank</td>
-                        <td></td>
-                        <td></td>
-                        <td>Plays</td>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Plays</th>
                     </tr>
                     </thead>
 
