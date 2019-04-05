@@ -20,7 +20,7 @@ code {
   -webkit-box-shadow: 0 5px #000;
   -moz-box-shadow: 0 5px #000;
   box-shadow: 0 5px #000;
-  background-color: lightgray;
+  background-color: #eeeeee;
   border: 1px solid black;
 }
 
@@ -30,7 +30,7 @@ code {
 
 .clicky.selected{
   box-shadow: -1px 3px #000;
-  background-color: #bababa;
+  background-color: #cbcbcb;
   transform: translateY(3px);
 }
 .cicky.selected:hover{
@@ -51,4 +51,24 @@ td {
 
 .alignRight {
   text-align: right;
+}
+
+.userIcon {
+  position: absolute;
+  right: 4px;
+  top: 6px;
+  cursor: pointer;
+}
+
+.userIcon:hover{
+  transform: translateY(1px);
+  transform: translateX(1px);
+}
+
+@media only screen and (max-width: 845px){
+  .userIcon{
+    position: absolute;
+    top: auto;
+    bottom: 6px;
+  }
 }

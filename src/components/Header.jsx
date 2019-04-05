@@ -11,7 +11,7 @@ export default class Header extends React.Component
     {
         return(
             <div>
-                My Listening Habits
+                Last FM Listening Habits
             </div>
         )
     }

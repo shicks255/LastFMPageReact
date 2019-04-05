@@ -41,12 +41,20 @@ export default class Body extends React.Component
         }
 
         this.changeItems = this.changeItems.bind(this);
+        this.setUserName = this.setUserName.bind(this);
     };
+
+    setUserName(value)
+    {
+        this.setState({
+            userName: value
+        });
+    }
 
     getFullUrl()
     {
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.state.strategy}&user=shicks255&api_key=${key}&format=json&period=${this.state.timeFrame}`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.state.strategy}&user=${this.state.userName}&api_key=${key}&format=json&period=${this.state.timeFrame}`;
         return url;
     }
 
@@ -75,7 +83,7 @@ export default class Body extends React.Component
     getRecentTracks()
     {
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=shicks255&api_key=${key}&format=json`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json`;
         fetch(url)
             .then(res => res.json())
             .then(
@@ -98,7 +106,7 @@ export default class Body extends React.Component
     getUserInfo()
     {
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=shicks255&api_key=${key}&format=json`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.userName}&api_key=${key}&format=json`;
         fetch(url)
             .then(res => res.json())
             .then(
@@ -162,6 +170,25 @@ export default class Body extends React.Component
         });
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot)
+    {
+        if (this.state != prevState)
+        {
+            let promise1 = new Promise((resolve) => {
+                this.callApi();
+                resolve(() => {});
+            });
+            let promise2 = new Promise((resolve) => {
+                this.getRecentTracks();
+                resolve(() => {});
+            });
+            let promise3 = new Promise((resolve) => {
+                this.getUserInfo();
+                resolve(() => {});
+            });
+        }
+    }
+
     clickButton(event)
     {
         const selectedId = event.target.id;
@@ -207,15 +234,16 @@ export default class Body extends React.Component
             <div>
                 <NowPlaying nowPlaying={this.state.nowPlaying}/>
                 <div className={"columns"}>
-                <div className={"column is-half is-offset-one-quarter has-text-centered"}>
-                    <Profile
-                        userAvatar={this.state.userAvatar}
-                        playCount={this.state.playCount}
-                        registered={this.state.registered}
-                        userName={this.state.userName}
-                    />
+                    <div className={"column is-half is-offset-one-quarter has-text-centered"}>
+                        <Profile
+                            userAvatar={this.state.userAvatar}
+                            playCount={this.state.playCount}
+                            registered={this.state.registered}
+                            userName={this.state.userName}
+                            changeUsername={(event) => this.setUserName(event)}
+                        />
+                    </div>
                 </div>
-            </div>
                 <div className={"columns"}>
                     <div className={'column is-half is-offset-one-quarter has-text-centered'}>
                         {recentButton}
