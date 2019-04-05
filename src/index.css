@@ -16,6 +16,12 @@ code {
 .clicky {
   cursor: pointer;
   padding: 0 15px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 5px #000;
+  -moz-box-shadow: 0 5px #000;
+  box-shadow: 0 5px #000;
+  background-color: lightgray;
+  border: 1px solid black;
 }
 
 .clicky:hover {
@@ -23,10 +29,11 @@ code {
 }
 
 .clicky.selected{
-  background-color: #00b89c;
+  box-shadow: -1px 3px #000;
+  background-color: #bababa;
+  transform: translateY(3px);
 }
 .cicky.selected:hover{
-  background-color: #00b89c;
 }
 
 .imageCell {
