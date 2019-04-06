@@ -48,6 +48,8 @@ export default class Body extends React.Component
         this.getUserInfo = this.getUserInfo.bind(this);
         this.callApi = this.callApi.bind(this);
         this.clickButton = this.clickButton.bind(this);
+        this.mouseEnter = this.mouseEnter.bind(this);
+        this.mouseOut = this.mouseOut.bind(this);
     };
 
     setUserName(value)
@@ -182,7 +184,6 @@ export default class Body extends React.Component
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        console.log(prevState);
         if (this.state.userName !== prevState.userName || this.state.nowPlaying !== prevState.nowPlaying)
             this.loadData();
     }
@@ -195,6 +196,16 @@ export default class Body extends React.Component
             this.setState({selected: "recent"});
         else if (selectedId === 'topButton')
             this.setState({selected: "top"})
+    }
+
+    mouseEnter(event)
+    {
+        console.log(event);
+    }
+
+    mouseOut(event)
+    {
+        console.log(event);
     }
 
     render()
@@ -226,7 +237,7 @@ export default class Body extends React.Component
                 {topContent}
             </div>;
         else
-            mainContent = <RecentTracksTable tracks={this.state.recentTracks}/>
+            mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
 
         return(
             <div>
