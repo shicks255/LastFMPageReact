@@ -22,7 +22,7 @@ export default class Profile extends React.Component {
 
     submitUsername()
     {
-        console.log(this.state.typeUsername);
+        this.setState({showModal: false});
         this.props.changeUsername(this.state.typeUsername);
     }
 

@@ -42,6 +42,12 @@ export default class Body extends React.Component
 
         this.changeItems = this.changeItems.bind(this);
         this.setUserName = this.setUserName.bind(this);
+        this.loadData = this.loadData.bind(this);
+        this.getFullUrl = this.getFullUrl.bind(this);
+        this.getRecentTracks = this.getRecentTracks.bind(this);
+        this.getUserInfo = this.getUserInfo.bind(this);
+        this.callApi = this.callApi.bind(this);
+        this.clickButton = this.clickButton.bind(this);
     };
 
     setUserName(value)
@@ -111,7 +117,6 @@ export default class Body extends React.Component
             .then(res => res.json())
             .then(
                 res => {
-                    console.log(res);
                     this.setState({
                         userAvatar: res.user.image[3]['#text'],
                         playCount: res.user.playcount,
@@ -154,7 +159,7 @@ export default class Body extends React.Component
             );
     }
 
-    componentDidMount()
+    loadData()
     {
         let promise1 = new Promise((resolve) => {
             this.callApi();
@@ -170,23 +175,16 @@ export default class Body extends React.Component
         });
     }
 
+    componentDidMount()
+    {
+        this.loadData();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        if (this.state != prevState)
-        {
-            let promise1 = new Promise((resolve) => {
-                this.callApi();
-                resolve(() => {});
-            });
-            let promise2 = new Promise((resolve) => {
-                this.getRecentTracks();
-                resolve(() => {});
-            });
-            let promise3 = new Promise((resolve) => {
-                this.getUserInfo();
-                resolve(() => {});
-            });
-        }
+        console.log(prevState);
+        if (this.state.userName !== prevState.userName || this.state.nowPlaying !== prevState.nowPlaying)
+            this.loadData();
     }
 
     clickButton(event)
