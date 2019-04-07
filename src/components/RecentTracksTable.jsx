@@ -17,8 +17,10 @@ export default class RecentTracksTable extends React.Component {
                 return(
                     <tr key={index}>
                         <td>
-                            <a onMouseOver={(event) => this.props.mouseOver(event)} href={track.url} target={"_blank"}>
-                                <img className={'image'} height={'64'} width={'64'} src={url}/>
+                            <a href={track.url} target={"_blank"}>
+                                <div onMouseEnter={(event) => this.props.mouseOver(event)} onMouseOut={this.props.mouseOut}>
+                                    <img  className={'image'} height={'64'} width={'64'} src={url}/>
+                                </div>
                             </a>
                         </td>
                         <td>{unixDate.toLocaleString()}</td>
@@ -38,7 +40,9 @@ export default class RecentTracksTable extends React.Component {
                     <tr key={index}>
                         <td>
                             <a href={track.url} target={"_blank"} onMouseOver={(event) => this.props.mouseOver(event)}>
-                                <img className={'image'} height={'64'} width={'64'} src={url}/>
+                                <div onMouseEnter={(event) => this.props.mouseOver(event)} onMouseOut={this.props.mouseOut}>
+                                    <img className={'image'} height={'64'} width={'64'} src={url}/>
+                                </div>
                             </a>
                         </td>
                         <td>

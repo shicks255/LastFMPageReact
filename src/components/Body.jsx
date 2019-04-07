@@ -37,7 +37,8 @@ export default class Body extends React.Component
             userAvatar: "",
             playCount: 0,
             registered: 0,
-            userName: "shicks255"
+            userName: "shicks255",
+            modalImageSrc: ""
         }
 
         this.changeItems = this.changeItems.bind(this);
@@ -188,6 +189,13 @@ export default class Body extends React.Component
             this.loadData();
     }
 
+    componentWillUpdate(nextProps, nextState, nextContext)
+    {
+        // console.log('checking update');
+        if (this.state.modalImageSrc !== nextState.modalImageSrc)
+            this.render();
+    }
+
     clickButton(event)
     {
         const selectedId = event.target.id;
@@ -200,12 +208,24 @@ export default class Body extends React.Component
 
     mouseEnter(event)
     {
-        console.log(event);
+        console.log('mouse hoverd');
+
+        let url = event.target.src;
+        let suffix = url.lastIndexOf("/");
+        let imageId = url.substr(suffix+1);
+
+        let prefix = url.substr(0,suffix);
+        let t = prefix.lastIndexOf("/");
+        prefix = prefix.substr(0,t);
+
+        let newImageId = prefix + '/128s/' + imageId;
+        this.setState({modalImageSrc: newImageId});
     }
 
-    mouseOut(event)
+    mouseOut()
     {
-        console.log(event);
+        console.log('mouse out');
+        this.setState({modalImageSrc: ''});
     }
 
     render()
@@ -239,6 +259,8 @@ export default class Body extends React.Component
         else
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
 
+        let modalClass = this.state.modalImageSrc.length > 0 ? 'modal is-active' : 'modal';
+
         return(
             <div>
                 <NowPlaying nowPlaying={this.state.nowPlaying}/>
@@ -262,6 +284,13 @@ export default class Body extends React.Component
                 <div className={"columns"}>
                     <div className={"column is-10 is-offset-1"} >
                         {mainContent}
+                    </div>
+                </div>
+                <div className={modalClass} >
+                    <div className={"modal-background extraModal"}>
+                    </div>
+                    <div className={"modal-content"}>
+                        <img src={this.state.modalImageSrc}/>
                     </div>
                 </div>
             </div>
