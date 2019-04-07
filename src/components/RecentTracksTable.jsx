@@ -16,10 +16,10 @@ export default class RecentTracksTable extends React.Component {
             if (date.length > 0){
                 return(
                     <tr key={index}>
-                        <td>
+                        <td >
                             <a href={track.url} target={"_blank"}>
-                                <div onMouseEnter={(event) => this.props.mouseOver(event)} onMouseOut={this.props.mouseOut}>
-                                    <img  className={'image'} height={'64'} width={'64'} src={url}/>
+                                <div onMouseEnter={(event) => this.props.mouseOver(event)} onMouseLeave={this.props.mouseOut}>
+                                    <img className={'image'} height={'64'} width={'64'} src={url}/>
                                 </div>
                             </a>
                         </td>

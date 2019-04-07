@@ -218,7 +218,7 @@ export default class Body extends React.Component
         let t = prefix.lastIndexOf("/");
         prefix = prefix.substr(0,t);
 
-        let newImageId = prefix + '/128s/' + imageId;
+        let newImageId = prefix + '/96s/' + imageId;
         this.setState({modalImageSrc: newImageId});
     }
 
@@ -259,7 +259,7 @@ export default class Body extends React.Component
         else
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
 
-        let modalClass = this.state.modalImageSrc.length > 0 ? 'modal is-active' : 'modal';
+        let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : '';
 
         return(
             <div>
@@ -286,12 +286,8 @@ export default class Body extends React.Component
                         {mainContent}
                     </div>
                 </div>
-                <div className={modalClass} >
-                    <div className={"modal-background extraModal"}>
-                    </div>
-                    <div className={"modal-content"}>
+                <div className={modalClass } >
                         <img src={this.state.modalImageSrc}/>
-                    </div>
                 </div>
             </div>
         )

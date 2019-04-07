@@ -53,6 +53,19 @@ td {
   text-align: right;
 }
 
+.active.imagePopup {
+  display: block;
+}
+
+.imagePopup {
+  position: fixed;
+  width: 384px;
+  top: 50%;
+  leff: 50%;
+  margin-left: 192px;
+  margin-top: -192px;
+}
+
 .userIcon {
   position: absolute;
   right: 4px;
