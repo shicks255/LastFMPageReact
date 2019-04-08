@@ -38,8 +38,10 @@ export default class Body extends React.Component
             playCount: 0,
             registered: 0,
             userName: "shicks255",
-            modalImageSrc: ""
+            modalImageSrc: "",
         }
+
+        this.modalTimeOut = null;
 
         this.changeItems = this.changeItems.bind(this);
         this.setUserName = this.setUserName.bind(this);
@@ -211,8 +213,6 @@ export default class Body extends React.Component
 
     mouseEnter(event)
     {
-        console.log('mouse hoverd');
-
         let url = event.target.src;
         let suffix = url.lastIndexOf("/");
         let imageId = url.substr(suffix+1);
@@ -222,12 +222,15 @@ export default class Body extends React.Component
         prefix = prefix.substr(0,t);
 
         let newImageId = prefix + '/96s/' + imageId;
-        this.setState({modalImageSrc: newImageId});
+        this.modalTimeOut = setTimeout(() =>
+        {
+            this.setState({modalImageSrc: newImageId});
+        }, 500);
     }
 
     mouseOut()
     {
-        console.log('mouse out');
+        clearTimeout(this.modalTimeOut);
         this.setState({modalImageSrc: ''});
     }
 
