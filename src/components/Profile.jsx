@@ -6,7 +6,8 @@ export default class Profile extends React.Component {
         super(props);
         this.state = {
             showModal: false,
-            typeUsername: ''
+            typeUsername: '',
+            modalErrorMessage: ''
         }
 
         this.toggleUsernameModal = this.toggleUsernameModal.bind(this);
@@ -22,16 +23,48 @@ export default class Profile extends React.Component {
 
     submitUsername()
     {
-        this.setState({showModal: false});
-        this.props.changeUsername(this.state.typeUsername);
+        let key = 'c349ab1fcb6b132ffb8d842e982458db';
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.typeUsername}&api_key=${key}&format=json`;
+        fetch(url)
+            .then(res => res.json())
+            .then(
+                res => {
+                    if (res.user && res.user.playcount > 0)
+                    {
+                        let tempUsername = this.state.typeUsername;
+                        this.setState(
+                            {
+                                showModal: false,
+                                typeUsername: '',
+                                modalErrorMessage: ''
+                            });
+                        this.props.changeUsername(tempUsername);
+                    }
+                    else
+                        this.setState({modalErrorMessage: `username of ${this.state.typeUsername} does not exist`});
+                },
+                err => {
+                    console.log('Problem loading data')
+                }
+            )
     }
 
     toggleUsernameModal()
     {
         if (this.state.showModal)
-            this.setState({showModal: false});
+            this.setState(
+                {
+                    showModal: false,
+                    typeUsername: '',
+                    modalErrorMessage: ''
+                });
         else
-            this.setState({showModal: true});
+            this.setState(
+                {
+                    showModal: true,
+                    typeUsername: '',
+                    modalErrorMessage: ''
+                });
     }
 
     render()
@@ -50,6 +83,8 @@ export default class Profile extends React.Component {
                     <label htmlFor={"newUsername"}>Enter a new Username:</label>
                     <input onChange={(e) => this.changeUsername(e)} type={"text"} id={"newUsername"} aria-placeholder={"Username"}></input>
                     <button onClick={this.submitUsername}>Submit</button>
+                    <br/>
+                    <span><b><i>{this.state.modalErrorMessage}</i></b></span>
                 </div>
             </div>
             <button onClick={this.toggleUsernameModal} className={"modal-close is-large"} aria-label={"close"}></button>

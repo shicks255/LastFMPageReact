@@ -57,6 +57,7 @@ export default class Body extends React.Component
 
     setUserName(value)
     {
+        localStorage.setItem("userName", value);
         this.setState({
             userName: value
         });
@@ -196,9 +197,15 @@ export default class Body extends React.Component
 
     componentWillUpdate(nextProps, nextState, nextContext)
     {
-        // console.log('checking update');
         if (this.state.modalImageSrc !== nextState.modalImageSrc)
             this.render();
+    }
+
+    componentWillMount()
+    {
+        let username = localStorage.getItem("userName");
+        if (username && username.length > 0)
+            this.setState({userName: username})
     }
 
     clickButton(event)
@@ -265,7 +272,7 @@ export default class Body extends React.Component
         else
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
 
-        let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : '';
+        let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : 'imagePopup';
 
         return(
             <div>
@@ -292,7 +299,7 @@ export default class Body extends React.Component
                         {mainContent}
                     </div>
                 </div>
-                <div className={modalClass } >
+                <div className={modalClass} >
                     <img alt={""} src={this.state.modalImageSrc}/>
                 </div>
             </div>

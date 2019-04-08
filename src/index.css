@@ -58,11 +58,12 @@ td {
 }
 
 .imagePopup {
+  display: none;
   position: fixed;
   width: 384px;
   top: 50%;
   leff: 50%;
-  margin-left: 192px;
+  margin-left: 288px;
   margin-top: -192px;
 }
 
