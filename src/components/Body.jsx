@@ -99,8 +99,10 @@ export default class Body extends React.Component
                 res => {
                     let recentTracks = res.recenttracks.track;
                     let nowPlaying = recentTracks.find((val,index) => {
-                        if (val['@attr'] && val['@attr'].nowplaying == 'true')
+                        if (val['@attr'] && val['@attr'].nowplaying === 'true')
                             return val;
+                        else
+                            return '';
                     });
 
                     this.setState({
@@ -132,6 +134,7 @@ export default class Body extends React.Component
 
     callApi()
     {
+        console.log('calling api');
         let url = this.getFullUrl()
         fetch(url)
             .then(res => res.json())
@@ -164,15 +167,15 @@ export default class Body extends React.Component
 
     loadData()
     {
-        let promise1 = new Promise((resolve) => {
+        new Promise((resolve) => {
             this.callApi();
             resolve(() => {});
         });
-        let promise2 = new Promise((resolve) => {
+        new Promise((resolve) => {
             this.getRecentTracks();
             resolve(() => {});
         });
-        let promise3 = new Promise((resolve) => {
+        new Promise((resolve) => {
             this.getUserInfo();
             resolve(() => {});
         });
@@ -287,7 +290,7 @@ export default class Body extends React.Component
                     </div>
                 </div>
                 <div className={modalClass } >
-                        <img src={this.state.modalImageSrc}/>
+                    <img alt={""} src={this.state.modalImageSrc}/>
                 </div>
             </div>
         )
