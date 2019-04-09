@@ -11,8 +11,10 @@ export default function Header(props)
                     </a>
                 </div>
 
-                <div className={"column is-9"}>
-                    Last FM Listening Habits
+                <div className={"column is-9 has-text-centered"}>
+                    <h1 className={"title"}>
+                        Last FM Listening Habits
+                    </h1>
                 </div>
         </nav>
     )

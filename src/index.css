@@ -6,6 +6,7 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #1A1A1D;
 }
 
 code {
@@ -13,8 +14,12 @@ code {
   monospace;
 }
 
+h1 {
+  color: white !important;
+}
+
 .container {
-  background-color: lightgrey;
+  background-color: #4E4E50;
 }
 
 .columns:not(:last-child) {
@@ -53,9 +58,28 @@ code {
   width: 96px;
 }
 
+.box {
+  background-color: #e8dce6 !important;
+}
+
 td {
   vertical-align: middle !important;
 }
+td a {
+  text-decoration: underline;
+  color: white;
+}
+
+tr,th{
+  color: white !important;
+}
+tr:nth-child(odd) {
+  background-color: #950740 !important;
+}
+tr:nth-child(even) {
+  background-color: #6F2232 !important;
+}
+
 
 .alignRight {
   text-align: right;
@@ -77,6 +101,9 @@ td {
 
 .navbar {
   border-bottom: 1px solid black;
+  background-color: #1A1A1D !important;
+  padding: 8px 8px 0px 8px;
+  vertical-align: middle !important;
 }
 
 .relative {
