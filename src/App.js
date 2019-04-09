@@ -11,6 +11,7 @@ class App extends Component {
         return (
             <div>
                 <Header/>
+                <br/>
                 <div className={'container'}>
                     <Body/>
                 </div>

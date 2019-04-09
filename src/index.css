@@ -67,10 +67,18 @@ td {
   margin-top: -192px;
 }
 
+.navbar {
+  border-bottom: 1px solid black;
+}
+
+.relative {
+  position: relative;
+}
+
 .userIcon {
   position: absolute;
-  right: 4px;
-  top: 6px;
+  right: 10px;
+  top: 10px;
   cursor: pointer;
 }
 
@@ -79,10 +87,11 @@ td {
   transform: translateX(1px);
 }
 
-@media only screen and (max-width: 845px){
+@media only screen and (max-width: 760px){
   .userIcon{
     position: absolute;
     top: auto;
     bottom: 6px;
+    right: 10px;
   }
 }

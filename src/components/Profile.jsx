@@ -91,24 +91,22 @@ export default class Profile extends React.Component {
         </div>
 
         return(
-            <div>
-                <div className={"card columns"}>
-                    <i className="fas fa-user-edit userIcon" onClick={this.toggleUsernameModal}></i>
-                    <div className={"card-image column is-two-fifths is-centered"}>
+            <div className={"box relativeK"}>
+                <div className={"columns"}>
+                    <div className={"column is-two-fifths is-centered"}>
                         <figure className={"image is-square"}>
                             <img alt={""} className={"image is-rounded"} src={this.props.userAvatar}/>
                         </figure>
                     </div>
                     <div className={"card-stacked column is-three-fifths is-narrow"}>
-                        <div className={"card-content"}>
-                            <h3 className={"title"} style={{marginBottom: "0"}}>
-                                {this.props.userName}
-                            </h3>
-                            <br/>
-                            <b>Registered:</b> {timeRegistered.toLocaleString()}
-                            <br/>
-                            <b>Play Count:</b> {playCount}
-                        </div>
+                        <h3 className={"title"} style={{marginBottom: "0"}}>
+                            {this.props.userName}
+                        </h3>
+                        <br/>
+                        <b>Registered:</b> {timeRegistered.toLocaleString()}
+                        <br/>
+                        <b>Play Count:</b> {playCount}
+                        <i className="fas fa-user-edit userIcon" onClick={this.toggleUsernameModal}></i>
                     </div>
                 </div>
                 {modal}
