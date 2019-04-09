@@ -13,6 +13,14 @@ code {
   monospace;
 }
 
+.container {
+  background-color: lightgrey;
+}
+
+.columns:not(:last-child) {
+  margin-bottom: 0 !important;
+}
+
 .clicky {
   cursor: pointer;
   padding: 0 15px;

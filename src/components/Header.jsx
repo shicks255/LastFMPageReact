@@ -6,7 +6,9 @@ export default function Header(props)
 
         <nav className={"navbar columns"} role={"navigation"} aria-label={"main navigation"}>
                 <div className={"column is-3"}>
-                    testtt
+                    <a href={""}>
+                        <img src={process.env.PUBLIC_URL + '/LastFmReactTitle.png'}/>
+                    </a>
                 </div>
 
                 <div className={"column is-9"}>

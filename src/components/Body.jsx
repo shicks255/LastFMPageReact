@@ -100,18 +100,21 @@ export default class Body extends React.Component
             .then(res => res.json())
             .then(
                 res => {
-                    let recentTracks = res.recenttracks.track;
-                    let nowPlaying = recentTracks.find((val,index) => {
-                        if (val['@attr'] && val['@attr'].nowplaying === 'true')
-                            return val;
-                        else
-                            return '';
-                    });
+                    if (res.recenttracks)
+                    {
+                        let recentTracks = res.recenttracks.track;
+                        let nowPlaying = recentTracks.find((val,index) => {
+                            if (val['@attr'] && val['@attr'].nowplaying === 'true')
+                                return val;
+                            else
+                                return '';
+                        });
 
-                    this.setState({
-                        recentTracks: recentTracks,
-                        nowPlaying: nowPlaying
-                    });
+                        this.setState({
+                            recentTracks: recentTracks,
+                            nowPlaying: nowPlaying
+                        });
+                    }
                 },
                 err => {console.log(err);}
             )
@@ -221,18 +224,20 @@ export default class Body extends React.Component
     mouseEnter(event)
     {
         let url = event.target.src;
-        let suffix = url.lastIndexOf("/");
-        let imageId = url.substr(suffix+1);
+        if (url){
+            let suffix = url.lastIndexOf("/");
+            let imageId = url.substr(suffix+1);
 
-        let prefix = url.substr(0,suffix);
-        let t = prefix.lastIndexOf("/");
-        prefix = prefix.substr(0,t);
+            let prefix = url.substr(0,suffix);
+            let t = prefix.lastIndexOf("/");
+            prefix = prefix.substr(0,t);
 
-        let newImageId = prefix + '/96s/' + imageId;
-        this.modalTimeOut = setTimeout(() =>
-        {
-            this.setState({modalImageSrc: newImageId});
-        }, 500);
+            let newImageId = prefix + '/96s/' + imageId;
+            this.modalTimeOut = setTimeout(() =>
+            {
+                this.setState({modalImageSrc: newImageId});
+            }, 500);
+        }
     }
 
     mouseOut()
@@ -266,7 +271,9 @@ export default class Body extends React.Component
         let mainContent;
         if (this.state.selected === 'top')
             mainContent = <div>
+                <br/>
                 <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
+                <br/>
                 {topContent}
             </div>;
         else
