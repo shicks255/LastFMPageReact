@@ -91,10 +91,10 @@ export default class Profile extends React.Component {
         </div>
 
         return(
-            <div className={"box relativeK"}>
-                <div className={"columns"}>
-                    <div className={"column is-two-fifths is-centered"}>
-                        <figure className={"image is-square"}>
+            <div className={"box relative"}>
+                <div className={"columns is-centered"}>
+                    <div className={"column is-two-fifths is-narrow"}>
+                        <figure className={"image is-128x128"}>
                             <img alt={""} className={"image is-rounded"} src={this.props.userAvatar}/>
                         </figure>
                     </div>
