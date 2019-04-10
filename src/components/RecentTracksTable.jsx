@@ -12,7 +12,7 @@ export default function RecentTracksTable(props) {
                     <td >
                         <a href={track.url} target={"_blank"}>
                             <div onMouseEnter={(event) => props.mouseOver(event)} onMouseLeave={props.mouseOut}>
-                                <img alt={""} className={'image'} height={'64'} width={'64'} src={url}/>
+                                <img alt={""} className={'image'} height={'64'} src={url}/>
                             </div>
                         </a>
                     </td>
