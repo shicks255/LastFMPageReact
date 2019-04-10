@@ -11,6 +11,10 @@ export default class Body extends React.Component
 {
     constructor(props)
     {
+        let username = localStorage.getItem("userName");
+        if (!username || username.length === 0)
+            username = 'shicks255';
+
         super(props);
         this.state = {
             strategy: "getTopArtists",
@@ -37,7 +41,7 @@ export default class Body extends React.Component
             userAvatar: "",
             playCount: 0,
             registered: 0,
-            userName: "shicks255",
+            userName: username,
             modalImageSrc: "",
         }
 
@@ -94,6 +98,7 @@ export default class Body extends React.Component
 
     getRecentTracks()
     {
+        console.log('getting recent tracks');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json`;
         fetch(url)
@@ -112,7 +117,7 @@ export default class Body extends React.Component
 
                         this.setState({
                             recentTracks: recentTracks,
-                            nowPlaying: nowPlaying
+                            nowPlaying: nowPlaying ? nowPlaying : ''
                         });
                     }
                 },
@@ -122,6 +127,7 @@ export default class Body extends React.Component
 
     getUserInfo()
     {
+        console.log('gettin guser info');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.userName}&api_key=${key}&format=json`;
         fetch(url)
@@ -175,40 +181,34 @@ export default class Body extends React.Component
     {
         new Promise((resolve) => {
             this.callApi();
-            resolve(() => {});
-        });
-        new Promise((resolve) => {
             this.getRecentTracks();
-            resolve(() => {});
-        });
-        new Promise((resolve) => {
             this.getUserInfo();
             resolve(() => {});
         });
     }
 
-    componentDidMount()
-    {
-        this.loadData();
-    }
-
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        if (this.state.userName !== prevState.userName || this.state.nowPlaying !== prevState.nowPlaying)
+        console.log('update from body');
+        console.log(this.state.userName + " " + prevState.userName);
+        console.log(this.state.nowPlaying.name + " " + prevState.nowPlaying.name);
+        if (this.state.userName !== prevState.userName || this.state.nowPlaying.name !== prevState.nowPlaying.name)
             this.loadData();
     }
 
     componentWillUpdate(nextProps, nextState, nextContext)
     {
-        if (this.state.modalImageSrc !== nextState.modalImageSrc)
+        if (this.state.modalImageSrc.length > 0 && this.state.modalImageSrc !== nextState.modalImageSrc)
             this.render();
     }
 
-    componentWillMount()
+    componentDidMount()
     {
-        let username = localStorage.getItem("userName");
-        if (username && username.length > 0)
-            this.setState({userName: username})
+        setInterval(() => {
+            this.getRecentTracks();
+        },10000);
+
+        this.loadData();
     }
 
     clickButton(event)
@@ -248,6 +248,7 @@ export default class Body extends React.Component
 
     render()
     {
+        console.log('rendering');
         let topContent = '';
         if (this.state.strategy === 'getTopArtists')
             topContent = <ArtistTable artists={this.state.artists}/>

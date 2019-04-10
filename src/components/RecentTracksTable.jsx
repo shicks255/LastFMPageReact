@@ -11,9 +11,7 @@ export default function RecentTracksTable(props) {
                 <tr key={index}>
                     <td >
                         <a href={track.url} target={"_blank"}>
-                            <div onMouseEnter={(event) => props.mouseOver(event)} onMouseLeave={props.mouseOut}>
-                                <img alt={""} className={'image'} height={'64'} src={url}/>
-                            </div>
+                            <img alt={""} onMouseEnter={(event) => props.mouseOver(event)} onMouseLeave={props.mouseOut} className={'image'} height={'64'} src={url}/>
                         </a>
                     </td>
                     <td>{unixDate.toLocaleString()}</td>
@@ -23,7 +21,7 @@ export default function RecentTracksTable(props) {
             );
         }
         else
-            return '';
+            return <tr key={0}></tr>;
     });
 
     let mobileContent = props.tracks.map((track,index) => {
@@ -51,14 +49,12 @@ export default function RecentTracksTable(props) {
             );
         }
         else
-            return '';
+            return <tr key={0}></tr>;
     });
 
     return(
         <div>
             <table className={"table is-striped is-hoverable is-fullwidth is-hidden-tablet"}>
-                <thead>
-                </thead>
                 <tbody>
                 {mobileContent}
                 </tbody>

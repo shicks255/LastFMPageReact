@@ -67,11 +67,11 @@ h1 {
 
 .gif {
   height: 33px;
-  width: 128px;
+  width: 100%;
 }
 
 .box {
-  background-color: #e8dce6 !important;
+  background-color: #9898a0 !important;
 }
 
 td {
@@ -129,6 +129,10 @@ tr:nth-child(even) {
           1px -1px 0 #000,
           -1px 1px 0 #000,
           1px 1px 0 #000;}
+
+.nowPlaying tr, .nowPlaying td {
+  background-color: #4E4E50;
+}
 
 .relative {
   position: relative;
