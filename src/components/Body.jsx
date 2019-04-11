@@ -43,6 +43,7 @@ export default class Body extends React.Component
             registered: 0,
             userName: username,
             modalImageSrc: "",
+            modalImageCaption: ""
         }
 
         this.modalTimeOut = null;
@@ -221,7 +222,7 @@ export default class Body extends React.Component
             this.setState({selected: "top"})
     }
 
-    mouseEnter(event)
+    mouseEnter(event, caption)
     {
         let url = event.target.src;
         if (url){
@@ -235,7 +236,10 @@ export default class Body extends React.Component
             let newImageId = prefix + '/96s/' + imageId;
             this.modalTimeOut = setTimeout(() =>
             {
-                this.setState({modalImageSrc: newImageId});
+                this.setState({
+                    modalImageSrc: newImageId,
+                    modalImageCaption: caption
+                });
             }, 500);
         }
     }
@@ -243,7 +247,10 @@ export default class Body extends React.Component
     mouseOut()
     {
         clearTimeout(this.modalTimeOut);
-        this.setState({modalImageSrc: ''});
+        this.setState({
+            modalImageSrc: '',
+            modalImageCaption: ''
+        });
     }
 
     render()
@@ -309,6 +316,7 @@ export default class Body extends React.Component
                 </div>
                 <div className={modalClass} >
                     <img alt={""} src={this.state.modalImageSrc}/>
+                    <span style={{color: "black"}}>{this.state.modalImageCaption}</span>
                 </div>
             </div>
         )

@@ -1,160 +1,161 @@
 html, body {
-  width: 100%;
-  /*height: 100vh;*/
-  min-height: 1024px;
-  margin: 0px;
-  padding: 0px;
+    width: 100%;
+    /*height: 100vh;*/
+    min-height: 1024px;
+    margin: 0px;
+    padding: 0px;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #1A1A1D;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1A1A1D;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-  monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 h1 {
-  color: white !important;
+    color: white !important;
 }
 
 .container {
-  background-color: #4E4E50;
+    background-color: #4E4E50;
 }
 
 .columns:not(:last-child) {
-  margin-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .bannerImage {
-  padding-right: 1.35rem !important;
+    padding-right: 1.35rem !important;
 }
 
 .clicky {
-  cursor: pointer;
-  padding: 0 15px;
-  border-radius: 3px;
-  -webkit-box-shadow: 0 5px #000;
-  -moz-box-shadow: 0 5px #000;
-  box-shadow: 0 5px #000;
-  background-color: #eeeeee;
-  border: 1px solid black;
+    cursor: pointer;
+    padding: 0 15px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 5px #000;
+    -moz-box-shadow: 0 5px #000;
+    box-shadow: 0 5px #000;
+    background-color: #eeeeee;
+    border: 1px solid black;
 }
 
 .clicky:hover {
-  background-color: lightblue;
+    background-color: lightblue;
 }
 
 .clicky.selected{
-  box-shadow: -1px 3px #000;
-  background-color: #cbcbcb;
-  transform: translateY(3px);
+    box-shadow: -1px 3px #000;
+    background-color: #cbcbcb;
+    transform: translateY(3px);
 }
 .cicky.selected:hover{
 }
 
 .imageCell {
-  min-width: 55px;
+    min-width: 55px;
 }
 
 .gif {
-  height: 33px;
-  width: 100%;
+    height: 33px;
+    width: 100%;
 }
 
 .box {
-  background-color: #9898a0 !important;
+    background-color: #9898a0 !important;
 }
 
 td {
-  vertical-align: middle !important;
+    vertical-align: middle !important;
 }
 td a {
-  text-decoration: underline;
-  color: white;
+    text-decoration: underline;
+    color: white;
 }
 
 tr,th{
-  color: white !important;
+    color: white !important;
 }
 tr:nth-child(odd) {
-  background-color: #950740 !important;
+    background-color: #950740 !important;
 }
 tr:nth-child(even) {
-  background-color: #6F2232 !important;
+    background-color: #6F2232 !important;
 }
 
 
 .alignRight {
-  text-align: right;
+    text-align: right;
 }
 
 .active.imagePopup {
-  display: block;
+    display: block;
 }
 
 .imagePopup {
-  display: none;
-  position: fixed;
-  width: 384px;
-  top: 50%;
-  leff: 50%;
-  margin-left: 288px;
-  margin-top: -192px;
+    display: none;
+    position: fixed;
+    width: 384px;
+    top: 50%;
+    leff: 50%;
+    margin-left: 288px;
+    margin-top: -192px;
 }
 
 .navbar {
-  border-bottom: 1px solid black;
-  background-color: #1A1A1D !important;
-  padding: 8px 0px 0px 8px;
-  vertical-align: middle !important;
+    border-bottom: 1px solid black;
+    background-color: #1A1A1D !important;
+    padding: 8px 0px 0px 8px;
+    vertical-align: middle !important;
 }
 
 .nowPlaying {
-  margin-bottom: 10px;
-  color: #C3073F;
-  font-weight: bolder;
-  -webkit-text-stroke: 1px black;
-  text-shadow:
-          3px 3px 0 #000,
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;}
+    margin-bottom: 10px;
+    color: #C3073F;
+    font-weight: bolder;
+    -webkit-text-stroke: 1px black;
+    text-shadow:
+            3px 3px 0 #000,
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;}
 
 .nowPlaying tr, .nowPlaying td {
-  background-color: #4E4E50;
+    background-color: #4E4E50;
 }
 
 .relative {
-  position: relative;
+    position: relative;
 }
 
 .userIcon {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    color: #6F2232;
 }
 
 .userIcon:hover{
-  transform: translateY(1px);
-  transform: translateX(1px);
+    transform: translateY(1px);
+    transform: translateX(1px);
 }
 
 @media only screen and (max-width: 760px){
-  .userIcon{
-    position: absolute;
-    top: auto;
-    bottom: 6px;
-    right: 10px;
-  }
+    .userIcon{
+        position: absolute;
+        top: auto;
+        bottom: 6px;
+        right: 10px;
+    }
 }
