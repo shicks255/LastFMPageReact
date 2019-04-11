@@ -4,13 +4,14 @@ export default function AlbumTable(props) {
 
     let bigContent = props.albums.map((val, index) => {
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+        let albumName = val.name;
         return(
             <tr key={index}>
                 <td className={"alignRight"}>{index+1}.</td>
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
-                            <img alt={""} height={64} width={64} src={url} />
+                            <img alt={""} height={64} width={64} src={url} onMouseEnter={(event) => props.mouseOver(event, albumName)} onMouseLeave={props.mouseOut}/>
                         </a>
                     </div>
                 </td>

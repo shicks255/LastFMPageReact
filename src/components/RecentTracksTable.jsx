@@ -11,9 +11,11 @@ export default function RecentTracksTable(props) {
             return(
                 <tr key={index}>
                     <td >
-                        <a href={track.url} target={"_blank"}>
-                            <img alt={""} onMouseEnter={(event) => props.mouseOver(event, album)} onMouseLeave={props.mouseOut} className={'image'} height={'64'} src={url}/>
-                        </a>
+                        <div className={"imageCell"}>
+                            <a href={track.url} target={"_blank"}>
+                                <img alt={""} onMouseEnter={(event) => props.mouseOver(event, album)} onMouseLeave={props.mouseOut} className={'image'} height={'64'} src={url}/>
+                            </a>
+                        </div>
                     </td>
                     <td>{unixDate.toLocaleString()}</td>
                     <td><i>{track.name}</i></td>

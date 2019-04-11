@@ -258,23 +258,37 @@ export default class Body extends React.Component
         console.log('rendering');
         let topContent = '';
         if (this.state.strategy === 'getTopArtists')
-            topContent = <ArtistTable artists={this.state.artists}/>
+            topContent = <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
         if (this.state.strategy === 'getTopAlbums')
-            topContent = <AlbumTable albums={this.state.albums}/>
+            topContent = <AlbumTable albums={this.state.albums} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
         if (this.state.strategy === 'getTopTracks')
-            topContent = <TrackTable tracks={this.state.tracks}/>
+            topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
 
         let recentButton;
+        let recentButtonTitle;
         if (this.state.selected === 'recent')
+        {
             recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky selected"}></i>
+            recentButtonTitle = <b>Recent</b>
+        }
         else
+        {
             recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky"}></i>
+            recentButtonTitle = "Recent";
+        }
 
         let topButton;
+        let topButtonTitle;
         if (this.state.selected === 'top')
+        {
             topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky selected"}></i>
+            topButtonTitle = <b>Top</b>
+        }
         else
+        {
             topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky"}></i>
+            topButtonTitle = "Top";
+        }
 
         let mainContent;
         if (this.state.selected === 'top')
@@ -303,10 +317,18 @@ export default class Body extends React.Component
                         />
                     </div>
                 </div>
-                <div className={"columns"}>
+                <div className={"columns menuButtons"}>
                     <div className={'column is-half is-offset-one-quarter has-text-centered'}>
-                        {recentButton}
-                        {topButton}
+                        <div style={{display: "inline-block"}}>
+                            {recentButton}
+                            <br/>
+                            {recentButtonTitle}
+                        </div>
+                        <div style={{display: "inline-block"}}>
+                            {topButton}
+                            <br/>
+                            {topButtonTitle}
+                        </div>
                     </div>
                 </div>
                 <div className={"columns"}>
@@ -316,7 +338,7 @@ export default class Body extends React.Component
                 </div>
                 <div className={modalClass} >
                     <img alt={""} src={this.state.modalImageSrc}/>
-                    <span style={{color: "black"}}>{this.state.modalImageCaption}</span>
+                    <span style={{color: "black"}}><b>{this.state.modalImageCaption}</b></span>
                 </div>
             </div>
         )

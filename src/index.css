@@ -72,6 +72,13 @@ h1 {
 
 .box {
     background-color: #9898a0 !important;
+    color: black;
+}
+.card-stacked {
+    color: black;
+}
+.card-stacked .title {
+    color: black;
 }
 
 td {
@@ -132,6 +139,17 @@ tr:nth-child(even) {
 
 .nowPlaying tr, .nowPlaying td {
     background-color: #4E4E50;
+}
+.menuTable tr, .menuTable td {
+    background-color: #9898a0;
+    color: black;
+}
+.menuTable {
+    color: black;
+}
+
+.menuButtons {
+    color: black;
 }
 
 .relative {

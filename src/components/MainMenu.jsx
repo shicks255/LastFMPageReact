@@ -14,7 +14,7 @@ export default function MainMenu(props)
     return (
         <div className={"columns is-mobile"}>
             <div className="box column is-half is-offset-one-quarter">
-                <table>
+                <table className={"menuTable"}>
                     <tbody>
                     <tr>
                         <td><label>Select</label></td>
