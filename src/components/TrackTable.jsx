@@ -10,10 +10,10 @@ export default function TrackTable(props) {
 
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let title = val.name;
-
+        let rank = val['@attr'].rank;
         return(
             <tr key={index}>
-                <td className={"alignRight"}>{index+1}.</td>
+                <td className={"alignRight"}>{rank}.</td>
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
@@ -37,9 +37,10 @@ export default function TrackTable(props) {
 
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let title = val.name;
+        let rank = val['@attr'].rank;
         return(
             <tr key={index}>
-                <td className={"alignRight"}>{index+1}.</td>
+                <td className={"alignRight"}>{rank}.</td>
                 <td>
                     <a href={val.url} target={'_blank'}>
                         <img alt={""} width={64} height={64} src={url} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>

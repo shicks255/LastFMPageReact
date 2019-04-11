@@ -6,6 +6,7 @@ import TrackTable from "./TrackTable";
 import RecentTracksTable from "./RecentTracksTable";
 import NowPlaying from "./NowPlaying";
 import Profile from "./Profile";
+import Pagination from "./Pagination";
 
 export default class Body extends React.Component
 {
@@ -19,6 +20,11 @@ export default class Body extends React.Component
         this.state = {
             strategy: "getTopArtists",
             timeFrame: "7day",
+            page: 1,
+            recentTracksPages: 0,
+            artistsPages: 0,
+            albumsPages: 0,
+            tracksPages: 0,
             strategies: {
                 "getTopArtists": "Top Artists",
                 "getTopAlbums": "Top Albums",
@@ -58,6 +64,9 @@ export default class Body extends React.Component
         this.clickButton = this.clickButton.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
+        this.forwardPage = this.forwardPage.bind(this);
+        this.backwardPage = this.backwardPage.bind(this);
+        this.jumpToPage = this.jumpToPage.bind(this);
     };
 
     setUserName(value)
@@ -68,10 +77,35 @@ export default class Body extends React.Component
         });
     }
 
+    forwardPage()
+    {
+        console.log('moving forward');
+        this.setState({
+            page: this.state.page + 1
+        });
+    }
+
+    backwardPage()
+    {
+        console.log('moving backward');
+        if (this.state.page > 1)
+            this.setState({
+                page: this.state.page - 1
+            });
+    }
+
+    jumpToPage(number)
+    {
+        console.log(`jumping to page ${number}`);
+        this.setState({
+            page: number
+        });
+    }
+
     getFullUrl()
     {
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.state.strategy}&user=${this.state.userName}&api_key=${key}&format=json&period=${this.state.timeFrame}`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.state.strategy}&user=${this.state.userName}&api_key=${key}&format=json&period=${this.state.timeFrame}&page=${this.state.page}`;
         return url;
     }
 
@@ -83,7 +117,8 @@ export default class Body extends React.Component
                 return val[1] === newValue;
             });
             this.setState({
-                strategy: strategyKey[0]
+                strategy: strategyKey[0],
+                page: 1
             }, this.callApi);
         }
         if (type === 'timeFrame')
@@ -92,7 +127,8 @@ export default class Body extends React.Component
                 return val[1] === newValue;
             })
             this.setState({
-                timeFrame: timeFrameKey[0]
+                timeFrame: timeFrameKey[0],
+                page: 1
             }, this.callApi);
         }
     }
@@ -101,7 +137,7 @@ export default class Body extends React.Component
     {
         console.log('getting recent tracks');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json&page=${this.state.page}`;
         fetch(url)
             .then(res => res.json())
             .then(
@@ -118,7 +154,8 @@ export default class Body extends React.Component
 
                         this.setState({
                             recentTracks: recentTracks,
-                            nowPlaying: nowPlaying ? nowPlaying : ''
+                            nowPlaying: nowPlaying ? nowPlaying : '',
+                            recentTracksPages: res.recenttracks['@attr'].totalPages
                         });
                     }
                 },
@@ -128,7 +165,7 @@ export default class Body extends React.Component
 
     getUserInfo()
     {
-        console.log('gettin guser info');
+        // console.log('gettin guser info');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.userName}&api_key=${key}&format=json`;
         fetch(url)
@@ -147,7 +184,7 @@ export default class Body extends React.Component
 
     callApi()
     {
-        console.log('calling api');
+        // console.log('calling api');
         let url = this.getFullUrl()
         fetch(url)
             .then(res => res.json())
@@ -156,22 +193,34 @@ export default class Body extends React.Component
                     if (this.state.strategy === 'getTopArtists')
                     {
                         let topArtists = res.topartists.artist;
-                        this.setState({artists: topArtists})
+                        this.setState({
+                            artists: topArtists,
+                            artistsPages: res.topartists['@attr'].totalPages
+                        });
                     }
                     if (this.state.strategy === 'getTopAlbums')
                     {
                         let topAlbums = res.topalbums.album;
-                        this.setState({albums: topAlbums});
+                        this.setState({
+                            albums: topAlbums,
+                            albumsPages: res.topalbums['@attr'].totalPages
+                        });
                     }
                     if (this.state.strategy === 'getTopTracks')
                     {
                         let topTracks = res.toptracks.track;
-                        this.setState({tracks: topTracks});
+                        this.setState({
+                            tracks: topTracks,
+                            tracksPages: res.toptracks['@attr'].totalPages
+                        });
                     }
                     if (this.state.strategy === 'getRecentTracks')
                     {
                         let recentTracks = res.recenttracks.track;
-                        this.setState({tracks: recentTracks});
+                        this.setState({
+                            recentTracks: recentTracks,
+                            recentTracksPages: res.recenttracks['@attr'].totalPages
+                        });
                     }
                 },
                 err => {console.log(err);}
@@ -180,26 +229,26 @@ export default class Body extends React.Component
 
     loadData()
     {
-        new Promise((resolve) => {
-            this.callApi();
-            this.getRecentTracks();
-            this.getUserInfo();
-            resolve(() => {});
-        });
+        new Promise(() => {this.callApi()});
+        new Promise(() => {this.getRecentTracks()});
+        new Promise(() => {this.getUserInfo()});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        console.log('update from body');
-        console.log(this.state.userName + " " + prevState.userName);
-        console.log(this.state.nowPlaying.name + " " + prevState.nowPlaying.name);
+        // console.log('update from body');
+        // console.log(this.state.userName + " " + prevState.userName);
+        // console.log(this.state.nowPlaying.name + " " + prevState.nowPlaying.name);
         if (this.state.userName !== prevState.userName || this.state.nowPlaying.name !== prevState.nowPlaying.name)
+            this.loadData();
+
+        if (this.state.page !== prevState.page)
             this.loadData();
     }
 
     componentWillUpdate(nextProps, nextState, nextContext)
     {
-        if (this.state.modalImageSrc.length > 0 && this.state.modalImageSrc !== nextState.modalImageSrc)
+        if ((this.state.modalImageSrc.length > 0 && this.state.modalImageSrc !== nextState.modalImageSrc) || this.state.page !== nextState.page)
             this.render();
     }
 
@@ -217,9 +266,15 @@ export default class Body extends React.Component
         const selectedId = event.target.id;
 
         if (selectedId === 'recentButton')
-            this.setState({selected: "recent"});
+            this.setState({
+                selected: "recent",
+                page: 1
+            });
         else if (selectedId === 'topButton')
-            this.setState({selected: "top"})
+            this.setState({
+                selected: "top",
+                page: 1
+            })
     }
 
     mouseEnter(event, caption)
@@ -255,14 +310,26 @@ export default class Body extends React.Component
 
     render()
     {
-        console.log('rendering');
+        // console.log('rendering');
+
+        let pagination;
+
         let topContent = '';
         if (this.state.strategy === 'getTopArtists')
+        {
             topContent = <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+            pagination = <Pagination totalPages={this.state.artistsPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+        }
         if (this.state.strategy === 'getTopAlbums')
+        {
             topContent = <AlbumTable albums={this.state.albums} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+            pagination = <Pagination totalPages={this.state.albumsPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+        }
         if (this.state.strategy === 'getTopTracks')
+        {
             topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+            pagination = <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+        }
 
         let recentButton;
         let recentButtonTitle;
@@ -294,12 +361,15 @@ export default class Body extends React.Component
         if (this.state.selected === 'top')
             mainContent = <div>
                 <br/>
-                <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>
+                <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>f
                 <br/>
                 {topContent}
             </div>;
         else
+        {
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
+            pagination = <Pagination totalPages={this.state.recentTracksPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+        }
 
         let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : 'imagePopup';
 
@@ -331,6 +401,7 @@ export default class Body extends React.Component
                         </div>
                     </div>
                 </div>
+                {pagination}
                 <div className={"columns"}>
                     <div className={"column is-10 is-offset-1"} >
                         {mainContent}

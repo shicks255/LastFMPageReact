@@ -44,7 +44,7 @@ export default class Profile extends React.Component {
                         this.setState({modalErrorMessage: `username of ${this.state.typeUsername} does not exist`});
                 },
                 err => {
-                    console.log('Problem loading data')
+                    console.log(`Problem loading data ${err}`);
                 }
             )
     }
@@ -103,7 +103,13 @@ export default class Profile extends React.Component {
                             {this.props.userName}
                         </h3>
                         <br/>
-                        <b>Registered:</b> {timeRegistered.toLocaleString()}
+                        <b>Registered:</b> {timeRegistered.toLocaleString(undefined, {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric'
+                    })}
                         <br/>
                         <b>Play Count:</b> {playCount}
                         <i className="fas fa-user-edit userIcon" onClick={this.toggleUsernameModal}></i>

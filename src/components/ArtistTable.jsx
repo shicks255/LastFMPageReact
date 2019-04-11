@@ -6,9 +6,10 @@ export default function ArtistTable(props) {
 
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let artistName = val.name;
+        let rank = val['@attr'].rank;
         return(
             <tr key={index}>
-                <td className={"alignRight"}>{index+1}.</td>
+                <td className={"alignRight"}>{rank}</td>
                 <td>
                     <div className={"imageCell"}>
                         <a target={'_blank'} href={val.url}>
