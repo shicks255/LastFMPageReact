@@ -8,7 +8,7 @@ export default class Pagination extends React.Component {
 
     render()
     {
-        let last = this.props.totalPages;
+        let last = Number(this.props.totalPages);
         let firstPage = this.props.currentPage === 1;
         let secondPage = this.props.currentPage === 2;
         let thirdPage = this.props.currentPage === 3;
@@ -24,7 +24,6 @@ export default class Pagination extends React.Component {
         let preLink =   <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage-1)}>{pre}</button></li>
         let postLink =  <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage+1)} >{post}</button></li>
         let lastLink =  <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, last)}>{last}</button></li>
-
 
         return (
             <nav className={"pagination"} role={"navigation"} aria-label={"pagination"}>
