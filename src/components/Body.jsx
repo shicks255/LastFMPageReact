@@ -73,7 +73,8 @@ export default class Body extends React.Component
     {
         localStorage.setItem("userName", value);
         this.setState({
-            userName: value
+            userName: value,
+            page: 1
         });
     }
 
@@ -94,8 +95,10 @@ export default class Body extends React.Component
             });
     }
 
-    jumpToPage(number)
+    jumpToPage(event, number)
     {
+        console.log(event);
+        console.log(number);
         console.log(`jumping to page ${number}`);
         this.setState({
             page: number
@@ -323,12 +326,12 @@ export default class Body extends React.Component
         if (this.state.strategy === 'getTopAlbums')
         {
             topContent = <AlbumTable albums={this.state.albums} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
-            pagination = <Pagination totalPages={this.state.albumsPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+            pagination = <Pagination totalPages={this.state.albumsPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
         if (this.state.strategy === 'getTopTracks')
         {
             topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
-            pagination = <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+            pagination = <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
 
         let recentButton;
@@ -368,7 +371,7 @@ export default class Body extends React.Component
         else
         {
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
-            pagination = <Pagination totalPages={this.state.recentTracksPages} currentPage={this.state.page} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+            pagination = <Pagination totalPages={this.state.recentTracksPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
 
         let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : 'imagePopup';
