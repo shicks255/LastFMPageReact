@@ -49,7 +49,8 @@ export default class Body extends React.Component
             registered: 0,
             userName: username,
             modalImageSrc: "",
-            modalImageCaption: ""
+            modalImageCaption: "",
+            loading: true,
         }
 
         this.modalTimeOut = null;
@@ -80,7 +81,6 @@ export default class Body extends React.Component
 
     forwardPage()
     {
-        console.log('moving forward');
         this.setState({
             page: this.state.page + 1
         });
@@ -88,7 +88,6 @@ export default class Body extends React.Component
 
     backwardPage()
     {
-        console.log('moving backward');
         if (this.state.page > 1)
             this.setState({
                 page: this.state.page - 1
@@ -97,9 +96,6 @@ export default class Body extends React.Component
 
     jumpToPage(event, number)
     {
-        console.log(event);
-        console.log(number);
-        console.log(`jumping to page ${number}`);
         this.setState({
             page: number
         });
@@ -141,7 +137,7 @@ export default class Body extends React.Component
         console.log('getting recent tracks');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json&page=${this.state.page}`;
-        fetch(url)
+        return fetch(url)
             .then(res => res.json())
             .then(
                 res => {
@@ -171,7 +167,7 @@ export default class Body extends React.Component
         // console.log('gettin guser info');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.userName}&api_key=${key}&format=json`;
-        fetch(url)
+        return fetch(url)
             .then(res => res.json())
             .then(
                 res => {
@@ -189,7 +185,7 @@ export default class Body extends React.Component
     {
         // console.log('calling api');
         let url = this.getFullUrl()
-        fetch(url)
+        return fetch(url)
             .then(res => res.json())
             .then(
                 res => {
@@ -232,21 +228,45 @@ export default class Body extends React.Component
 
     loadData()
     {
-        new Promise(() => {this.callApi()});
-        new Promise(() => {this.getRecentTracks()});
-        new Promise(() => {this.getUserInfo()});
+        this.setState({loading: true});
+        let p1 = new Promise((res, rej) =>
+        {
+            let p = this.callApi();
+            p.then((g) => {
+                res();
+            })
+        });
+        let p2 = new Promise((res, rej) =>
+        {
+            let p = this.getRecentTracks();
+            p.then((g) => {
+                res();
+            });
+        });
+        let p3 = new Promise((res, rej) =>
+        {
+            let p = this.getUserInfo();
+            p.then((g) => {
+                res();
+            });
+        });
+
+        let promiseData = Promise.all([p1, p2, p3])
+
+        promiseData.then((suc) => {
+            this.setState({loading: false});
+            console.log('all data loaded');
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        // console.log('update from body');
-        // console.log(this.state.userName + " " + prevState.userName);
-        // console.log(this.state.nowPlaying.name + " " + prevState.nowPlaying.name);
         if (this.state.userName !== prevState.userName || this.state.nowPlaying.name !== prevState.nowPlaying.name)
             this.loadData();
 
         if (this.state.page !== prevState.page)
             this.loadData();
+
     }
 
     componentWillUpdate(nextProps, nextState, nextContext)
@@ -313,10 +333,7 @@ export default class Body extends React.Component
 
     render()
     {
-        // console.log('rendering');
-
         let pagination;
-
         let topContent = '';
         if (this.state.strategy === 'getTopArtists')
         {
@@ -373,6 +390,9 @@ export default class Body extends React.Component
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
             pagination = <Pagination totalPages={this.state.recentTracksPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
+
+        if (this.state.loading)
+            mainContent = <a className={"button is-large is-loading"}>Loading...</a>
 
         let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : 'imagePopup';
 
