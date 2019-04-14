@@ -20,58 +20,63 @@ export default class Pagination extends React.Component {
         let pre = this.props.currentPage > 1 ? this.props.currentPage-1 : '';
         let post = this.props.currentPage < last ? this.props.currentPage + 1 : '';
 
-        let firstLink = <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, 1)}>1</button></li>
-        let preLink =   <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage-1)}>{pre}</button></li>
-        let postLink =  <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage+1)} >{post}</button></li>
-        let lastLink =  <li><button className="pagination-link" onClick={(event) => this.props.jumpTo(event, last)}>{last}</button></li>
+        let firstLink = <a className="button pagination-link" onClick={(event) => this.props.jumpTo(event, 1)}>1</a>
+        let preLink =   <a className="button pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage-1)}>{pre}</a>
+        let postLink =  <a className="button pagination-link" onClick={(event) => this.props.jumpTo(event, this.props.currentPage+1)} >{post}</a>
+        let lastLink =  <a className="button pagination-link" onClick={(event) => this.props.jumpTo(event, last)}>{last}</a>
 
         return (
-            <nav className={"pagination"} role={"navigation"} aria-label={"pagination"}>
-                {
-                    firstPage
-                        ? <button className={"pagination-previous disabled"}>Previous</button>
-                        : <button className={"pagination-previous"} onClick={this.props.previous}>Previous</button>
-                }
-                {
-                    lastPage
-                        ? <button className={"pagination-next disabled"}>Next</button>
-                        : <button className={"pagination-next"} onClick={this.props.next}>Next</button>
-                }
-                <br/>
-                <ul className={"pagination-list"}>
-                    {
-                        firstPage
-                            ? ''
-                            : firstLink
-                    }
-                    {
-                        firstPage || secondPage || thirdPage
-                            ? ''
-                            : <li><span className="pagination-ellipsis">&hellip;</span></li>
-                    }
-                    {
-                        firstPage || secondPage
-                            ? ''
-                            : preLink
-                    }
-                    <li><button className="pagination-link is-current" >{this.props.currentPage}</button></li>
-                    {
-                        lastPage
-                            ? ''
-                            : postLink
-                    }
-                    {
-                        lastPage || penultimatePage || penultimatePage2
-                            ? ''
-                            : <li><span className="pagination-ellipsis">&hellip;</span></li>
-                    }
-                    {
-                        penultimatePage || lastPage
-                            ? ''
-                            : lastLink
-                    }
-                </ul>
-            </nav>
+            <div>
+                <div className={"columns"} role={"navigation"} aria-label={"pagination"}>
+                    <div className={"column is-half is-offset-one-quarter has-text-centered"}>
+                        {
+                            firstPage
+                                ? <a className={"pagination-previous button disabled"}>Previous</a>
+                                : <a className={"pagination-previous button"} onClick={this.props.previous}>Previous</a>
+                        }
+                        {
+                            lastPage
+                                ? <a className={"pagination-next button disabled"}>Next</a>
+                                : <a className={"pagination-next button"} onClick={this.props.next}>Next</a>
+                        }
+                    </div>
+                </div>
+                <div className={"columns"}>
+                    <div className={"column is-half is-offset-one-quarter has-text-centered is-centered"}>
+                            {
+                                firstPage
+                                    ? ''
+                                    : firstLink
+                            }
+                            {
+                                firstPage || secondPage || thirdPage
+                                    ? ''
+                                    : <span className="pagination-ellipsis">&hellip;</span>
+                            }
+                            {
+                                firstPage || secondPage
+                                    ? ''
+                                    : preLink
+                            }
+                            <a className="pagination-link is-current button" >{this.props.currentPage}</a>
+                            {
+                                lastPage
+                                    ? ''
+                                    : postLink
+                            }
+                            {
+                                lastPage || penultimatePage || penultimatePage2
+                                    ? ''
+                                    : <span className="pagination-ellipsis">&hellip;</span>
+                            }
+                            {
+                                penultimatePage || lastPage
+                                    ? ''
+                                    : lastLink
+                            }
+                    </div>
+                </div>
+            </div>
         )
     }
 

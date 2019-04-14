@@ -164,12 +164,11 @@ footer {
     color: black;
 }
 
-.pagination {
-    max-width: fit-content;
-}
-
 .disabled {
     cursor: default !important;
+    background-color: #fff;
+    box-shadow: none;
+    opacity: .5;
 }
 
 .relative {
