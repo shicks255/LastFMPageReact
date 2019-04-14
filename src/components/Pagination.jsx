@@ -29,12 +29,12 @@ export default class Pagination extends React.Component {
             <nav className={"pagination"} role={"navigation"} aria-label={"pagination"}>
                 {
                     firstPage
-                        ? ''
-                        :<button className={"pagination-previous"} onClick={this.props.previous}>Previous</button>
+                        ? <button className={"pagination-previous disabled"}>Previous</button>
+                        : <button className={"pagination-previous"} onClick={this.props.previous}>Previous</button>
                 }
                 {
                     lastPage
-                        ? ''
+                        ? <button className={"pagination-next disabled"}>Next</button>
                         : <button className={"pagination-next"} onClick={this.props.next}>Next</button>
                 }
                 <br/>

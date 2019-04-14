@@ -164,6 +164,14 @@ footer {
     color: black;
 }
 
+.pagination {
+    max-width: fit-content;
+}
+
+.disabled {
+    cursor: default !important;
+}
+
 .relative {
     position: relative;
 }
