@@ -183,7 +183,6 @@ export default class Body extends React.Component
 
     callApi()
     {
-        // console.log('calling api');
         let url = this.getFullUrl()
         return fetch(url)
             .then(res => res.json())
@@ -251,7 +250,7 @@ export default class Body extends React.Component
             });
         });
 
-        let promiseData = Promise.all([p1, p2, p3])
+        let promiseData = Promise.all([p1, p2])
 
         promiseData.then((suc) => {
             this.setState({loading: false});
@@ -264,9 +263,11 @@ export default class Body extends React.Component
         if (this.state.userName !== prevState.userName || this.state.nowPlaying.name !== prevState.nowPlaying.name)
             this.loadData();
 
-        if (this.state.page !== prevState.page)
+        if (this.state.strategy !== prevState.strategy || this.state.timeFrame !== prevState.timeFrame)
             this.loadData();
 
+        if (this.state.page !== prevState.page)
+            this.loadData();
     }
 
     componentWillUpdate(nextProps, nextState, nextContext)
@@ -335,64 +336,81 @@ export default class Body extends React.Component
     {
         let pagination;
         let topContent = '';
-        if (this.state.strategy === 'getTopArtists')
-        {
-            topContent = <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
-            pagination = <Pagination totalPages={this.state.artistsPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+        if (this.state.strategy === 'getTopArtists') {
+            topContent =
+                <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+            pagination =
+                <Pagination totalPages={this.state.artistsPages} currentPage={this.state.page} next={this.forwardPage}
+                            previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
-        if (this.state.strategy === 'getTopAlbums')
-        {
+        if (this.state.strategy === 'getTopAlbums') {
             topContent = <AlbumTable albums={this.state.albums} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
-            pagination = <Pagination totalPages={this.state.albumsPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+            pagination =
+                <Pagination totalPages={this.state.albumsPages} currentPage={this.state.page} next={this.forwardPage}
+                            previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
-        if (this.state.strategy === 'getTopTracks')
-        {
+        if (this.state.strategy === 'getTopTracks') {
             topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
-            pagination = <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
+            pagination =
+                <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} next={this.forwardPage}
+                            previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
 
         let recentButton;
         let recentButtonTitle;
-        if (this.state.selected === 'recent')
-        {
-            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky selected"}></i>
+        if (this.state.selected === 'recent') {
+            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)}
+                              className={"fas fa-history fa-5x clicky selected"}></i>
             recentButtonTitle = <b>Recent</b>
-        }
-        else
-        {
-            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-history fa-5x clicky"}></i>
+        } else {
+            recentButton = <i id={"recentButton"} onClick={(event) => this.clickButton(event)}
+                              className={"fas fa-history fa-5x clicky"}></i>
             recentButtonTitle = "Recent";
         }
 
         let topButton;
         let topButtonTitle;
-        if (this.state.selected === 'top')
-        {
-            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky selected"}></i>
+        if (this.state.selected === 'top') {
+            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)}
+                           className={"fas fa-trophy fa-5x clicky selected"}></i>
             topButtonTitle = <b>Top</b>
-        }
-        else
-        {
-            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)} className={"fas fa-trophy fa-5x clicky"}></i>
+        } else {
+            topButton = <i id={"topButton"} onClick={(event) => this.clickButton(event)}
+                           className={"fas fa-trophy fa-5x clicky"}></i>
             topButtonTitle = "Top";
         }
 
+        let menu = '';
         let mainContent;
         if (this.state.selected === 'top')
-            mainContent = <div>
-                <br/>
-                <MainMenu {...this.state} onChange={(x,y) => this.changeItems(x,y)}/>f
-                <br/>
-                {topContent}
-            </div>;
+        {
+            mainContent =
+                <div>
+                    <br/>
+                    <br/>
+                    {topContent}
+                </div>;
+            menu = <MainMenu {...this.state} onChange={(x, y) => this.changeItems(x, y)}/>
+        }
         else
         {
             mainContent = <RecentTracksTable mouseOver={this.mouseEnter} mouseOut={this.mouseOut} tracks={this.state.recentTracks}/>
             pagination = <Pagination totalPages={this.state.recentTracksPages} currentPage={this.state.page} next={this.forwardPage} previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
 
+        let loading = '';
         if (this.state.loading)
-            mainContent = <a className={"button is-large is-loading"}>Loading...</a>
+            loading =
+                <div className="modal is-active" >
+                    <div className = "modal-background" >  </div>
+                    <div className="modal-content" style={{color : "#C3073F"}}>
+                        <div>
+                            <i className="fas fa-compact-disc fa-7x fa-spin"></i>
+                            <br/><br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span style={{color: "white"}}>Loading...</span>
+                        </div>
+                    </div>
+                </div>
 
         let modalClass = this.state.modalImageSrc.length > 0 ? 'active imagePopup box' : 'imagePopup';
 
@@ -424,9 +442,11 @@ export default class Body extends React.Component
                         </div>
                     </div>
                 </div>
-                {pagination}
                 <div className={"columns"}>
                     <div className={"column is-10 is-offset-1"} >
+                        {menu}
+                        {pagination}
+                        {loading}
                         {mainContent}
                     </div>
                 </div>

@@ -137,6 +137,10 @@ footer {
     color: #C3073F;
 }
 
+.modal-content  {
+    text-align: center;
+}
+
 .nowPlaying {
     margin-bottom: 10px;
     color: #C3073F;
