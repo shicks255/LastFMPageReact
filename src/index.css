@@ -137,6 +137,11 @@ footer {
     color: #C3073F;
 }
 
+h1 {
+    text-align: right;
+    padding: 2px 5px 2px 2px !important;
+}
+
 .modal-content  {
     text-align: center;
 }
@@ -198,5 +203,9 @@ footer {
         top: auto;
         bottom: 6px;
         right: 10px;
+    }
+
+    h1 {
+        text-align: center;
     }
 }
