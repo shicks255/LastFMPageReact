@@ -75,7 +75,10 @@ export default class Body extends React.Component
         localStorage.setItem("userName", value);
         this.setState({
             userName: value,
-            page: 1
+            page: 1,
+            selected: 'recent',
+            strategy: 'getTopArtists',
+            timeFrame: '7day'
         });
     }
 
@@ -134,7 +137,6 @@ export default class Body extends React.Component
 
     getRecentTracks()
     {
-        console.log('getting recent tracks');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.state.userName}&api_key=${key}&format=json&page=${this.state.page}`;
         return fetch(url)
@@ -164,7 +166,6 @@ export default class Body extends React.Component
 
     getUserInfo()
     {
-        // console.log('gettin guser info');
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.userName}&api_key=${key}&format=json`;
         return fetch(url)
@@ -228,33 +229,32 @@ export default class Body extends React.Component
     loadData()
     {
         this.setState({loading: true});
-        let p1 = new Promise((res, rej) =>
+        let p1 = new Promise((res) =>
         {
             let p = this.callApi();
-            p.then((g) => {
+            p.then(() => {
                 res();
             })
         });
-        let p2 = new Promise((res, rej) =>
+        let p2 = new Promise((res) =>
         {
             let p = this.getRecentTracks();
-            p.then((g) => {
+            p.then(() => {
                 res();
             });
         });
-        let p3 = new Promise((res, rej) =>
+        new Promise((res) =>
         {
             let p = this.getUserInfo();
-            p.then((g) => {
+            p.then(() => {
                 res();
             });
         });
 
         let promiseData = Promise.all([p1, p2])
 
-        promiseData.then((suc) => {
+        promiseData.then(() => {
             this.setState({loading: false});
-            console.log('all data loaded');
         });
     }
 
