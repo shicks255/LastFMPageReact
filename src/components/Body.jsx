@@ -64,6 +64,7 @@ export default class Body extends React.Component
         this.callApi = this.callApi.bind(this);
         this.clickButton = this.clickButton.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this);
+        this.mouseEnter2 = this.mouseEnter2.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
         this.forwardPage = this.forwardPage.bind(this);
         this.backwardPage = this.backwardPage.bind(this);
@@ -228,6 +229,7 @@ export default class Body extends React.Component
 
     loadData()
     {
+        console.log('loading data');
         this.setState({loading: true});
         let p1 = new Promise((res) =>
         {
@@ -323,6 +325,21 @@ export default class Body extends React.Component
         }
     }
 
+    mouseEnter2(event, caption)
+    {
+        let url = event.target.src;
+        if (url){
+            this.modalTimeOut = setTimeout(() =>
+            {
+                this.setState({
+                    modalImageSrc: url,
+                    modalImageCaption: caption
+                });
+            }, 500);
+        }
+    }
+
+
     mouseOut()
     {
         clearTimeout(this.modalTimeOut);
@@ -338,7 +355,7 @@ export default class Body extends React.Component
         let topContent = '';
         if (this.state.strategy === 'getTopArtists') {
             topContent =
-                <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+                <ArtistTable artists={this.state.artists} mouseOver={this.mouseEnter2} mouseOut={this.mouseOut}/>
             pagination =
                 <Pagination totalPages={this.state.artistsPages} currentPage={this.state.page} next={this.forwardPage}
                             previous={this.backwardPage} jumpTo={this.jumpToPage}/>
@@ -350,7 +367,7 @@ export default class Body extends React.Component
                             previous={this.backwardPage} jumpTo={this.jumpToPage}/>
         }
         if (this.state.strategy === 'getTopTracks') {
-            topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter} mouseOut={this.mouseOut}/>
+            topContent = <TrackTable tracks={this.state.tracks} mouseOver={this.mouseEnter2} mouseOut={this.mouseOut}/>
             pagination =
                 <Pagination totalPages={this.state.tracksPages} currentPage={this.state.page} next={this.forwardPage}
                             previous={this.backwardPage} jumpTo={this.jumpToPage}/>

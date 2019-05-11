@@ -1,6 +1,66 @@
 import React from 'react';
 
-export default function TrackTable(props) {
+export default React.memo(function TrackTable(props) {
+
+
+    function getFanArtImage(mbid, index)
+    {
+        let imageUrl = '';
+        let url = 'https://webservice.fanart.tv/v3/music/'+mbid+'&?api_key=e10d02f0a079517e365621fb714c944a&format=json';
+        let picture = document.getElementById('trackImage_' + index);
+        if (picture)
+            picture.src = '';
+        fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                if (res.artistthumb)
+                    imageUrl = res.artistthumb[0].url;
+                else if(res.artistbackground)
+                    imageUrl = res.artistbackground[0].url;
+                else if(res.hdmusiclogo)
+                    imageUrl = res.hdmusiclogo[0].url;
+                else if (res.musiclogo)
+                    imageUrl = res.musiclogo[0].url;
+                else if(res.albums)
+                {
+                    let albums = Object.keys(res.albums);
+                    let firstAlbum = albums[0];
+                    if (res.albums[firstAlbum])
+                        imageUrl = res.albums[firstAlbum].albumcover[0].url;
+                }
+
+                picture = document.getElementById('trackImage_' + index);
+                if (imageUrl.length > 0)
+                    picture.src = imageUrl;
+                else
+                    picture.src = '';
+            });
+    }
+
+    function getMusicBrainzId(val, index){
+        let fullName = encodeURI(val.name);
+        fetch('http://musicbrainz.org/ws/2/artist/?query=' + fullName + '&fmt=json',
+            {
+                headers:{
+                    'User-Agent': 'SteveFM/1.0 https:\\/\\/music.stevenmhicks.com shicks255@yahoo.com',
+                },
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.artists)
+                {
+                    let mbid = res.artists[0].id;
+                    getFanArtImage(mbid, index);
+                }
+            });
+    }
+
+    function getActualArtistUrl(val, index) {
+        if (val.mbid.length > 0)
+            getFanArtImage(val.mbid, index);
+        else
+            getMusicBrainzId(val, index);
+    }
 
     let bigContent = props.tracks.map((val, index) => {
         let min = Math.floor(val.duration / 60)
@@ -8,7 +68,6 @@ export default function TrackTable(props) {
         let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
         let time = `${min}:${secString.substr(0,2)}`;
 
-        let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let title = val.name;
         let rank = val['@attr'].rank;
         return(
@@ -17,7 +76,7 @@ export default function TrackTable(props) {
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
-                            <img alt={""} width={64} height={64} src={url} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
+                            <img alt={""} width={64} id={'trackImage_' + index} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
                         </a>
                     </div>
                 </td>
@@ -35,7 +94,6 @@ export default function TrackTable(props) {
         let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
         let time = `${min}:${secString.substr(0,2)}`;
 
-        let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let title = val.name;
         let rank = val['@attr'].rank;
         return(
@@ -43,7 +101,7 @@ export default function TrackTable(props) {
                 <td className={"alignRight"}>{rank}.</td>
                 <td>
                     <a href={val.url} target={'_blank'}>
-                        <img alt={""} width={64} height={64} src={url} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
+                        <img alt={""} id={'trackImage_' + index} width={64} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
                     </a>
                 </td>
                 <td>
@@ -57,6 +115,8 @@ export default function TrackTable(props) {
             </tr>
         )
     });
+
+    props.tracks.forEach((value, index) => getActualArtistUrl(value.artist, index));
 
     return(
         <div>
@@ -92,4 +152,4 @@ export default function TrackTable(props) {
             </table>
         </div>
     )
-}
+});
