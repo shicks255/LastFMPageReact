@@ -2,7 +2,7 @@ import React from 'react';
 
 export default React.memo(function ArtistTable(props) {
 
-    function getFanArtImage(mbid, index)
+    function getFanArtImage(mbid, index, val, secondTry)
     {
         let imageUrl = '';
         let url = 'https://webservice.fanart.tv/v3/music/'+mbid+'&?api_key=e10d02f0a079517e365621fb714c944a&format=json';
@@ -27,6 +27,14 @@ export default React.memo(function ArtistTable(props) {
                     if (res.albums[firstAlbum])
                         imageUrl = res.albums[firstAlbum].albumcover[0].url;
                 }
+                else
+                {
+                    if (!secondTry)
+                    {
+                        getMusicBrainzId(val, index)
+                        return;
+                    }
+                }
 
                 picture = document.getElementById('artistImage_' + index);
                 if (imageUrl.length > 0)
@@ -49,14 +57,14 @@ export default React.memo(function ArtistTable(props) {
                 if (res.artists)
                 {
                     let mbid = res.artists[0].id;
-                    getFanArtImage(mbid, index);
+                    getFanArtImage(mbid, index, val, true);
                 }
             });
     }
 
     function getActualArtistUrl(val, index) {
         if (val.mbid.length > 0)
-            getFanArtImage(val.mbid, index);
+            getFanArtImage(val.mbid, index, val);
         else
             getMusicBrainzId(val, index);
     }

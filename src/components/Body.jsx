@@ -229,7 +229,6 @@ export default class Body extends React.Component
 
     loadData()
     {
-        console.log('loading data');
         this.setState({loading: true});
         let p1 = new Promise((res) =>
         {
