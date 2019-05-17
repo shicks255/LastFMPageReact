@@ -46,7 +46,7 @@ export default React.memo(function ArtistTable(props) {
 
     function getMusicBrainzId(val, index){
         let fullName = encodeURI(val.name);
-        fetch('http://musicbrainz.org/ws/2/artist/?query=' + fullName + '&fmt=json',
+        fetch('https://musicbrainz.org/ws/2/artist/?query=' + fullName + '&fmt=json',
             {
                 headers:{
                     'User-Agent': 'SteveFM/1.0 https:\\/\\/music.stevenmhicks.com shicks255@yahoo.com',
