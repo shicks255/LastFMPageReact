@@ -36,7 +36,7 @@ export default function RecentTracksTable(props) {
                 <tr key={index}>
                     <td>
                         <a href={track.url} target={"_blank"}>
-                            <div>
+                            <div className={"imageCell"}>
                                 <img alt={""} className={'image'} height={'64'} width={'64'} src={url}/>
                             </div>
                         </a>

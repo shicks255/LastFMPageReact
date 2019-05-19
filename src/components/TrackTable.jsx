@@ -108,9 +108,11 @@ export default React.memo(function TrackTable(props) {
             <tr key={index}>
                 <td className={"alignRight"}>{rank}.</td>
                 <td>
-                    <a href={val.url} target={'_blank'}>
-                        <img alt={""} id={'trackImage_' + index} width={64} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
-                    </a>
+                    <div className={"imageCell"}>
+                        <a href={val.url} target={'_blank'}>
+                            <img alt={""} id={'trackImage_' + index} width={64} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
+                        </a>
+                    </div>
                 </td>
                 <td>
                     <a href={val.url} target={'_blank'}>{val.name}</a>
