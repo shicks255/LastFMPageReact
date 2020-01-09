@@ -464,6 +464,7 @@ export default class Body extends React.Component
                         {pagination}
                         {loading}
                         {mainContent}
+                        {pagination}
                     </div>
                 </div>
                 <div className={modalClass} >
