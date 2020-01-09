@@ -14,7 +14,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "install": "copyfiles -u 1 ./build/* ./build/static/css/* ./build/static/js/* \\\\httptomcat\\caddy\\lastFm\\"
+    "install": "copyfiles -u 1 ./build/* ./build/static/css/* ./build/static/js/* \\\\thinkcentre\\caddy\\lastFm\\"
   },
   "eslintConfig": {
     "extends": "react-app"
