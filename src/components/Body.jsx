@@ -5,7 +5,7 @@ import AlbumTable from "./AlbumTable";
 import TrackTable from "./TrackTable";
 import RecentTracksTable from "./RecentTracksTable";
 import NowPlaying from "./NowPlaying";
-import Profile from "./Profile";
+import {Profile} from "./Profile";
 import Pagination from "./Pagination";
 
 export default class Body extends React.Component
