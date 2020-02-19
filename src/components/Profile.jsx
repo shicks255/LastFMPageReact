@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileStore from "./ProfileStore";
+import ProfileStore, {profileStore} from "./ProfileStore";
 import {observer} from 'mobx-react';
 
 export const Profile = observer(class Profile extends React.Component {
@@ -10,8 +10,7 @@ export const Profile = observer(class Profile extends React.Component {
 
     render()
     {
-        const store = new ProfileStore();
-
+        const store = profileStore;
         let timeRegistered = new Date(this.props.registered*1000);
         let playCount = this.props.playCount
         playCount = playCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")

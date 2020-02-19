@@ -1,6 +1,6 @@
 import {observable, decorate, action, computed} from "mobx";
 
-export default class ProfileStore {
+class ProfileStore {
     showModal: boolean = false;
     typeUsername: string = '';
     modalErrorMessage: string = '';
@@ -17,14 +17,14 @@ export default class ProfileStore {
 
     submitUsername = () => {
         let key = 'c349ab1fcb6b132ffb8d842e982458db';
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.state.typeUsername}&api_key=${key}&format=json`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${this.typeUsername}&api_key=${key}&format=json`;
         fetch(url)
             .then(res => res.json())
             .then(
                 res => {
                     if (res.user && res.user.playcount > 0)
                     {
-                        let tempUsername = this.state.typeUsername;
+                        let tempUsername = this.typeUsername;
                         this.showModal = false;
                         // this.props.changeUsername(tempUsername);
                     }
@@ -43,3 +43,5 @@ decorate(ProfileStore,{
     typeUsername: observable,
     modalErrorMessage: observable,
 });
+
+export const profileStore =  new ProfileStore();
