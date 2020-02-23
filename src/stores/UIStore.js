@@ -6,6 +6,7 @@ export class UIStore {
     modalImageCaption: string = '';
     loading: boolean = true;
     modalTimeout: null;
+    page: number = 1;
 
     doModal(url, caption) {
         let suffix = url.lastIndexOf("/");
@@ -34,6 +35,22 @@ export class UIStore {
         this.modalImageSrc = '';
         this.modalImageCaption = '';
     }
+
+    forwardPage()
+    {
+        return this.page += 1;
+    }
+
+    backwardPage()
+    {
+        if (this.page > 1)
+            return this.page -= 1;
+    }
+
+    jumpToPage(number)
+    {
+        this.page = number;
+    }
 }
 
 decorate(UIStore, {
@@ -45,6 +62,10 @@ decorate(UIStore, {
     doModal: action,
     doModal2: action,
     closeModal: action,
+    page: observable,
+    forwardPage: action,
+    backwardPage: action,
+    jumpToPage: action,
 });
 
 export const uiStore = new UIStore();
