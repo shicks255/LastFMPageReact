@@ -1,8 +1,10 @@
 import React from 'react';
+import {inject,observer} from 'mobx-react';
 
-export default function AlbumTable(props) {
+export const AlbumTable = inject('uiStore','logicStore')(observer((props) =>  {
+    const {uiStore,logicStore} = props;
 
-    let bigContent = props.albums.map((val, index) => {
+    let bigContent = logicStore.albums.map((val, index) => {
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let albumName = val.name;
         let rank = val['@attr'].rank;
@@ -12,7 +14,7 @@ export default function AlbumTable(props) {
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
-                            <img alt={""} height={64} width={64} src={url} onMouseEnter={(event) => props.mouseOver(event, albumName)} onMouseLeave={props.mouseOut}/>
+                            <img alt={""} height={64} width={64} src={url} onMouseEnter={(event) => uiStore.doModal(event.target.src, albumName)} onMouseLeave={() => uiStore.closeModal()}/>
                         </a>
                     </div>
                 </td>
@@ -23,7 +25,7 @@ export default function AlbumTable(props) {
         )
     });
 
-    let mobileContent = props.albums.map((val, index) => {
+    let mobileContent = logicStore.albums.map((val, index) => {
         let url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let rank = val['@attr'].rank;
         return(
@@ -81,4 +83,4 @@ export default function AlbumTable(props) {
         </div>
 
     )
-}
+}));

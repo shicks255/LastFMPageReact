@@ -2,13 +2,13 @@ import React from 'react';
 
 export default function MainMenu(props)
 {
-    let stateStrategies = props.strategies;
-    let strategies = Object.keys(stateStrategies).map((value, index) => {
-        return <option key={index}>{stateStrategies[value]}</option>
+    const propStrategies = props.strategies;
+    let strategies = Object.keys(propStrategies).map((value, index) => {
+        return <option key={index}>{propStrategies[value]}</option>
     });
-    let stateTimeFrames = props.timeFrames;
-    let timeFrames = Object.keys(stateTimeFrames).map((value, index) => {
-        return <option key={index}>{stateTimeFrames[value]}</option>
+    const propTimeFrames = props.timeFrames;
+    let timeFrames = Object.keys(propTimeFrames).map((value, index) => {
+        return <option key={index}>{propTimeFrames[value]}</option>
     });
 
     return (

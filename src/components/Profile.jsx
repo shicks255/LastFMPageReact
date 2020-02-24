@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileStore, {profileStore} from "./ProfileStore";
+import ProfileStore, {profileStore} from "../stores/ProfileStore";
 import {observer} from 'mobx-react';
 
 export const Profile = observer(class Profile extends React.Component {

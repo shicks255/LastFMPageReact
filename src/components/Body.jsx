@@ -9,11 +9,12 @@ import NowPlaying from "./NowPlaying";
 import {Profile} from "./Profile";
 import {Pagination} from "./Pagination";
 import {uiStore} from "../stores/UIStore";
-import {timeFrames} from "../utils";
+import {timeFrames,strategies} from "../utils";
 import LoadingModal from "./LoadingModal";
 import Button from "./Button";
+import {logicStore} from "../stores/LogicStore";
 
-export const Body = inject("uiStore")(observer(class Body extends React.Component
+export const Body = inject("uiStore","logicStore")(observer(class Body extends React.Component
 {
     constructor(props)
     {
@@ -24,19 +25,6 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
         super(props);
         this.state = {
             lastFmKey: process.env.REACT_APP_LAST_FM_KEY,
-            strategy: "getTopArtists",
-            timeFrame: "7day",
-            strategies: {
-                "getTopArtists": "Top Artists",
-                "getTopAlbums": "Top Albums",
-                "getTopTracks": "Top Songs"
-            },
-            artists: [],
-            albums: [],
-            tracks: [],
-            recentTracks: [],
-            nowPlaying: "",
-            selected: 'recent',
             userAvatar: "",
             playCount: 0,
             registered: 0,
@@ -58,44 +46,39 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
         localStorage.setItem("userName", value);
         this.setState({
             userName: value,
-            selected: 'recent',
-            strategy: 'getTopArtists',
-            timeFrame: '7day'
         });
+        const {logicStore} = this.props;
+        logicStore.selected = 'recent';
+        logicStore.strategy = 'getTopArtists';
+        logicStore.timeFrame = '7day';
         this.props.uiStore.jumpToPage(1);
     }
 
     getFullUrl()
     {
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.state.strategy}
-        &user=${this.state.userName}
-        &api_key=${this.state.lastFmKey}
-        &format=json
-        &period=${this.state.timeFrame}
-        &page=${this.props.uiStore.page}`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.props.logicStore.strategy}&user=${this.state.userName}&api_key=${this.state.lastFmKey}&format=json&period=${this.props.logicStore.timeFrame}&page=${this.props.uiStore.page}`;
         return url;
     }
 
     changeItems(newValue, type)
     {
+        const {logicStore} = this.props;
         this.props.uiStore.jumpToPage(1);
         if (type === 'strategy')
         {
-            const strategyKey = Object.entries(this.state.strategies).find((val, index) => {
+            const strategyKey = Object.entries(strategies).find((val) => {
                 return val[1] === newValue;
             });
-            this.setState({
-                strategy: strategyKey[0],
-            }, this.callApi);
+            logicStore.strategy = strategyKey[0];
+            this.callApi();
         }
         if (type === 'timeFrame')
         {
-            let timeFrameKey = Object.entries(timeFrames).find((val,index) => {
+            let timeFrameKey = Object.entries(timeFrames).find((val) => {
                 return val[1] === newValue;
             })
-            this.setState({
-                timeFrame: timeFrameKey[0],
-            }, this.callApi);
+            logicStore.timeFrame = timeFrameKey[0];
+            this.callApi();
         }
     }
 
@@ -106,6 +89,8 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
         &api_key=${this.state.lastFmKey}
         &format=json
         &page=${this.props.uiStore.page}`;
+
+        const {logicStore} = this.props;
 
         return fetch(url)
             .then(res => res.json())
@@ -119,9 +104,9 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
                                 return val;
                         });
 
+                        logicStore.recentTracks = recentTracks;
+                        logicStore.noewPlaying = nowPlaying ? nowPlaying : '';
                         this.setState({
-                            recentTracks: recentTracks,
-                            nowPlaying: nowPlaying ? nowPlaying : '',
                             recentTracksPages: res.recenttracks['@attr'].totalPages
                         });
                     }
@@ -152,36 +137,37 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
 
     callApi()
     {
+        const {logicStore} = this.props;
         let url = this.getFullUrl()
         return fetch(url)
             .then(res => res.json())
             .then(
                 res => {
-                    if (this.state.strategy === 'getTopArtists')
+                    if (logicStore.strategy === 'getTopArtists')
                     {
+                        logicStore.artists = res.topartists.artist;
                         this.setState({
-                            artists: res.topartists.artist,
                             artistsPages: res.topartists['@attr'].totalPages
                         });
                     }
-                    if (this.state.strategy === 'getTopAlbums')
+                    if (logicStore.strategy === 'getTopAlbums')
                     {
+                        logicStore.albums = res.topalbums.album;
                         this.setState({
-                            albums: res.topalbums.album,
                             albumsPages: res.topalbums['@attr'].totalPages
                         });
                     }
-                    if (this.state.strategy === 'getTopTracks')
+                    if (logicStore.strategy === 'getTopTracks')
                     {
+                        logicStore.tracks = res.toptracks.track;
                         this.setState({
-                            tracks: res.toptracks.track,
                             tracksPages: res.toptracks['@attr'].totalPages
                         });
                     }
-                    if (this.state.strategy === 'getRecentTracks')
+                    if (logicStore.strategy === 'getRecentTracks')
                     {
+                        logicStore.recentTracks = res.recenttracks.track;
                         this.setState({
-                            recentTracks: res.recenttracks.track,
                             recentTracksPages: res.recenttracks['@attr'].totalPages
                         });
                     }
@@ -215,17 +201,17 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
-        if (this.state.userName !== prevState.userName || this.state.nowPlaying.name !== prevState.nowPlaying.name)
-            this.loadData();
-
-        if (this.state.strategy !== prevState.strategy || this.state.timeFrame !== prevState.timeFrame)
-            this.loadData();
+        // if (this.state.userName !== prevState.userName || logicStore.nowPlaying.name !== prevState.nowPlaying.name)
+        //     this.loadData();
+        //
+        // if (logicStore.strategy !== prevState.strategy || logicStore.timeFrame !== prevState.timeFrame)
+        //     this.loadData();
     }
 
     componentWillUpdate(nextProps, nextState, nextContext)
     {
-        if ((this.props.uiStore.modalImageSrc.length > 0 && this.props.uiStore.modalImageSrc !== nextState.modalImageSrc) || this.state.page !== nextState.page)
-            this.render();
+        // if ((this.props.uiStore.modalImageSrc.length > 0 && this.props.uiStore.modalImageSrc !== nextState.modalImageSrc) || this.state.page !== nextState.page)
+        //     this.render();
     }
 
     componentDidMount()
@@ -246,46 +232,44 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
         if (selectedId === 'topButton')
             value = 'top';
 
-        this.setState({
-            selected: value,
-        });
+        this.props.logicStore.selected = value;
         this.props.uiStore.jumpToPage(1);
     }
 
     render()
     {
-        const {uiStore} = this.props;
+        const {uiStore,logicStore} = this.props;
 
         let pagination;
         let topContent = '';
-        if (this.state.strategy === 'getTopArtists') {
+        if (logicStore.strategy === 'getTopArtists') {
             topContent =
-                <ArtistTable artists={this.state.artists} />
+                <ArtistTable />
             pagination =
                 <Pagination loadData={this.loadData} totalPages={this.state.artistsPages} />
         }
-        if (this.state.strategy === 'getTopAlbums') {
-            topContent = <AlbumTable albums={this.state.albums} />
+        if (logicStore.strategy === 'getTopAlbums') {
+            topContent = <AlbumTable />
             pagination =
                 <Pagination loadData={this.loadData} totalPages={this.state.albumsPages}/>
         }
-        if (this.state.strategy === 'getTopTracks') {
-            topContent = <TrackTable tracks={this.state.tracks} />
+        if (logicStore.strategy === 'getTopTracks') {
+            topContent = <TrackTable />
             pagination =
                 <Pagination loadData={this.loadData} totalPages={this.state.tracksPages} />
         }
 
         let recentButtonClass = 'fas fa-history fa-5x clicky';
-        if (this.state.selected === 'recent')
+        if (logicStore.selected === 'recent')
             recentButtonClass += ' selected';
 
         let topButtonClass = 'fas fa-trophy fa-5x clicky';
-        if (this.state.selected === 'top')
+        if (logicStore.selected === 'top')
             topButtonClass += ' selected';
 
         let menu = '';
         let mainContent;
-        if (this.state.selected === 'top')
+        if (logicStore.selected === 'top')
         {
             mainContent =
                 <div>
@@ -293,11 +277,11 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
                     <br/>
                     {topContent}
                 </div>;
-            menu = <MainMenu {...this.state} timeFrames={timeFrames} onChange={(x, y) => this.changeItems(x, y)}/>
+            menu = <MainMenu {...this.state} strategies={strategies} timeFrames={timeFrames} onChange={(x, y) => this.changeItems(x, y)}/>
         }
         else
         {
-            mainContent = <RecentTracksTable tracks={this.state.recentTracks}/>
+            mainContent = <RecentTracksTable />
             pagination = <Pagination loadData={this.loadData} totalPages={this.state.recentTracksPages} />
         }
 
@@ -306,7 +290,7 @@ export const Body = inject("uiStore")(observer(class Body extends React.Componen
 
         return(
             <div>
-                <NowPlaying nowPlaying={this.state.nowPlaying}/>
+                <NowPlaying nowPlaying={logicStore.nowPlaying}/>
                 <div className={"columns"}>
                     <div className={"column is-half is-offset-one-quarter has-text-centered"}>
                         <Profile

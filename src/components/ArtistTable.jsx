@@ -1,6 +1,8 @@
 import React from 'react';
+import {observer,inject} from 'mobx-react';
 
-export default React.memo(function ArtistTable(props) {
+export const ArtistTable = inject('uiStore','logicStore')(observer((props) => {
+    const {uiStore,logicStore} = props;
 
     function getFanArtImage(mbid, index, val, secondTry)
     {
@@ -69,7 +71,7 @@ export default React.memo(function ArtistTable(props) {
             getMusicBrainzId(val, index);
     }
 
-    let content = props.artists.map((val, index) => {
+    let content = logicStore.artists.map((val, index) => {
         let artistName = val.name;
         let rank = val['@attr'].rank;
         return(
@@ -78,7 +80,7 @@ export default React.memo(function ArtistTable(props) {
                 <td>
                     <div className={"imageCell"}>
                         <a target={'_blank'} href={val.url}>
-                            <img alt={""} id={'artistImage_' + index} height={64} width={64} src={''} onMouseEnter={(event) => props.mouseOver(event, artistName)} onMouseLeave={props.mouseOut}/>
+                            <img alt={""} id={'artistImage_' + index} height={64} width={64} src={''} onMouseEnter={(event) => uiStore.doModal2(event.target.src, artistName)} onMouseLeave={() => uiStore.closeModal()}/>
                         </a>
                     </div>
                 </td>
@@ -88,7 +90,7 @@ export default React.memo(function ArtistTable(props) {
         )
     });
 
-    props.artists.forEach((val, index) => getActualArtistUrl(val, index));
+    logicStore.artists.forEach((val, index) => getActualArtistUrl(val, index));
 
     return(
         <table className={'table is-fullwidth'}>
@@ -106,4 +108,4 @@ export default React.memo(function ArtistTable(props) {
             </tbody>
         </table>
     )
-});
+}));

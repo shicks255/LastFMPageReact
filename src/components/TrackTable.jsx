@@ -1,7 +1,9 @@
 import React from 'react';
+import {observer,inject} from 'mobx-react';
+import {uiStore} from "../stores/UIStore";
 
-export default React.memo(function TrackTable(props) {
-
+export const TrackTable = inject('uiStore','logicStore')(observer((props) => {
+    const {uiStore,logicStore} = props;
 
     function getFanArtImage(mbid, index, val, secondTry)
     {
@@ -70,7 +72,7 @@ export default React.memo(function TrackTable(props) {
             getMusicBrainzId(val, index);
     }
 
-    let bigContent = props.tracks.map((val, index) => {
+    let bigContent = logicStore.tracks.map((val, index) => {
         let min = Math.floor(val.duration / 60)
         let sec = val.duration - (min*60)
         let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
@@ -84,7 +86,7 @@ export default React.memo(function TrackTable(props) {
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
-                            <img alt={""} width={64} id={'trackImage_' + index} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
+                            <img alt={""} width={64} id={'trackImage_' + index} height={64} src={''} onMouseEnter={(event) => uiStore.doModal2(event.target.src, title)} onMouseLeave={() => uiStore.closeModal()}/>
                         </a>
                     </div>
                 </td>
@@ -96,7 +98,7 @@ export default React.memo(function TrackTable(props) {
         )
     });
 
-    let mobileContent = props.tracks.map((val, index) => {
+    let mobileContent = logicStore.tracks.map((val, index) => {
         let min = Math.floor(val.duration / 60)
         let sec = val.duration - (min*60)
         let secString = sec < 10 ? "0" + sec.toString() : sec.toString();
@@ -110,7 +112,7 @@ export default React.memo(function TrackTable(props) {
                 <td>
                     <div className={"imageCell"}>
                         <a href={val.url} target={'_blank'}>
-                            <img alt={""} id={'trackImage_' + index} width={64} height={64} src={''} onMouseEnter={(event) => props.mouseOver(event, title)} onMouseLeave={props.mouseOut}/>
+                            <img alt={""} id={'trackImage_' + index} width={64} height={64} src={''} onMouseEnter={(event) => uiStore.doModal2(event.target.src, title)} onMouseLeave={() => uiStore.closeModal()}/>
                         </a>
                     </div>
                 </td>
@@ -126,7 +128,7 @@ export default React.memo(function TrackTable(props) {
         )
     });
 
-    props.tracks.forEach((value, index) => getActualArtistUrl(value.artist, index));
+    logicStore.tracks.forEach((value, index) => getActualArtistUrl(value.artist, index));
 
     return(
         <div>
@@ -162,4 +164,4 @@ export default React.memo(function TrackTable(props) {
             </table>
         </div>
     )
-});
+}));
