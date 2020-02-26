@@ -9,7 +9,6 @@ class LogicStore {
     recentTracks:[] = [];
     nowPlaying: string = "";
     selected:string = 'recent';
-
 }
 
 decorate(LogicStore, {

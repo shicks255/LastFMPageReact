@@ -7,3 +7,9 @@ export const timeFrames = {
     "12month": "1 Year",
     "overall": "All Time",
 }
+
+export const strategies = {
+    "getTopArtists": "Top Artists",
+    "getTopAlbums": "Top Albums",
+    "getTopTracks": "Top Songs"
+}

@@ -5,6 +5,8 @@ import './index.css';
 import App from './App';
 import service from './serviceWorker';
 import {uiStore} from "./stores/UIStore";
+import {logicStore} from "./stores/LogicStore";
+import {profileStore} from "./stores/ProfileStore";
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
@@ -20,10 +22,12 @@ import {uiStore} from "./stores/UIStore";
 
 const stores = {
     uiStore,
+    logicStore,
+    profileStore,
 }
 
 ReactDOM.render(
-    <Provider uiStore={stores.uiStore}>
+    <Provider uiStore={stores.uiStore} logicStore={stores.logicStore} profileStore={profileStore}>
         <App />
     </Provider>,
     document.getElementById('root'));

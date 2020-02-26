@@ -13,26 +13,18 @@ import {timeFrames,strategies} from "../utils";
 import LoadingModal from "./LoadingModal";
 import Button from "./Button";
 import {logicStore} from "../stores/LogicStore";
+import {profileStore} from "../stores/ProfileStore";
 
-export const Body = inject("uiStore","logicStore")(observer(class Body extends React.Component
+export const Body = inject("uiStore","logicStore","profileStore")(observer(class Body extends React.Component
 {
     constructor(props)
     {
-        let username = localStorage.getItem("userName");
-        if (!username || username.length === 0)
-            username = 'shicks255';
-
         super(props);
         this.state = {
             lastFmKey: process.env.REACT_APP_LAST_FM_KEY,
-            userAvatar: "",
-            playCount: 0,
-            registered: 0,
-            userName: username,
         }
 
         this.changeItems = this.changeItems.bind(this);
-        this.setUserName = this.setUserName.bind(this);
         this.loadData = this.loadData.bind(this);
         this.getFullUrl = this.getFullUrl.bind(this);
         this.getRecentTracks = this.getRecentTracks.bind(this);
@@ -41,22 +33,14 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
         this.clickButton = this.clickButton.bind(this);
     };
 
-    setUserName(value)
-    {
-        localStorage.setItem("userName", value);
-        this.setState({
-            userName: value,
-        });
-        const {logicStore} = this.props;
-        logicStore.selected = 'recent';
-        logicStore.strategy = 'getTopArtists';
-        logicStore.timeFrame = '7day';
-        this.props.uiStore.jumpToPage(1);
-    }
-
     getFullUrl()
     {
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.props.logicStore.strategy}&user=${this.state.userName}&api_key=${this.state.lastFmKey}&format=json&period=${this.props.logicStore.timeFrame}&page=${this.props.uiStore.page}`;
+        let url = `https://ws.audioscrobbler.com/2.0/?method=user.${this.props.logicStore.strategy}
+        &user=${this.props.profileStore.userName}
+        &api_key=${this.state.lastFmKey}
+        &format=json
+        &period=${this.props.logicStore.timeFrame}
+        &page=${this.props.uiStore.page}`;
         return url;
     }
 
@@ -85,7 +69,7 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
     getRecentTracks()
     {
         let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
-        &user=${this.state.userName}
+        &user=${profileStore.userName}
         &api_key=${this.state.lastFmKey}
         &format=json
         &page=${this.props.uiStore.page}`;
@@ -105,7 +89,7 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
                         });
 
                         logicStore.recentTracks = recentTracks;
-                        logicStore.noewPlaying = nowPlaying ? nowPlaying : '';
+                        logicStore.nowPlaying = nowPlaying ? nowPlaying : '';
                         this.setState({
                             recentTracksPages: res.recenttracks['@attr'].totalPages
                         });
@@ -117,22 +101,7 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
 
     getUserInfo()
     {
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo
-        &user=${this.state.userName}
-        &api_key=${this.state.lastFmKey}
-        &format=json`;
-        return fetch(url)
-            .then(res => res.json())
-            .then(
-                res => {
-                    this.setState({
-                        userAvatar: res.user.image[3]['#text'],
-                        playCount: res.user.playcount,
-                        registered: res.user.registered['#text']
-                    });
-                },
-                err => {console.log(err);}
-            )
+        return this.props.profileStore.getUserInfo();
     }
 
     callApi()
@@ -187,40 +156,24 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
         {
             this.getRecentTracks().then(() => res());
         });
-        new Promise((res) =>
+        let p3 = new Promise((res) =>
         {
             this.getUserInfo().then(() => res());
         });
 
-        let promiseData = Promise.all([p1, p2])
+        let promiseData = Promise.all([p1, p2, p3])
 
         promiseData.then(() => {
             this.props.uiStore.loading = false;
         });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot)
-    {
-        // if (this.state.userName !== prevState.userName || logicStore.nowPlaying.name !== prevState.nowPlaying.name)
-        //     this.loadData();
-        //
-        // if (logicStore.strategy !== prevState.strategy || logicStore.timeFrame !== prevState.timeFrame)
-        //     this.loadData();
-    }
-
-    componentWillUpdate(nextProps, nextState, nextContext)
-    {
-        // if ((this.props.uiStore.modalImageSrc.length > 0 && this.props.uiStore.modalImageSrc !== nextState.modalImageSrc) || this.state.page !== nextState.page)
-        //     this.render();
-    }
-
     componentDidMount()
     {
         this.loadData();
-        this.getRecentTracks();
-        // setInterval(() => {
-        //     this.getRecentTracks();
-        // },10000);
+        setInterval(() => {
+            this.getRecentTracks();
+        },10000);
     }
 
     clickButton(event)
@@ -234,6 +187,7 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
 
         this.props.logicStore.selected = value;
         this.props.uiStore.jumpToPage(1);
+        this.loadData();
     }
 
     render()
@@ -297,8 +251,7 @@ export const Body = inject("uiStore","logicStore")(observer(class Body extends R
                             userAvatar={this.state.userAvatar}
                             playCount={this.state.playCount}
                             registered={this.state.registered}
-                            userName={this.state.userName}
-                            changeUsername={(event) => this.setUserName(event)}
+                            loadData={() => this.loadData()}
                         />
                     </div>
                 </div>
