@@ -3,11 +3,12 @@ import {observer,inject} from 'mobx-react';
 
 export const ArtistTable = inject('uiStore','logicStore')(observer((props) => {
     const {uiStore,logicStore} = props;
+    const fanartKey = process.env.REACT_APP_FANART_KEY;
 
     function getFanArtImage(mbid, index, val, secondTry)
     {
         let imageUrl = '';
-        let url = 'https://webservice.fanart.tv/v3/music/'+mbid+'&?api_key=e10d02f0a079517e365621fb714c944a&format=json';
+        let url = `https://webservice.fanart.tv/v3/music/${mbid}&?api_key=${fanartKey}&format=json`;
         let picture = document.getElementById('artistImage_' + index);
         if (picture)
             picture.src = '';
@@ -39,10 +40,11 @@ export const ArtistTable = inject('uiStore','logicStore')(observer((props) => {
                 }
 
                 picture = document.getElementById('artistImage_' + index);
-                if (imageUrl.length > 0)
-                    picture.src = imageUrl;
-                else
-                    picture.src = '';
+                if (picture)
+                    if (imageUrl.length > 0)
+                        picture.src = imageUrl;
+                    else
+                        picture.src = '';
             });
     }
 

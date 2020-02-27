@@ -51,7 +51,7 @@ class ProfileStore {
                         localStorage.setItem('userName', tempUsername);
                     }
                     else
-                        this.modalErrorMessage = `username of ${this.state.typeUsername} does not exist`;
+                        this.modalErrorMessage = `username of ${this.typeUsername} does not exist`;
                 },
                 err => {
                     console.log(`Problem loading data ${err}`);

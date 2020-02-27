@@ -21,10 +21,10 @@ export const Pagination = inject('uiStore')(observer((props) => {
     let pre = uiStore.page > 1 ? uiStore.page-1 : '';
     let post = uiStore.page < last ? uiStore.page + 1 : '';
 
-    let firstLink = <a className="button pagination-link" onClick={() => changePage(1)}>1</a>
-    let preLink =   <a className="button pagination-link" onClick={() => changePage(uiStore.page-1)}>{pre}</a>
-    let postLink =  <a className="button pagination-link" onClick={() => changePage(uiStore.page+1)} >{post}</a>
-    let lastLink =  <a className="button pagination-link" onClick={() => changePage(last)}>{last}</a>
+    let firstLink = <button className="button pagination-link" onClick={() => changePage(1)}>1</button>
+    let preLink =   <button className="button pagination-link" onClick={() => changePage(uiStore.page-1)}>{pre}</button>
+    let postLink =  <button className="button pagination-link" onClick={() => changePage(uiStore.page+1)} >{post}</button>
+    let lastLink =  <button className="button pagination-link" onClick={() => changePage(last)}>{String(last)}</button>
 
     return (
         <div>
@@ -32,13 +32,13 @@ export const Pagination = inject('uiStore')(observer((props) => {
                 <div className={"column is-half is-offset-one-quarter has-text-centered"}>
                     {
                         firstPage
-                            ? <a className={"pagination-previous button disabled"}>Previous</a>
-                            : <a className={"pagination-previous button"} onClick={() => changePage(uiStore.backwardPage())}>Previous</a>
+                            ? <button className={"pagination-previous button disabled"}>Previous</button>
+                            : <button className={"pagination-previous button"} onClick={() => changePage(uiStore.backwardPage())}>Previous</button>
                     }
                     {
                         lastPage
-                            ? <a className={"pagination-next button disabled"}>Next</a>
-                            : <a className={"pagination-next button"} onClick={() => changePage(uiStore.forwardPage())}>Next</a>
+                            ? <button className={"pagination-next button disabled"}>Next</button>
+                            : <button className={"pagination-next button"} onClick={() => changePage(uiStore.forwardPage())}>Next</button>
                     }
                 </div>
             </div>
@@ -59,7 +59,7 @@ export const Pagination = inject('uiStore')(observer((props) => {
                             ? ''
                             : preLink
                     }
-                    <a className="pagination-link is-current button" >{uiStore.page}</a>
+                    <button className="pagination-link is-current button" >{uiStore.page}</button>
                     {
                         lastPage
                             ? ''

@@ -22,6 +22,22 @@ export const Profile = inject('profileStore')(observer(class Profile extends Rea
         })
     }
 
+    componentDidMount(): void
+    {
+        document.addEventListener('keyup', (e) => {
+            if (e.keyCode === 27)
+                this.props.profileStore.showModal = false;
+            if (e.keyCode === 13)
+                this.submitUsername();
+        })
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void
+    {
+        if (prevProps.profileStore.showModal && this.props.profileStore.showModal)
+            document.getElementById('newUsername').focus();
+    }
+
     render()
     {
         const {profileStore} = this.props;

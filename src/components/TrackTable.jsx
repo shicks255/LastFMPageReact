@@ -4,11 +4,12 @@ import {uiStore} from "../stores/UIStore";
 
 export const TrackTable = inject('uiStore','logicStore')(observer((props) => {
     const {uiStore,logicStore} = props;
+    const fanartKey = process.env.REACT_APP_FANART_KEY;
 
     function getFanArtImage(mbid, index, val, secondTry)
     {
         let imageUrl = '';
-        let url = 'https://webservice.fanart.tv/v3/music/'+mbid+'&?api_key=e10d02f0a079517e365621fb714c944a&format=json';
+        let url = `https://webservice.fanart.tv/v3/music/${mbid}&api_key=${fanartKey}&format=json`;
         let picture = document.getElementById('trackImage_' + index);
         if (picture)
             picture.src = '';
