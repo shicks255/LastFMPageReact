@@ -53,6 +53,7 @@ export const Profile = inject('profileStore')(observer(class Profile extends Rea
             <div className={"modal-content"}>
                 <div className={"box"}>
                     <label htmlFor={"newUsername"}>Enter a new Username:</label>
+                    &nbsp;&nbsp;
                     <input onChange={(e) => this.changeUsername(e.target.value)} type={"text"} id={"newUsername"} aria-placeholder={"Username"}></input>
                     <button onClick={this.submitUsername}>Submit</button>
                     <br/>

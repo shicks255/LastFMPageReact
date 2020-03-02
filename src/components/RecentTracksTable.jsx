@@ -29,7 +29,7 @@ export const RecentTracksTable = inject('uiStore','logicStore')(observer((props)
             return <tr key={0}></tr>;
     });
 
-    let mobileContent = logicStore.tracks.map((track,index) => {
+    let mobileContent = logicStore.recentTracks.map((track,index) => {
         let url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
         let date = track.date ? track.date.uts : "";
         let unixDate = new Date(date*1000);

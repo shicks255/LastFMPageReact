@@ -1,6 +1,5 @@
 html, body {
     width: 100%;
-    /*height: 100vh;*/
     min-height: 1024px;
     margin: 0px;
     padding: 0px;
@@ -81,6 +80,7 @@ button:not(.is-current){
 .box {
     background-color: #9898a0 !important;
     color: black;
+    padding: 2rem !important;
 }
 .card-stacked {
     color: black;
@@ -144,6 +144,7 @@ h1 {
 
 .modal-content  {
     text-align: center;
+    padding: 5px;
 }
 
 .nowPlaying {
