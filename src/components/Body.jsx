@@ -14,6 +14,7 @@ import LoadingModal from "./LoadingModal";
 import Button from "./Button";
 import {logicStore} from "../stores/LogicStore";
 import {profileStore} from "../stores/ProfileStore";
+import Visuals from "./visuals/Visuals";
 
 export const Body = inject("uiStore","logicStore","profileStore")(observer(class Body extends React.Component
 {
@@ -115,6 +116,7 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
                     if (logicStore.strategy === 'getTopArtists')
                     {
                         logicStore.artists = res.topartists.artist;
+                        console.log(res.topartists.artist);
                         this.setState({
                             artistsPages: res.topartists['@attr'].totalPages
                         });
@@ -171,9 +173,9 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
     componentDidMount()
     {
         this.loadData();
-        setInterval(() => {
-            this.getRecentTracks();
-        },10000);
+        // setInterval(() => {
+        //     this.getRecentTracks();
+        // },10000);
     }
 
     clickButton(event)
@@ -184,6 +186,8 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
             value = 'recent';
         if (selectedId === 'topButton')
             value = 'top';
+        if (selectedId === 'vis')
+            value = 'vis'
 
         this.props.logicStore.selected = value;
         this.props.uiStore.jumpToPage(1);
@@ -221,10 +225,13 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
         if (logicStore.selected === 'top')
             topButtonClass += ' selected';
 
+        let vizButtonClass = 'fas fa-trophy fa-5x clicky';
+        if (logicStore.selected === 'vis')
+            vizButtonClass += ' selected';
+
         let menu = '';
         let mainContent;
-        if (logicStore.selected === 'top')
-        {
+        if (logicStore.selected === 'top') {
             mainContent =
                 <div>
                     <br/>
@@ -232,9 +239,11 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
                     {topContent}
                 </div>;
             menu = <MainMenu {...this.state} strategies={strategies} timeFrames={timeFrames} onChange={(x, y) => this.changeItems(x, y)}/>
-        }
-        else
-        {
+        } else if (logicStore.selected === 'vis') {
+            mainContent = <Visuals timeFrame={this.state.timeFrame} onChange={(x,y) => this.changeItems(x, y)}/>
+
+            pagination = null
+        } else {
             mainContent = <RecentTracksTable />
             pagination = <Pagination loadData={this.loadData} totalPages={this.state.recentTracksPages} />
         }
@@ -251,14 +260,15 @@ export const Body = inject("uiStore","logicStore","profileStore")(observer(class
                             userAvatar={this.state.userAvatar}
                             playCount={this.state.playCount}
                             registered={this.state.registered}
-                            loadData={() => this.loadData()}
+                            loadData={this.loadData}
                         />
                     </div>
                 </div>
                 <div className={"columns menuButtons"}>
                     <div className={'column is-half is-offset-one-quarter has-text-centered'}>
-                        <Button id={'recentButton'} class={recentButtonClass} title={'Recent'} clickButton={this.clickButton}/>
-                        <Button id={'topButton'} class={topButtonClass} title={'Top'} clickButton={this.clickButton}/>
+                        <Button id={'recentButton'} class={recentButtonClass} title='Recent' clickButton={this.clickButton}/>
+                        <Button id={'topButton'} class={topButtonClass} title='Top' clickButton={this.clickButton}/>
+                        <Button id={'vis'} class={vizButtonClass} title='Visualization' clickButton={this.clickButton} />
                     </div>
                 </div>
                 <div className={"columns"}>

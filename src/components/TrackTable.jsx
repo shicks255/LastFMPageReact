@@ -73,6 +73,8 @@ export const TrackTable = inject('uiStore','logicStore')(observer((props) => {
             getMusicBrainzId(val, index);
     }
 
+    console.log(logicStore.tracks);
+
     let bigContent = logicStore.tracks.map((val, index) => {
         let min = Math.floor(val.duration / 60)
         let sec = val.duration - (min*60)
