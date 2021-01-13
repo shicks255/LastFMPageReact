@@ -96,10 +96,11 @@ export default function LineGraph(props) {
     return (
         <div className='column is-full has-text-centered'>
             <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
+                Play Count by Day
                 <ResponsiveLine
                     data={ld}
-                    margin={{top: 50, right: 250, left: 250, bottom: 50}}
-                    enableGridX={false}
+                    margin={{top: 50, right: 150, left: 100, bottom: 100}}
+                    enableGridX={true}
                     enableGridY={true}
                     enableSlices='x'
                     sliceTooltip={(e) => {
@@ -144,14 +145,15 @@ export default function LineGraph(props) {
                         min: 1
                     }}
                     axisLeft={{
-                        legend: 'listens',
+                        legend: 'Listens',
                         legendOffset: -35,
                         legendPosition: 'middle',
-                        tickValues: tickValues
+                        tickValues: tickValues,
                     }}
                     axisBottom={{
                         format: '%b %d',
                         tickValues: 'every 1 day',
+                        tickRotation: -75,
                     }}
                     legends={[
                         {

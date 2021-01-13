@@ -1,10 +1,8 @@
 import React from 'react';
 import {ResponsiveBump} from '@nivo/bump';
-import {logicStore} from "../../stores/LogicStore";
 
 export default function BumpChart(props) {
 
-    console.log(props.recentTracks);
     const tracks = props.recentTracks.sort((x,y) => x.date['uts'] > y.date['uts'] ? 1 : -1);
     const oldest = tracks[0] ? new Date(tracks[0].date.uts * 1000) : '';
     const newest = tracks[tracks.length-1] ? new Date(tracks[tracks.length-1].date.uts * 1000) : '';
@@ -40,7 +38,7 @@ export default function BumpChart(props) {
             //make the dates actual days
             tracksByArtist[artistName] = tracksByArtist[artistName].map(i => {
                 const d = new Date(i * 1000);
-                return `${d.getMonth()+1}/${d.getDate()}`
+                return `${d.getMonth()+1}/${('0' + d.getDate()).slice(-2)}/${d.getFullYear()}`
             });
 
             // returns {12/25: 5, 12/26: 1}
@@ -56,7 +54,7 @@ export default function BumpChart(props) {
 
             //adds any missing dates with 0 playcount
             for (let d = new Date(oldest); d.getDate() <= newest.getDate(); d.setDate(d.getDate() + 1)) {
-                const key = '' + (d.getMonth()+1) + '/' + d.getDate()
+                const key = '' + (d.getMonth()+1) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
                 if (!dayPlayCount.hasOwnProperty(key)) {
                     dayPlayCount[key] = 0;
                 }
@@ -85,8 +83,6 @@ export default function BumpChart(props) {
             })
         });
 
-    console.log(data);
-
     // At this point we have an array of
     // {
     //     "id": "Pink Floyd",
@@ -101,7 +97,7 @@ export default function BumpChart(props) {
     // }
     let dayRanks = {}
     for (let d = new Date(oldest); d.getDate() <= newest.getDate(); d.setDate(d.getDate() + 1)) {
-        const key = '' + (d.getMonth() + 1) + '/' + d.getDate()
+        const key = '' + (d.getMonth()+1) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
 
         const dateData = data.map(obj => {
             const keep = obj.data.filter(x => x.x === key);
@@ -127,17 +123,13 @@ export default function BumpChart(props) {
         dayRanks[key] = r;
     }
 
-    console.log(dayRanks);
-
     const newData = data.map(d => {
         const newd = d.data.map(dat => {
             return {
-                "x": dat.x,
+                "x": dat.x.slice(0, -5),
                 "y": dayRanks[dat.x].indexOf(d.id) + 1
             }
         })
-
-        console.log(newd);
 
         return {
             "id": d.id,
@@ -149,6 +141,7 @@ export default function BumpChart(props) {
 
         <div className='column is-full has-text-centered'>
             <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
+                Artist Rank By Day
                 <ResponsiveBump
                     data={newData}
                     yOuterPadding={-50}
@@ -157,15 +150,15 @@ export default function BumpChart(props) {
                     pointSize={12}
                     activePointSize={16}
                     inactivePointSize={8}
-                    margin={{top: 50, right: 250, left: 50, bottom: 50}}
+                    margin={{top: 50, right: 150, left: 100, bottom: 100}}
                     axisBottom={{
                         tickSize: 5,
-                        legend: 'Artist',
-                        legendPosition: 'middle'
+                        tickRotation: -75,
                     }}
                     axisLeft={{
                         tickSize: 5,
                         legend: 'Ranking',
+                        legendOffset: -35,
                         legendPosition: 'middle'
                     }}
                 />

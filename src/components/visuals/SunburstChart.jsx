@@ -1,94 +1,76 @@
-import React, {useEffect, useState} from 'react';
-import {profileStore} from "../../stores/ProfileStore";
-import {logicStore} from "../../stores/LogicStore";
+import React from 'react';
 import {ResponsiveSunburst} from "nivo";
 
-export default function SunburstChart() {
+export default function SunburstChart(props) {
 
-    const lastFmKey =  process.env.REACT_APP_LAST_FM_KEY;
+    const { recentTracks } = props;
 
-    const [topAlbums, setTopAlbums] = useState([]);
-    useEffect(() => {
-        let url = `https://ws.audioscrobbler.com/2.0/?method=user.getTopAlbums
-        &user=${profileStore.userName}
-        &limit=200
-        &api_key=${lastFmKey}
-        &period=${logicStore.timeFrame}
-        &format=json
-        &page=1`;
-
-        fetch(url)
-            .then((data) => {
-                const d = data.json()
-                console.log(d);
-                return d;
-            })
-            .then(d => {
-                console.log(d.topalbums.album);
-                setTopAlbums(d.topalbums.album);
-            });
-
-    }, []);
-
-    if (!topAlbums) {
+    if (!recentTracks) {
         return (<div>
             Loading...
         </div>);
     }
 
-    const artistToAlbums = topAlbums.reduce((accum, album) => {
-        const artistName = album.artist.name;
+    const d = recentTracks.reduce((accum, item) => {
+        const artistName = item.artist['#text'];
+        const albumName = item.album['#text'];
 
         if (accum.hasOwnProperty(artistName)) {
-            accum[artistName].push({
-                "album": album.name,
-                "playcount": album.playcount
-            })
-        } else {
-            accum[artistName] = [
-                {
-                    "album": album.name,
-                    "playcount": album.playcount
-                }
-            ]
-        }
-
-        return accum
-    }, {});
-
-    const dataPoints =
-        Object.entries(artistToAlbums).map((k) => {
-
-            const albumData = k[1].map((album) => {
-                return {
-                    "id": album.album,
-                    "value": album.playcount,
-                    // "color": "hsl(74, 70%, 50%)",
-                }
-            })
-
-            return {
-                "id": k[0],
-                // "color": "hsl(74, 70%, 50%)",
-                "children": albumData,
+            if (accum[artistName].hasOwnProperty(albumName)) {
+                accum[artistName][albumName] = accum[artistName][albumName] + 1
+            } else {
+                accum[artistName][albumName] = 1;
             }
-    });
+        } else {
+            accum[artistName] = {
+                [albumName]: 1
+            }
+        }
+        return accum;
+    }, {})
+
+    const dp = Object.entries(d)
+        .sort((x,y) => {
+            const xCount = Object.values(x[1]).reduce((accum, cur) => {
+                return accum + cur
+            }, 0);
+            const yCount = Object.values(y[1]).reduce((accum, cur) => {
+                return accum + cur
+            }, 0);
+
+            return xCount > yCount ? -1 : 1;
+        })
+        .slice(0, 20)
+        .map(k => {
+
+        const albumData = Object.entries(k[1]).map(i => {
+            return {
+                "id": i[0],
+                "value": i[1],
+            }
+        });
+
+        return {
+            "id": k[0],
+            "children": albumData
+        }
+    })
 
     const data = {
         "id": "albums",
         "color": "#a32929",
-        "children": dataPoints,
+        "children": dp,
     }
 
     return (
         <div className='column is-full has-text-centered'>
             <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
+                Recent Tracks Album Pie Chart
                 <ResponsiveSunburst
                     data={data}
+                    margin={{top: 15, bottom: 20}}
                     cornerRadius={3}
                     borderWidth={4}
-                    // colors={{ scheme: 'category10' }}
-                    // childColor={{"from": "color"}}
                     motionConfig="gentle"
                     isInteractive={true}
                 />
