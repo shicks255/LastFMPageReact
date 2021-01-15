@@ -62,13 +62,22 @@ export default function SunburstChart(props) {
         "children": dp,
     }
 
+    const theme = {
+        textColor: "#eee",
+    }
+
     return (
         <div className='column is-full has-text-centered'>
-            <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
-                Recent Tracks Album Pie Chart
+            <div style={{height: "500px", width: "800px", fontWeight: "bold"}}>
+                <span style={{color: '#eee'}}>
+                    Recent Tracks Album Pie Chart
+                </span>
                 <ResponsiveSunburst
                     data={data}
+                    // theme={theme}
                     margin={{top: 15, bottom: 20}}
+                    borderWith={1}
+                    borderColor='#4E4E50'
                     cornerRadius={3}
                     borderWidth={4}
                     motionConfig="gentle"

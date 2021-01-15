@@ -198,6 +198,12 @@ h1 {
     transform: translateX(1px);
 }
 
+.sliceTooltipTable td {
+    background-color: black !important;
+    padding: 3px;
+}
+
+
 @media only screen and (max-width: 760px){
     .userIcon{
         position: absolute;

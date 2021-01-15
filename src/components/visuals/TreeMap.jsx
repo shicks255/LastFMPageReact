@@ -27,14 +27,15 @@ export default function TreeMap(props) {
     return (
         <div className='column is-full has-text-centered'>
             <div style={{height: "350px",fontWeight: "bold"}}>
+                <span style={{color: '#eee'}}>
+                    {name} Heat Map
+                </span>
                 <ResponsiveTreeMap
-                    height={300}
-                    width={400}
                     data={treeData}
                     identity="name"
                     value="value"
                     colors={{
-                        "scheme": "dark2"
+                        "scheme": "accent"
                     }}
                     nodeOpacity={0.75}
                     label={node => trimName(node.id)}

@@ -52,7 +52,6 @@ export default function LineGraph(props) {
     }, {})
 
     const ld = [];
-    let maxTick = 0;
 
     Object.keys(tracksByArtist).forEach((artistName) => {
         const artistAndPlayCounts = tracksByArtist[artistName];
@@ -73,9 +72,6 @@ export default function LineGraph(props) {
         tracksByArtist[artistName] = artistPlayCount;
 
         const trackData = Object.entries(artistPlayCount).map((k,v) => {
-            if (k[1] > maxTick)
-                maxTick = k[1];
-
             return {
                 "x": k[0],
                 "y": k[1]
@@ -91,17 +87,29 @@ export default function LineGraph(props) {
         ld.push(data);
     })
 
-    const tickValues = [...Array(maxTick).keys()].map(x => ++x);
+    const theme = {
+        textColor: "#eee",
+        axis: {
+            domain: {
+                line: {
+                    stroke: "#eee",
+                }
+            }
+        }
+    }
 
     return (
         <div className='column is-full has-text-centered'>
-            <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
-                Play Count by Day
+            <div style={{height: "350px", fontWeight: "bold", minWidth: 0}}>
+                <span style={{color: '#eee'}}>
+                    Play Count by Day
+                </span>
                 <ResponsiveLine
                     data={ld}
-                    margin={{top: 50, right: 150, left: 100, bottom: 100}}
-                    enableGridX={true}
-                    enableGridY={true}
+                    margin={{top: 50, right: 150, left: 50, bottom: 50}}
+                    theme={theme}
+                    enableGridX={false}
+                    enableGridY={false}
                     enableSlices='x'
                     sliceTooltip={(e) => {
                         const rows = e.slice.points
@@ -112,8 +120,10 @@ export default function LineGraph(props) {
                             })
                             .map(p => {
                                 return (
-                                    <tr key={p.id} style={{color: p.serieColor}}>
-                                        <td>{trimName(p.serieId)}</td>
+                                    <tr className='sliceTooltipTable' key={p.id}>
+                                        <td style={{color: p.serieColor}}>
+                                            {trimName(p.serieId)}
+                                        </td>
                                         <td>{p.data.y}</td>
                                     </tr>
                                 )
@@ -129,8 +139,9 @@ export default function LineGraph(props) {
                     }}
                     isInteractive={true}
                     colors={{
-                        scheme: 'category10'
+                        scheme: 'accent'
                     }}
+                    lineWidth={3}
                     pointSize={10}
                     xScale={{
                         type: 'time',
@@ -142,13 +153,13 @@ export default function LineGraph(props) {
                     xFormat="time:%m/%d/%Y"
                     yScale={{
                         type: 'linear',
-                        min: 1
+                        min: 0,
+                        nax: 10,
                     }}
                     axisLeft={{
                         legend: 'Listens',
                         legendOffset: -35,
                         legendPosition: 'middle',
-                        tickValues: tickValues,
                     }}
                     axisBottom={{
                         format: '%b %d',

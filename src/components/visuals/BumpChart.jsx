@@ -32,7 +32,7 @@ export default function BumpChart(props) {
                 return -1;
             return 1;
         })
-        .slice(0,10)
+        .slice(0,15)
         .forEach((a) => {
             const artistName = a[0];
             //make the dates actual days
@@ -137,11 +137,24 @@ export default function BumpChart(props) {
         }
     })
 
+    const theme = {
+        textColor: "#eee",
+        axis: {
+            domain: {
+                line: {
+                    stroke: "red",
+                }
+            }
+        }
+    }
+
     return (
 
         <div className='column is-full has-text-centered'>
-            <div style={{height: "350px", fontWeight: "bold", backgroundColor: "white"}}>
-                Artist Rank By Day
+            <div style={{height: "350px", fontWeight: "bold"}}>
+                <span style={{color: '#eee'}}>
+                    Artist Rank By Day
+                </span>
                 <ResponsiveBump
                     data={newData}
                     yOuterPadding={-50}
@@ -149,8 +162,13 @@ export default function BumpChart(props) {
                     activeLineWidth={6}
                     pointSize={12}
                     activePointSize={16}
+                    theme={theme}
+                    colors={{"scheme": "accent"}}
                     inactivePointSize={8}
-                    margin={{top: 50, right: 150, left: 100, bottom: 100}}
+                    margin={{top: 50, right: 150, left: 50, bottom: 75}}
+                    axisTop={{
+                        tickRotation: -75,
+                    }}
                     axisBottom={{
                         tickSize: 5,
                         tickRotation: -75,

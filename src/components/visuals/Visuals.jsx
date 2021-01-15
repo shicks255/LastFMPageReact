@@ -58,18 +58,23 @@ export default function Visuals(props) {
                     </table>
                 </div>
             </div>
+            <hr/>
             <div className='columns'>
                 <TreeMap data={logicStore.artists} name='Artists' keyy='name' value='playcount' />
             </div>
+            <hr/>
             <div className='columns'>
                 <TreeMap data={logicStore.albums} name='Albums' keyy='name' value='playcount' />
             </div>
+            <hr/>
             <div className='columns'>
                 <LineGraph recentTracks={recentTracks} />
             </div>
+            <hr/>
             <div className='columns'>
                 <Sunburst recentTracks={recentTracks} />
             </div>
+            <hr/>
             <div className='columns'>
                 <BumpChart recentTracks={recentTracks} />
             </div>
