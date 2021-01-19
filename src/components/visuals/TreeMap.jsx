@@ -6,6 +6,12 @@ export default function TreeMap(props) {
     const {data, name, keyy, value} = props;
 
     const dataPoints = data.map(item => {
+        if (name === 'Albums') {
+            return {
+                "name": `${item.artist.name} - ${item[keyy]}`,
+                "value": item[value]
+            }
+        }
         return {
             "name": item[keyy],
             "value": item[value]
@@ -18,10 +24,20 @@ export default function TreeMap(props) {
         "children": dataPoints
     }
 
-    function trimName(artistName) {
-        if (artistName.length > 10)
-            return artistName.slice(0, 10);
-        return artistName;
+    function trimName(node) {
+        const {id, height, width} = node;
+
+        const labelRotation = (height > width) ? -90 : 0
+
+        let textTrim = 10;
+        if (labelRotation === 0)
+            textTrim = width / 10;
+        if (labelRotation === -90)
+            textTrim = height / 10;
+
+        if (id.length > textTrim)
+            return id.slice(0, textTrim);
+        return id;
     }
 
     return (
@@ -38,7 +54,9 @@ export default function TreeMap(props) {
                         "scheme": "accent"
                     }}
                     nodeOpacity={0.75}
-                    label={node => trimName(node.id)}
+                    label={node => {
+                        return trimName(node);
+                    }}
                     margin={{top: 10, right: 10, bottom: 10, left: 10}}
                     labelSkipSize={45}
                     labelTextColor={{from: 'color', modifiers: [['darker', 3]]}}
