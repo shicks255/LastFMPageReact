@@ -1,6 +1,10 @@
 import React from 'react';
 import {ResponsiveBump} from '@nivo/bump';
 
+
+//todo, if the difference between oldest and newest is more than 30 days, cap it to 30 days
+//so that the bump chart is not insanely long
+
 export default function BumpChart(props) {
 
     const tracks = props.recentTracks.sort((x,y) => x.date['uts'] > y.date['uts'] ? 1 : -1);
@@ -9,6 +13,10 @@ export default function BumpChart(props) {
 
     if (tracks.length <= 0)
         return <div>Loading...</div>
+
+    newest.setHours(23)
+    newest.setMinutes(59)
+    newest.setSeconds(59)
 
     //returns {"Pink Floyd": [PlayTimestamps]
     const tracksByArtist = tracks.reduce((accum, curr) => {
@@ -53,7 +61,7 @@ export default function BumpChart(props) {
             }, {});
 
             //adds any missing dates with 0 playcount
-            for (let d = new Date(oldest); d.getDate() <= newest.getDate(); d.setDate(d.getDate() + 1)) {
+            for (let d = new Date(oldest); d <= newest; d.setDate(d.getDate() + 1)) {
                 const key = '' + (d.getMonth()+1) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
                 if (!dayPlayCount.hasOwnProperty(key)) {
                     dayPlayCount[key] = 0;
@@ -96,7 +104,7 @@ export default function BumpChart(props) {
     //     "12/28": ['Pink Floyd', 'AFI']
     // }
     let dayRanks = {}
-    for (let d = new Date(oldest); d.getDate() <= newest.getDate(); d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(oldest); d <= newest; d.setDate(d.getDate() + 1)) {
         const key = '' + (d.getMonth()+1) + '/' + ('0' + d.getDate()).slice(-2) + '/' + d.getFullYear();
 
         const dateData = data.map(obj => {

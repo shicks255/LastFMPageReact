@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {ResponsiveLine} from "@nivo/line";
 
 export default function LineGraph(props) {
