@@ -15,7 +15,8 @@
     "nivo": "^0.31.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-scripts": "2.1.8"
+    "react-query": "~3.6.0",
+    "react-scripts": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,12 +26,20 @@
     "install": "copyfiles -u 1 ./build/* ./build/static/css/* ./build/static/js/* \\\\thinkcentre\\caddy\\lastFm\\"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "airbnb"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "~7.18.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
 }

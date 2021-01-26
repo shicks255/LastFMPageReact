@@ -1,82 +1,100 @@
-import React from 'react';
-import {inject,observer} from 'mobx-react';
+import React, { useContext } from 'react';
+import { LocalStateContext } from '../LocalStateContext';
 
-export const Pagination = inject('uiStore')(observer((props) => {
+export default function Pagination(props) {
+  const { state, actions } = useContext(LocalStateContext);
 
-    let changePage = (number) => {
-        props.uiStore.jumpToPage(number);
-        props.loadData();
-    }
+  const changePage = (number) => {
+    actions.setPage(number);
+  };
 
-    const {uiStore} = props;
-    let last = Number(props.totalPages);
-    let firstPage = uiStore.page === 1;
-    let secondPage = uiStore.page === 2;
-    let thirdPage = uiStore.page === 3;
+  // eslint-disable-next-line react/prop-types
+  const { totalPages } = props;
 
-    let lastPage = uiStore.page === last;
-    let penultimatePage = uiStore.page === last-1;
-    let penultimatePage2 = uiStore.page === last-2;
+  const last = Number(totalPages);
+  const firstPage = state.page === 1;
+  const secondPage = state.page === 2;
+  const thirdPage = state.page === 3;
 
-    let pre = uiStore.page > 1 ? uiStore.page-1 : '';
-    let post = uiStore.page < last ? uiStore.page + 1 : '';
+  const lastPage = state.page === last;
+  const penultimatePage = state.page === last - 1;
+  const penultimatePage2 = state.page === last - 2;
 
-    let firstLink = <button className="button pagination-link" onClick={() => changePage(1)}>1</button>
-    let preLink =   <button className="button pagination-link" onClick={() => changePage(uiStore.page-1)}>{pre}</button>
-    let postLink =  <button className="button pagination-link" onClick={() => changePage(uiStore.page+1)} >{post}</button>
-    let lastLink =  <button className="button pagination-link" onClick={() => changePage(last)}>{String(last)}</button>
+  const pre = state.page > 1 ? state.page - 1 : '';
+  const post = state.page < last ? state.page + 1 : '';
 
-    return (
-        <div>
-            <div className={"columns"} role={"navigation"} aria-label={"pagination"}>
-                <div className={"column is-half is-offset-one-quarter has-text-centered"}>
-                    {
+  const firstLink = <button type="button" className="button pagination-link" onClick={() => changePage(1)}>1</button>;
+  const preLink = <button type="button" className="button pagination-link" onClick={() => changePage(state.page - 1)}>{pre}</button>;
+  const postLink = <button type="button" className="button pagination-link" onClick={() => changePage(state.page + 1)}>{post}</button>;
+  const lastLink = <button type="button" className="button pagination-link" onClick={() => changePage(last)}>{String(last)}</button>;
+
+  return (
+    <div>
+      <div className="columns" role="navigation" aria-label="pagination">
+        <div className="column is-half is-offset-one-quarter has-text-centered">
+          {
                         firstPage
-                            ? <button className={"pagination-previous button disabled"}>Previous</button>
-                            : <button className={"pagination-previous button"} onClick={() => changePage(uiStore.backwardPage())}>Previous</button>
+                          ? <button type="button" className="pagination-previous button disabled">Previous</button>
+                          : (
+                            <button
+                              type="button"
+                              className="pagination-previous button"
+                              onClick={() => changePage(state.page - 1)}
+                            >
+                              Previous
+                            </button>
+                          )
                     }
-                    {
+          {
                         lastPage
-                            ? <button className={"pagination-next button disabled"}>Next</button>
-                            : <button className={"pagination-next button"} onClick={() => changePage(uiStore.forwardPage())}>Next</button>
+                          ? <button type="button" className="pagination-next button disabled">Next</button>
+                          : (
+                            <button
+                              type="button"
+                              className="pagination-next button"
+                              onClick={() => changePage(state.page + 1)}
+                            >
+                              Next
+                            </button>
+                          )
                     }
-                </div>
-            </div>
-            <div className={"columns"}>
-                <div className={"column is-half is-offset-one-quarter has-text-centered is-centered"}>
-                    {
-                        firstPage
-                            ? ''
-                            : firstLink
-                    }
-                    {
-                        firstPage || secondPage || thirdPage
-                            ? ''
-                            : <span className="pagination-ellipsis">&hellip;</span>
-                    }
-                    {
-                        firstPage || secondPage
-                            ? ''
-                            : preLink
-                    }
-                    <button className="pagination-link is-current button" >{uiStore.page}</button>
-                    {
-                        lastPage
-                            ? ''
-                            : postLink
-                    }
-                    {
-                        lastPage || penultimatePage || penultimatePage2
-                            ? ''
-                            : <span className="pagination-ellipsis">&hellip;</span>
-                    }
-                    {
-                        penultimatePage || lastPage
-                            ? ''
-                            : lastLink
-                    }
-                </div>
-            </div>
         </div>
-    )
-}));
+      </div>
+      <div className="columns">
+        <div className="column is-half is-offset-one-quarter has-text-centered is-centered">
+          {
+                        firstPage
+                          ? ''
+                          : firstLink
+                    }
+          {
+                        firstPage || secondPage || thirdPage
+                          ? ''
+                          : <span className="pagination-ellipsis">&hellip;</span>
+                    }
+          {
+                        firstPage || secondPage
+                          ? ''
+                          : preLink
+                    }
+          <button type="button" className="pagination-link is-current button">{state.page}</button>
+          {
+                        lastPage
+                          ? ''
+                          : postLink
+                    }
+          {
+                        lastPage || penultimatePage || penultimatePage2
+                          ? ''
+                          : <span className="pagination-ellipsis">&hellip;</span>
+                    }
+          {
+                        penultimatePage || lastPage
+                          ? ''
+                          : lastLink
+                    }
+        </div>
+      </div>
+    </div>
+  );
+}

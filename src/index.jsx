@@ -1,12 +1,10 @@
 import React from 'react';
-import {Provider} from 'mobx-react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
 // import service from './serviceWorker';
-import {uiStore} from "./stores/UIStore";
-import {logicStore} from "./stores/LogicStore";
-import {profileStore} from "./stores/ProfileStore";
+import { Providerr } from './LocalStateContext';
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
@@ -20,14 +18,13 @@ import {profileStore} from "./stores/ProfileStore";
 //     });
 // }
 
-const stores = {
-    uiStore,
-    logicStore,
-    profileStore,
-}
+const queryClient = new QueryClient();
 
 ReactDOM.render(
-    <Provider uiStore={stores.uiStore} logicStore={stores.logicStore} profileStore={profileStore}>
-        <App />
-    </Provider>,
-    document.getElementById('root'));
+  <Providerr>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </Providerr>,
+  document.getElementById('root'),
+);
