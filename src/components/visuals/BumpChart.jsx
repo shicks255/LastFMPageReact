@@ -1,22 +1,16 @@
-/* eslint-disable no-param-reassign */
 import React from 'react';
 import { ResponsiveBump } from '@nivo/bump';
 import Loader from '../Loader';
 
 // todo, if the difference between oldest and newest is more than 30 days, cap it to 30 days
 // so that the bump chart is not insanely long
-
 export default function BumpChart(props) {
-  // eslint-disable-next-line react/prop-types
   const { recentTracksQuery } = props;
 
-  // eslint-disable-next-line react/prop-types
   if (recentTracksQuery.isLoading) return <Loader />;
 
-  // eslint-disable-next-line react/prop-types
   const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
 
-  // eslint-disable-next-line react/prop-types
   const tracks = recentTracks.sort((x, y) => (x.date.uts > y.date.uts ? 1 : -1));
   const oldest = tracks[0] ? new Date(tracks[0].date.uts * 1000) : '';
   const newest = tracks[tracks.length - 1] ? new Date(tracks[tracks.length - 1].date.uts * 1000) : '';
@@ -194,3 +188,17 @@ export default function BumpChart(props) {
     </div>
   );
 }
+
+BumpChart.propTypes = {
+  recentTracksQuery: {
+    isLoading: Boolean,
+    data: Array,
+  },
+};
+
+BumpChart.defaultProps = {
+  recentTracksQuery: {
+    isLoading: false,
+    data: [],
+  },
+};

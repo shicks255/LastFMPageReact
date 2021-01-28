@@ -4,11 +4,9 @@ import { LocalStateContext } from '../LocalStateContext';
 export default function Button(props) {
   const { state, actions } = useContext(LocalStateContext);
 
-  // eslint-disable-next-line react/prop-types
   const { id, dataLabel, title } = props;
 
   let classs = 'fas fa-5x clicky';
-  // eslint-disable-next-line react/prop-types
   switch (props.id) {
     case 'recentButton':
       classs += ' fa-history';
@@ -27,16 +25,26 @@ export default function Button(props) {
 
   return (
     <div style={{ display: 'inline-block' }}>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, */}
-      {/* eslint-disable jsx-a11y/no-static-element-interactions */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <i
         id={id}
         onClick={() => actions.setSelected(dataLabel)}
         className={classs}
+        aria-hidden="true"
       />
       <br />
       <b>{title}</b>
     </div>
   );
 }
+
+Button.propTypes = {
+  id: String,
+  dataLabel: String,
+  title: String,
+};
+
+Button.defaultProps = {
+  id: '',
+  dataLabel: '',
+  title: '',
+};

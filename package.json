@@ -10,8 +10,6 @@
     "@nivo/treemap": "^0.67.0",
     "bulma": "^0.7.4",
     "copyfiles": "^2.4.1",
-    "mobx": "^5.15.4",
-    "mobx-react": "^6.1.8",
     "nivo": "^0.31.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",

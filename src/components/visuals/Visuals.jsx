@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
 import TreeMap from './TreeMap';
 import LineGraph from './LineGraph';
 import { timeFrames } from '../../utils';
@@ -20,8 +19,7 @@ export default function Visuals() {
           <table className="menuTable">
             <tbody>
               <tr>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <td><label>Time Frame:</label></td>
+                <td>Time Frame:</td>
                 <td>
                   <select>
                     {timeFrames2}
@@ -52,9 +50,6 @@ export default function Visuals() {
       <div className="columns">
         <BumpChart recentTracksQuery={recentTracksBigQuery} />
       </div>
-      {/* <div className='columns'> */}
-      {/*    <CalendarChart recentTracks={recentTracks} /> */}
-      {/* </div> */}
     </>
   );
 }

@@ -11,12 +11,9 @@ export default function RecentTracksTable() {
   const recentTracks = recentTracksQuery.data;
 
   const bigContent = recentTracks.track.filter((x) => x.date).map((track, i) => {
-    // eslint-disable-next-line no-unused-vars
     const url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const date = track.date.uts;
     const unixDate = new Date(date * 1000);
-    // eslint-disable-next-line no-unused-vars
-    const album = track.album['#text'];
     return (
       <tr key={track.date.uts}>
         <td>

@@ -28,8 +28,7 @@ export default function MainMenu() {
               </td>
             </tr>
             <tr>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <td><label>Time Frame:</label></td>
+              <td>Time Frame:</td>
               <td>
                 <select
                   defaultValue={state.timeFrame}

@@ -1,8 +1,6 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 
 export default function NowPlaying(props) {
-  // eslint-disable-next-line react/prop-types
   const { nowPlaying } = props;
   if (!nowPlaying) { return <div />; }
 
@@ -40,3 +38,11 @@ export default function NowPlaying(props) {
     </div>
   );
 }
+
+NowPlaying.propTypes = {
+  nowPlaying: {},
+};
+
+NowPlaying.defaultProps = {
+  nowPlaying: {},
+};

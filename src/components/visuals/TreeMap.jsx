@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
 import useLastFmApi from '../../useLasftFmApi';
@@ -78,3 +77,15 @@ export default function TreeMap(props) {
     </div>
   );
 }
+
+TreeMap.propTypes = {
+  name: String,
+  keyy: String,
+  value: String,
+};
+
+TreeMap.defaultProps = {
+  name: '',
+  keyy: '',
+  value: '',
+};

@@ -42,7 +42,7 @@ export default function AlbumTable() {
   });
 
   const mobileContent = topAlbums.album.map((val) => {
-    const url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+    const url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';
     const { rank } = val['@attr'];
     return (
       <tr key={val.name}>

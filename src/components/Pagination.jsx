@@ -8,7 +8,6 @@ export default function Pagination(props) {
     actions.setPage(number);
   };
 
-  // eslint-disable-next-line react/prop-types
   const { totalPages } = props;
 
   const last = Number(totalPages);
@@ -98,3 +97,11 @@ export default function Pagination(props) {
     </div>
   );
 }
+
+Pagination.propTypes = {
+  totalPages: Number,
+};
+
+Pagination.defaultProps = {
+  totalPages: 1,
+};

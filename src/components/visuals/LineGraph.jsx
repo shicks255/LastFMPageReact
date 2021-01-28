@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import Loader from '../Loader';
@@ -18,10 +17,8 @@ export default function LineGraph(props) {
 
   const topArtistsFromTracks = recentTracks.reduce((accum, curr) => {
     if (Object.prototype.hasOwnProperty.call(accum, (curr.artist['#text']))) {
-      // eslint-disable-next-line no-param-reassign
       accum[curr.artist['#text']] += 1;
     } else {
-      // eslint-disable-next-line no-param-reassign
       accum[curr.artist['#text']] = 1;
     }
 
@@ -56,10 +53,8 @@ export default function LineGraph(props) {
 
     const artistPlayCount = tracksByArtist[artistName].reduce((accum, date) => {
       if (accum && Object.prototype.hasOwnProperty.call(accum, date)) {
-        // eslint-disable-next-line no-param-reassign,operator-assignment
-        accum[date] = accum[date] + 1;
+        accum[date] += 1;
       } else {
-        // eslint-disable-next-line no-param-reassign
         accum[date] = 1;
       }
 
@@ -177,3 +172,17 @@ export default function LineGraph(props) {
     </div>
   );
 }
+
+LineGraph.propTypes = {
+  recentTracksQuery: {
+    isLoading: Boolean,
+    data: Array,
+  },
+};
+
+LineGraph.defaultProps = {
+  recentTracksQuery: {
+    isLoading: false,
+    data: [],
+  },
+};

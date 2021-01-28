@@ -1,10 +1,11 @@
-/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { useState } from 'react';
 
 const LocalStateContext = React.createContext();
 
-function Providerr({ children }) {
+function Providerr(props) {
+  const { children } = props;
+
   const [userName, setUserName] = useState(localStorage.getItem('userName') || 'shicks255');
   const [showModal, setShowModal] = useState(false);
   const [modalErrorMessage, setModalErrorMessage] = useState('');
@@ -62,3 +63,11 @@ function Providerr({ children }) {
 }
 
 export { LocalStateContext, Providerr };
+
+Providerr.propTypes = {
+  children: Array,
+};
+
+Providerr.defaultProps = {
+  children: [],
+};

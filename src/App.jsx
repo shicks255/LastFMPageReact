@@ -1,19 +1,27 @@
 import React from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import 'bulma/css/bulma.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
+// eslint-disable-next-line no-unused-vars
+import { ReactQueryDevtools } from 'react-query/devtools';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Body from './components/Body';
+import { Providerr } from './LocalStateContext';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <div>
-      <Header />
-      <div className="container">
-        <Body />
-      </div>
-      <Footer />
-    </div>
+    <Providerr>
+      <QueryClientProvider client={queryClient}>
+        <Header />
+        <div className="container">
+          <Body />
+        </div>
+        <Footer />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      </QueryClientProvider>
+    </Providerr>
   );
 }

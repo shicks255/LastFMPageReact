@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+// eslint-disable-next-line no-unused-vars
 function useIsMobile() {
   const [size, setSize] = useState(undefined);
 

@@ -47,15 +47,16 @@ export default function Profile() {
       <div className="modal-background extraModal" />
       <div className="modal-content">
         <div className="box">
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="newUsername">Enter a new Username:</label>
+          <label htmlFor="newUsername">
+            Enter a new Username:
                 &nbsp;&nbsp;
-          <input
-            onChange={(e) => setTempUserName(e.target.value)}
-            type="text"
-            id="newUsername"
-            aria-placeholder="Username"
-          />
+            <input
+              onChange={(e) => setTempUserName(e.target.value)}
+              type="text"
+              id="newUsername"
+              aria-placeholder="Username"
+            />
+          </label>
           <button type="submit" onClick={submitUsername}>Submit</button>
           <br />
           <span><b><i>{state.modalErrorMessage}</i></b></span>

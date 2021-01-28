@@ -1,26 +1,21 @@
-/* eslint-disable no-param-reassign,operator-assignment */
 import React from 'react';
 import { ResponsiveSunburst } from 'nivo';
 import Loader from '../Loader';
 
 export default function SunburstChart(props) {
-  // eslint-disable-next-line react/prop-types
   const { recentTracksQuery } = props;
 
-  // eslint-disable-next-line react/prop-types
   if (recentTracksQuery.isLoading) return <Loader />;
 
-  // eslint-disable-next-line react/prop-types
   const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
 
-  // eslint-disable-next-line react/prop-types
   const d = recentTracks.reduce((accum, item) => {
     const artistName = item.artist['#text'];
     const albumName = item.album['#text'];
 
     if (Object.prototype.hasOwnProperty.call(accum, artistName)) {
       if (Object.prototype.hasOwnProperty.call(accum[artistName], albumName)) {
-        accum[artistName][albumName] = accum[artistName][albumName] + 1;
+        accum[artistName][albumName] += 1;
       } else {
         accum[artistName][albumName] = 1;
       }
@@ -79,3 +74,17 @@ export default function SunburstChart(props) {
     </div>
   );
 }
+
+SunburstChart.propTypes = {
+  recentTracksQuery: {
+    isLoading: Boolean,
+    data: Array,
+  },
+};
+
+SunburstChart.defaultProps = {
+  recentTracksQuery: {
+    isLoading: false,
+    data: [],
+  },
+};
