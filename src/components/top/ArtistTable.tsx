@@ -7,7 +7,7 @@ import ArtistImage from '../ArtistImage';
 export default function ArtistTable() {
   const { topArtistsQuery } = useLastFmApi();
 
-  if (topArtistsQuery.isLoading) { return <Loader />; }
+  if (topArtistsQuery.isLoading) { return <Loader small={false} />; }
   const artist = topArtistsQuery.data;
   const artists = artist.artist;
 

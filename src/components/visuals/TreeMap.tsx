@@ -3,7 +3,13 @@ import { ResponsiveTreeMap } from '@nivo/treemap';
 import useLastFmApi from '../../useLasftFmApi';
 import Loader from '../Loader';
 
-export default function TreeMap(props) {
+type Props = {
+  name: string,
+  keyy: string,
+  value: string,
+}
+
+export default function TreeMap(props: Props) {
   const {
     name, keyy, value,
   } = props;
@@ -12,7 +18,7 @@ export default function TreeMap(props) {
 
   const query = name === 'Albums' ? topAlbumsQuery : topArtistsQuery;
 
-  if (query.isLoading) return <Loader />;
+  if (query.isLoading) return <Loader small={false} />;
 
   const data = name === 'Albums' ? query.data.album : query.data.artist;
 
@@ -35,7 +41,7 @@ export default function TreeMap(props) {
     children: dataPoints,
   };
 
-  function trimName(node) {
+  function trimName(node): string {
     const { id, height, width } = node;
 
     const labelRotation = (height > width) ? -90 : 0;
@@ -64,6 +70,7 @@ export default function TreeMap(props) {
             scheme: 'accent',
           }}
           nodeOpacity={0.75}
+          // @ts-ignore
           label={(node) => trimName(node)}
           margin={{
             top: 10, right: 10, bottom: 10, left: 10,
@@ -77,15 +84,3 @@ export default function TreeMap(props) {
     </div>
   );
 }
-
-TreeMap.propTypes = {
-  name: String,
-  keyy: String,
-  value: String,
-};
-
-TreeMap.defaultProps = {
-  name: '',
-  keyy: '',
-  value: '',
-};

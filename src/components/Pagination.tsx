@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 
-export default function Pagination(props) {
+type Props = {
+  totalPages: number
+}
+
+export default function Pagination(props: Props) {
   const { state, actions } = useContext(LocalStateContext);
 
   const changePage = (number) => {
@@ -97,11 +101,3 @@ export default function Pagination(props) {
     </div>
   );
 }
-
-Pagination.propTypes = {
-  totalPages: Number,
-};
-
-Pagination.defaultProps = {
-  totalPages: 1,
-};

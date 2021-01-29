@@ -1,14 +1,20 @@
 import React from 'react';
-import Loader from './Loader';
 import useLastFmApi from '../useLasftFmApi';
+import Loader from './Loader';
 
-export default function ArtistImage(props) {
+type Props = {
+  mbid: string,
+  artistName: string
+}
+
+function ArtistImage(props: Props) {
   const { artistImageQuery } = useLastFmApi();
 
   const { mbid, artistName } = props;
   const result = artistImageQuery(mbid, artistName);
 
-  if (result.loading) return <Loader small />;
+  // eslint-disable-next-line react/jsx-filename-extension
+  if (result.isLoading) return <Loader small />;
 
   return (
     <img
@@ -22,12 +28,4 @@ export default function ArtistImage(props) {
   );
 }
 
-ArtistImage.propTypes = {
-  mbid: String,
-  artistName: String,
-};
-
-ArtistImage.defaultProps = {
-  mbid: '',
-  artistName: '',
-};
+export default ArtistImage;

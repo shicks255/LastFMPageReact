@@ -41,7 +41,7 @@ export default function useLastFmApi() {
       .then(
         (res) => {
           if (res.recenttracks) {
-            if (res.recenttracks.track[0]?.['@attr'].nowplaying) {
+            if (res.recenttracks.track[0]?.['@attr']?.nowplaying) {
               actions.setNowPlaying(res.recenttracks.track[0]);
             }
             return res.recenttracks;

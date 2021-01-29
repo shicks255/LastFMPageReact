@@ -1,7 +1,13 @@
 import React, { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 
-export default function Button(props) {
+type Props = {
+  id: string,
+  dataLabel: string,
+  title: string,
+}
+
+export default function Button(props: Props) {
   const { state, actions } = useContext(LocalStateContext);
 
   const { id, dataLabel, title } = props;
@@ -36,15 +42,3 @@ export default function Button(props) {
     </div>
   );
 }
-
-Button.propTypes = {
-  id: String,
-  dataLabel: String,
-  title: String,
-};
-
-Button.defaultProps = {
-  id: '',
-  dataLabel: '',
-  title: '',
-};

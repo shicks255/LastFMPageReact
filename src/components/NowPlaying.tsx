@@ -1,6 +1,16 @@
 import React from 'react';
+import { Artist } from '../types/Artist';
+import { Image } from '../types/Image';
 
-export default function NowPlaying(props) {
+type Props = {
+  nowPlaying: {
+    image: Image[],
+    artist: Artist,
+    name: string,
+  }
+}
+
+export default function NowPlaying(props: Props) {
   const { nowPlaying } = props;
   if (!nowPlaying) { return <div />; }
 
@@ -38,11 +48,3 @@ export default function NowPlaying(props) {
     </div>
   );
 }
-
-NowPlaying.propTypes = {
-  nowPlaying: {},
-};
-
-NowPlaying.defaultProps = {
-  nowPlaying: {},
-};

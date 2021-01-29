@@ -1,15 +1,21 @@
 import React from 'react';
 import { ResponsiveSunburst } from 'nivo';
+import { QueryObserverResult } from 'react-query';
 import Loader from '../Loader';
+import { Track } from '../../types/Track';
 
-export default function SunburstChart(props) {
+type Props = {
+  recentTracksQuery: QueryObserverResult<Track[]>
+}
+
+export default function SunburstChart(props: Props) {
   const { recentTracksQuery } = props;
 
-  if (recentTracksQuery.isLoading) return <Loader />;
+  if (recentTracksQuery.isLoading || !recentTracksQuery.data) return <Loader small={false} />;
 
   const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
 
-  const d = recentTracks.reduce((accum, item) => {
+  const d: {[key: string]: number} = recentTracks.reduce((accum, item) => {
     const artistName = item.artist['#text'];
     const albumName = item.album['#text'];
 
@@ -74,17 +80,3 @@ export default function SunburstChart(props) {
     </div>
   );
 }
-
-SunburstChart.propTypes = {
-  recentTracksQuery: {
-    isLoading: Boolean,
-    data: Array,
-  },
-};
-
-SunburstChart.defaultProps = {
-  recentTracksQuery: {
-    isLoading: false,
-    data: [],
-  },
-};

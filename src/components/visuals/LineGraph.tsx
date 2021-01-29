@@ -1,21 +1,27 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
+import { QueryObserverResult } from 'react-query';
 import Loader from '../Loader';
+import { Track } from '../../types/Track';
 
-export default function LineGraph(props) {
+type Props = {
+  recentTracksQuery: QueryObserverResult<Track[]>
+}
+
+export default function LineGraph(props: Props) {
   function trimName(name) {
     if (name.length > 20) { return `${name.slice(0, 20)}...`; }
     return name;
   }
 
   const { recentTracksQuery } = props;
-  if (recentTracksQuery.isLoading) {
-    return (<Loader />);
+  if (recentTracksQuery.isLoading || !recentTracksQuery.data) {
+    return (<Loader small={false} />);
   }
 
   const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
 
-  const topArtistsFromTracks = recentTracks.reduce((accum, curr) => {
+  const topArtistsFromTracks: {[key: string]: number} = recentTracks.reduce((accum, curr) => {
     if (Object.prototype.hasOwnProperty.call(accum, (curr.artist['#text']))) {
       accum[curr.artist['#text']] += 1;
     } else {
@@ -36,7 +42,7 @@ export default function LineGraph(props) {
       if (Object.prototype.hasOwnProperty.call(accum, curr.artist['#text'])) {
         accum[curr.artist['#text']].push(curr.date.uts);
       } else {
-        const tracks = [];
+        const tracks: number[] = [];
         tracks.push(curr.date.uts);
         // eslint-disable-next-line no-param-reassign
         accum[curr.artist['#text']] = tracks;
@@ -45,21 +51,22 @@ export default function LineGraph(props) {
     return accum;
   }, {});
 
-  const ld = [];
+  const ld: {id: string, color: string, data: {x: string, y: number}[]}[] = [];
 
   Object.keys(tracksByArtist).forEach((artistName) => {
     const artistAndPlayCounts = tracksByArtist[artistName];
     tracksByArtist[artistName] = artistAndPlayCounts.map((i) => new Date(i * 1000).toLocaleDateString('en-US'));
 
-    const artistPlayCount = tracksByArtist[artistName].reduce((accum, date) => {
-      if (accum && Object.prototype.hasOwnProperty.call(accum, date)) {
-        accum[date] += 1;
-      } else {
-        accum[date] = 1;
-      }
+    const artistPlayCount:
+        {[key: string]: number} = tracksByArtist[artistName].reduce((accum, date) => {
+          if (accum && Object.prototype.hasOwnProperty.call(accum, date)) {
+            accum[date] += 1;
+          } else {
+            accum[date] = 1;
+          }
 
-      return accum;
-    }, {});
+          return accum;
+        }, {});
 
     tracksByArtist[artistName] = artistPlayCount;
 
@@ -143,7 +150,7 @@ export default function LineGraph(props) {
           yScale={{
             type: 'linear',
             min: 0,
-            nax: 10,
+            max: 10,
           }}
           axisLeft={{
             legend: 'Listens',
@@ -163,7 +170,7 @@ export default function LineGraph(props) {
               translateX: 125,
               itemWidth: 100,
               itemHeight: 20,
-              itemSpacing: 4,
+              itemsSpacing: 4,
               itemTextColor: '#999',
             },
           ]}
@@ -172,17 +179,3 @@ export default function LineGraph(props) {
     </div>
   );
 }
-
-LineGraph.propTypes = {
-  recentTracksQuery: {
-    isLoading: Boolean,
-    data: Array,
-  },
-};
-
-LineGraph.defaultProps = {
-  recentTracksQuery: {
-    isLoading: false,
-    data: [],
-  },
-};

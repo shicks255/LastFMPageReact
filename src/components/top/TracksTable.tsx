@@ -8,11 +8,11 @@ import ArtistImage from '../ArtistImage';
 export default function TracksTable() {
   const { topTracksQuery } = useLastFmApi();
 
-  if (topTracksQuery.isLoading) { return <Loader />; }
+  if (topTracksQuery.isLoading) { return <Loader small={false} />; }
   const topTracks = topTracksQuery.data;
   const tracks = topTracks.track;
 
-  if (!tracks) return <Loader />;
+  if (!tracks) return <Loader small={false} />;
 
   const bigContent = tracks.map((val) => {
     const time = convertDurationToTimestamp(val.duration);

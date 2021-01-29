@@ -6,7 +6,7 @@ import Loader from './Loader';
 export default function RecentTracksTable() {
   const { recentTracksQuery } = useLastFmApi();
 
-  if (recentTracksQuery.isLoading) { return <Loader />; }
+  if (recentTracksQuery.isLoading) { return <Loader small={false} />; }
 
   const recentTracks = recentTracksQuery.data;
 

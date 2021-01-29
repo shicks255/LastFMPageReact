@@ -26,7 +26,7 @@ export default function Profile() {
   //         document.getElementById('newUsername').focus();
   // }
 
-  if (userQuery.isLoading) { return <Loader />; }
+  if (userQuery.isLoading) { return <Loader small={false} />; }
 
   if (!userQuery.data || userQuery.data.error) {
     actions.setModalErrorMessage(userQuery.data.message);

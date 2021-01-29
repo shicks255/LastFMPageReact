@@ -6,7 +6,7 @@ import Loader from '../Loader';
 export default function AlbumTable() {
   const { topAlbumsQuery } = useLastFmApi();
 
-  if (topAlbumsQuery.isLoading) { return <Loader />; }
+  if (topAlbumsQuery.isLoading) { return <Loader small={false} />; }
 
   const topAlbums = topAlbumsQuery.data;
 
