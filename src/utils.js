@@ -17,7 +17,6 @@ export const strategies = {
 const fanartKey = process.env.REACT_APP_FANART_KEY;
 
 function getMusicBrainzId(artistName) {
-  console.log(artistName);
   const fullName = encodeURI(artistName);
   return fetch(`https://musicbrainz.org/ws/2/artist/?query=${fullName}&fmt=json`,
     {
@@ -28,7 +27,6 @@ function getMusicBrainzId(artistName) {
     .then((res) => res.json())
     .then((res) => {
       if (res.artists) {
-        console.log(res);
         const mbid = res.artists[0].id;
         return getFanArtImage(mbid, artistName, true);
       }
@@ -58,13 +56,11 @@ function getFanArtImage(mbid, artistName, secondTry) {
         imageUrl = 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';
       }
 
-      console.log(imageUrl);
       return imageUrl;
     });
 }
 
 export function getActualArtistUrl(mbid, artistName) {
-  console.log(artistName);
   return (mbid && mbid.length > 0)
     ? getFanArtImage(mbid, artistName, false)
     : getMusicBrainzId(artistName);

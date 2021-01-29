@@ -2,6 +2,7 @@
 import { useQuery } from 'react-query';
 import { useContext } from 'react';
 import { LocalStateContext } from './LocalStateContext';
+import { getActualArtistUrl } from './utils';
 
 function generateUrl(type, page, period, key) {
   return `https://ws.audioscrobbler.com/2.0/?method=${type}
@@ -40,6 +41,9 @@ export default function useLastFmApi() {
       .then(
         (res) => {
           if (res.recenttracks) {
+            if (res.recenttracks.track[0]?.['@attr'].nowplaying) {
+              actions.setNowPlaying(res.recenttracks.track[0]);
+            }
             return res.recenttracks;
           }
           return [];
@@ -48,7 +52,7 @@ export default function useLastFmApi() {
           console.log(err);
         },
       );
-  });
+  }, { refetchInterval: 30_000 });
 
   const recentTracksBigQuery = useQuery(['recentTracks', 'big'], () => {
     const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
@@ -123,6 +127,8 @@ export default function useLastFmApi() {
       );
   });
 
+  const artistImageQuery = (mbid, artistName) => useQuery(['artistImage', mbid, artistName], () => getActualArtistUrl(mbid, artistName));
+
   return {
     userQuery,
     recentTracksQuery,
@@ -130,5 +136,6 @@ export default function useLastFmApi() {
     topAlbumsQuery,
     topTracksQuery,
     recentTracksBigQuery,
+    artistImageQuery,
   };
 }

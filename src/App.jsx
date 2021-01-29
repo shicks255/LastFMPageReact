@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import 'bulma/css/bulma.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
-// eslint-disable-next-line no-unused-vars
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -20,7 +19,7 @@ export default function App() {
           <Body />
         </div>
         <Footer />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Providerr>
   );

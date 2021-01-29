@@ -6,21 +6,10 @@ import ArtistImage from '../ArtistImage';
 
 export default function ArtistTable() {
   const { topArtistsQuery } = useLastFmApi();
-  // const [artists, setArtists] = useState(undefined);
 
   if (topArtistsQuery.isLoading) { return <Loader />; }
   const artist = topArtistsQuery.data;
   const artists = artist.artist;
-  // console.log(topArtists);
-
-  // useEffect(() => {
-  //   async function mapStuff() {
-  //     const artistss =
-  //     await topArtists.artist.map((value) => getActualArtistUrl(value, 'artistTable'));
-  //     Promise.all(artistss).then((res) => setArtists(res));
-  //   }
-  //   mapStuff();
-  // }, [topArtists]);
 
   const content = artists.map((val) => {
     const artistName = val.name;
