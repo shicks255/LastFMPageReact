@@ -10,6 +10,8 @@ export default function MainMenu() {
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => <option key={value} value={value}>{timeFrames[value]}</option>);
 
+  if (state.selected !== 'top') return <></>;
+
   return (
     <div className="columns is-mobile">
       <div className="box column is-half is-offset-one-quarter">

@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 import { useQuery } from 'react-query';
 import { useContext } from 'react';
-import { LocalStateContext } from './LocalStateContext';
-import { getActualArtistUrl } from './utils';
+import { LocalStateContext } from '../LocalStateContext';
+import { getActualArtistUrl } from '../utils';
 
 function generateUrl(type, page, period, key) {
   return `https://ws.audioscrobbler.com/2.0/?method=${type}
@@ -34,24 +33,33 @@ export default function useLastFmApi() {
       );
   });
 
+  function handleReturn(res: Response): Promise<any> {
+    return Promise.all([res.ok, res.json()])
+      .then(([ok, body]) => {
+        if (ok) {
+          return body;
+        }
+        throw Error(body.message);
+      });
+  }
+
   const recentTracksQuery = useQuery(['recentTracks', state.page], () => {
     const url = generateUrl('user.getrecenttracks', state.page, '', apiKey);
     return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.recenttracks) {
-            if (res.recenttracks.track[0]?.['@attr']?.nowplaying) {
-              actions.setNowPlaying(res.recenttracks.track[0]);
-            }
-            return res.recenttracks;
-          }
-          return [];
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        if (body.recenttracks.track[0]?.['@attr']?.nowplaying) {
+          actions.setNowPlaying(body.recenttracks.track[0]);
+        }
+        actions.setRecentTracksError(undefined);
+        return body.recenttracks;
+      })
+      .catch((err) => {
+        actions.setRecentTracksError({
+          technical: err.message,
+          business: 'Problem loading recent tracks',
+        });
+      });
   }, { refetchInterval: 30_000 });
 
   const recentTracksBigQuery = useQuery(['recentTracks', 'big'], () => {
@@ -62,69 +70,65 @@ export default function useLastFmApi() {
         &limit=200
         &page=1`;
     return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.recenttracks) {
-            return res.recenttracks.track.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
-          }
-          return [];
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        actions.setRecentTracksBigError(undefined);
+        return body.recenttracks.track.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
+      })
+      .catch((err) => {
+        actions.setRecentTracksBigError({
+          technical: err.message,
+          business: 'Problem loading recent tracks',
+        });
+      });
   });
 
   const topArtistsQuery = useQuery(['topArtists', state.page, state.timeFrame], () => {
     const url = generateUrl('user.getTopArtists', state.page, state.timeFrame, apiKey);
     return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.topartists) {
-            return res.topartists;
-          }
-          return [];
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        actions.setTopArtistsError(undefined);
+        return body.topartists;
+      })
+      .catch((err) => {
+        actions.setTopArtistsError({
+          technical: err.message,
+          business: 'Problem loading top artists',
+        });
+      });
   });
 
   const topAlbumsQuery = useQuery(['topAlbums', state.page, state.timeFrame], () => {
     const url = generateUrl('user.getTopAlbums', state.page, state.timeFrame, apiKey);
     return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.topalbums) {
-            return res.topalbums;
-          }
-          return [];
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        actions.setTopAlbumsError(undefined);
+        return body.topalbums;
+      })
+      .catch((err) => {
+        actions.setTopAlbumsError({
+          business: 'Problem loading top albums',
+          technical: err.message,
+        });
+      });
   });
 
   const topTracksQuery = useQuery(['topTracks', state.page, state.timeFrame], () => {
     const url = generateUrl('user.getTopTracks', state.page, state.timeFrame, apiKey);
     return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => {
-          if (res.toptracks) {
-            return res.toptracks;
-          }
-          return [];
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        actions.setTopTracksError(undefined);
+        return body.toptracks;
+      })
+      .catch((err) => {
+        actions.setTopTracksError({
+          technical: err.message,
+          business: 'Problem loading top tracks',
+        });
+      });
   });
 
   const artistImageQuery = (mbid, artistName) => useQuery(['artistImage', mbid, artistName], () => getActualArtistUrl(mbid, artistName));

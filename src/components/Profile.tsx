@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
-import useLasftFmApi from '../useLasftFmApi';
+import useLasftFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 
 export default function Profile() {
@@ -49,7 +49,7 @@ export default function Profile() {
         <div className="box">
           <label htmlFor="newUsername">
             Enter a new Username:
-                &nbsp;&nbsp;
+            &nbsp;&nbsp;
             <input
               onChange={(e) => setTempUserName(e.target.value)}
               type="text"
@@ -72,34 +72,38 @@ export default function Profile() {
   );
 
   return (
-    <div className="box relative">
-      <div className="columns is-centered">
-        <div className="column is-two-fifths is-narrow">
-          <figure className="image is-128x128">
-            <img alt="" className="image is-rounded" src={user.avatar} />
-          </figure>
-        </div>
-        <div className="card-stacked column is-three-fifths is-narrow">
-          <h3 className="title" style={{ marginBottom: '0' }}>
-            {state.userName}
-          </h3>
-          <br />
-          <b>Registered:</b>
-          {' '}
-          {user.registered.toLocaleString(undefined, {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-          })}
-          <br />
-          <b>Play Count:</b>
-          {' '}
-          {user.playCount}
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,max-len */}
-          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
-          <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
+    <div className="columns">
+      <div className="column is-half is is-offset-one-quarter has-text-centered">
+        <div className="box relative">
+          <div className="columns is-centered">
+            <div className="column is-two-fifths is-narrow">
+              <figure className="image is-128x128">
+                <img alt="" className="image is-rounded" src={user.avatar} />
+              </figure>
+            </div>
+            <div className="card-stacked column is-three-fifths is-narrow">
+              <h3 className="title" style={{ marginBottom: '0' }}>
+                {state.userName}
+              </h3>
+              <br />
+              <b>Registered:</b>
+              {' '}
+              {user.registered.toLocaleString(undefined, {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
+              <br />
+              <b>Play Count:</b>
+              {' '}
+              {user.playCount}
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,max-len */}
+              {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
+              <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
+            </div>
+          </div>
         </div>
       </div>
       {modal}

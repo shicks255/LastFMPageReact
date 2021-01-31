@@ -89,7 +89,7 @@ export default function BumpChart(props: Props) {
         .sort((x, y) => (x[0] > y[0] ? 1 : -1));
 
       // Replace each days total with the running total for this period
-      let runningTotal: number = 0;
+      let runningTotal = 0;
       const dayDataPoints = dayPlayCountArray.map((i) => {
         runningTotal += i[1];
         return {

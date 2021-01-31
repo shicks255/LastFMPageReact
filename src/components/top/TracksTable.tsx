@@ -1,14 +1,19 @@
-import React from 'react';
-import useLastFmApi from '../../useLasftFmApi';
+import React, { useContext } from 'react';
+import useLastFmApi from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import { convertDurationToTimestamp } from '../../utils';
 import ArtistImage from '../ArtistImage';
+import { LocalStateContext } from '../../LocalStateContext';
+import ErrorMessage from '../ErrorMessage';
 
 export default function TracksTable() {
   const { topTracksQuery } = useLastFmApi();
+  const { state } = useContext(LocalStateContext);
 
   if (topTracksQuery.isLoading) { return <Loader small={false} />; }
+  if (state.topTracksError) return <ErrorMessage error={state.topTracksError} />;
+
   const topTracks = topTracksQuery.data;
   const tracks = topTracks.track;
 

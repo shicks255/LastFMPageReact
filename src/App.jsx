@@ -6,21 +6,19 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Body from './components/Body';
-import { Providerr } from './LocalStateContext';
+import { Provider } from './LocalStateContext';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <Providerr>
+    <Provider>
       <QueryClientProvider client={queryClient}>
         <Header />
-        <div className="container">
-          <Body />
-        </div>
+        <Body />
         <Footer />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-    </Providerr>
+    </Provider>
   );
 }

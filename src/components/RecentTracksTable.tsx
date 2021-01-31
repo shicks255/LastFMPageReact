@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Pagination from './Pagination';
-import useLastFmApi from '../useLasftFmApi';
+import useLastFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
+import HoverImage from './HoverImage';
+import { LocalStateContext } from '../LocalStateContext';
+import ErrorMessage from './ErrorMessage';
 
 export default function RecentTracksTable() {
   const { recentTracksQuery } = useLastFmApi();
+  const { state } = useContext(LocalStateContext);
 
   if (recentTracksQuery.isLoading) { return <Loader small={false} />; }
+  if (state.recentTracksError) return <ErrorMessage error={state.recentTracksError} />;
 
   const recentTracks = recentTracksQuery.data;
 
-  const bigContent = recentTracks.track.filter((x) => x.date).map((track, i) => {
-    const url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+  const bigContent = recentTracks.track.filter((x) => x.date).map((track) => {
+    const smallImgSrc = track?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+    const bigImgSrc = track?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const date = track.date.uts;
     const unixDate = new Date(date * 1000);
     return (
@@ -19,14 +25,7 @@ export default function RecentTracksTable() {
         <td>
           <div className="imageCell">
             <a href={track.url} target="_blank" rel="noreferrer">
-              <img
-                alt=""
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}}
-                className="image"
-                height="64"
-                src={url}
-              />
+              <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={track.album['#text']} />
             </a>
           </div>
         </td>
@@ -38,7 +37,7 @@ export default function RecentTracksTable() {
   });
 
   const mobileContent = recentTracks.track.filter((x) => x.date).map((track) => {
-    const url = track.image[1]['#text'].length > 0 ? track.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+    const url = track.image[2]['#text'].length > 0 ? track.image[2]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const date = track.date.uts;
     const unixDate = new Date(date * 1000);
     return (

@@ -1,18 +1,18 @@
 import React from 'react';
 import Pagination from '../Pagination';
-import useLastFmApi from '../../useLasftFmApi';
+import useLastFmApi from '../../hooks/useLasftFmApi';
 import Loader from '../Loader';
+import HoverImage from '../HoverImage';
 
 export default function AlbumTable() {
   const { topAlbumsQuery } = useLastFmApi();
 
   if (topAlbumsQuery.isLoading) { return <Loader small={false} />; }
-
   const topAlbums = topAlbumsQuery.data;
 
   const bigContent = topAlbums.album.map((val) => {
-    const url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-    // const albumName = val.name;
+    const smallImgSrc = val?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+    const bigImgSrc = val?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const { rank } = val['@attr'];
     return (
       <tr key={val.name}>
@@ -23,14 +23,7 @@ export default function AlbumTable() {
         <td>
           <div className="imageCell">
             <a href={val.url} target="_blank" rel="noreferrer">
-              <img
-                alt=""
-                height={64}
-                width={64}
-                src={url}
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}}
-              />
+              <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
             </a>
           </div>
         </td>

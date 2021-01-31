@@ -1,5 +1,5 @@
 import React from 'react';
-import useLastFmApi from '../../useLasftFmApi';
+import useLastFmApi from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';

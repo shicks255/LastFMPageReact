@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import TreeMap from './TreeMap';
 import LineGraph from './LineGraph';
 import { timeFrames } from '../../utils';
 import Sunburst from './SunburstChart';
 import BumpChart from './BumpChart';
-import useLastFmApi from '../../useLasftFmApi';
+import useLastFmApi from '../../hooks/useLasftFmApi';
+import { LocalStateContext } from '../../LocalStateContext';
+import ErrorMessage from '../ErrorMessage';
 
 export default function Visuals() {
   const timeFrames2 = Object.keys(timeFrames)
     .map((value) => <option key={value}>{timeFrames[value]}</option>);
 
+  const { state } = useContext(LocalStateContext);
   const { recentTracksBigQuery } = useLastFmApi();
+
+  if (state.recentTracksBigError) return <ErrorMessage error={state.recentTracksBigError} />;
 
   return (
     <>

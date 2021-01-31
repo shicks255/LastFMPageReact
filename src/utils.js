@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 export const timeFrames = {
   '7day': '7 Days',
   '1month': '1 Month',
@@ -28,6 +27,7 @@ function getMusicBrainzId(artistName) {
     .then((res) => {
       if (res.artists) {
         const mbid = res.artists[0].id;
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         return getFanArtImage(mbid, artistName, true);
       }
       return 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';

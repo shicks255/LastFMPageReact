@@ -1,6 +1,7 @@
 import React from 'react';
-import useLastFmApi from '../useLasftFmApi';
+import useLastFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
+import HoverImage from './HoverImage';
 
 type Props = {
   mbid: string,
@@ -15,16 +16,10 @@ function ArtistImage(props: Props) {
 
   // eslint-disable-next-line react/jsx-filename-extension
   if (result.isLoading) return <Loader small />;
+  const src = result.data;
 
   return (
-    <img
-      alt=""
-      height={64}
-      width={64}
-      src={result.data}
-      onMouseEnter={() => {}}
-      onMouseLeave={() => {}}
-    />
+    <HoverImage src={src} popupSrc={src} caption={artistName} />
   );
 }
 

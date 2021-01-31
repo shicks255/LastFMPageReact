@@ -1,18 +1,10 @@
-import React from 'react';
-import { Artist } from '../types/Artist';
-import { Image } from '../types/Image';
+import React, { useContext } from 'react';
+import { LocalStateContext } from '../LocalStateContext';
 
-type Props = {
-  nowPlaying: {
-    image: Image[],
-    artist: Artist,
-    name: string,
-  }
-}
-
-export default function NowPlaying(props: Props) {
-  const { nowPlaying } = props;
-  if (!nowPlaying) { return <div />; }
+export default function NowPlaying() {
+  const { state } = useContext(LocalStateContext);
+  const { artist } = state.nowPlaying;
+  if (!artist) { return <div />; }
 
   return (
     <div className="nowPlaying">
@@ -23,15 +15,15 @@ export default function NowPlaying(props: Props) {
             <tbody>
               <tr>
                 <td rowSpan={2}>
-                  <img alt="" className="image" src={nowPlaying.image[1]['#text']} />
+                  <img alt="" className="image" src={artist.image[1]['#text']} />
                 </td>
                 <td>&nbsp;</td>
                 <td style={{ textAlign: 'center' }}>
                   <span className="nowPlaying">
-                    {nowPlaying.artist['#text']}
+                    {artist['#text']}
                     {' '}
                     -
-                    {nowPlaying.name}
+                    {artist.name}
                   </span>
                 </td>
               </tr>
