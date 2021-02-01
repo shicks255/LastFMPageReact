@@ -7,7 +7,7 @@ import MainMenu from './MainMenu';
 import Visuals from './visuals/Visuals';
 import RecentTracksTable from './RecentTracksTable';
 
-export default function Main() {
+const Main: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { state } = useContext(LocalStateContext);
 
   let mainContent: JSX.Element = <RecentTracksTable />;
@@ -35,4 +35,6 @@ export default function Main() {
       </div>
     </div>
   );
-}
+});
+
+export default Main;

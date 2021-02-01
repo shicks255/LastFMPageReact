@@ -3,12 +3,13 @@ import { ResponsiveSunburst } from 'nivo';
 import { QueryObserverResult } from 'react-query';
 import Loader from '../Loader';
 import { Track } from '../../types/Track';
+import { chartColors } from '../../utils';
 
 type Props = {
   recentTracksQuery: QueryObserverResult<Track[]>
 }
 
-export default function SunburstChart(props: Props) {
+const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
   const { recentTracksQuery } = props;
 
   if (recentTracksQuery.isLoading || !recentTracksQuery.data) return <Loader small={false} />;
@@ -69,6 +70,7 @@ export default function SunburstChart(props: Props) {
           data={data}
                     // theme={theme}
           margin={{ top: 15, bottom: 20 }}
+          colors={chartColors}
           borderWith={1}
           borderColor="#4E4E50"
           cornerRadius={3}
@@ -79,4 +81,6 @@ export default function SunburstChart(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default SunburstChart;

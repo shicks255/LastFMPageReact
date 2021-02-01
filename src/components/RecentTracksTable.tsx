@@ -15,13 +15,14 @@ export default function RecentTracksTable() {
 
   const recentTracks = recentTracksQuery.data;
 
-  const bigContent = recentTracks.track.filter((x) => x.date).map((track) => {
+  const bigContent = recentTracks.track.filter((x) => x.date).map((track, i) => {
     const smallImgSrc = track?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const bigImgSrc = track?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const date = track.date.uts;
     const unixDate = new Date(date * 1000);
     return (
-      <tr key={track.date.uts}>
+    // eslint-disable-next-line react/no-array-index-key
+      <tr key={i}>
         <td>
           <div className="imageCell">
             <a href={track.url} target="_blank" rel="noreferrer">
@@ -36,12 +37,13 @@ export default function RecentTracksTable() {
     );
   });
 
-  const mobileContent = recentTracks.track.filter((x) => x.date).map((track) => {
+  const mobileContent = recentTracks.track.filter((x) => x.date).map((track, i) => {
     const url = track.image[2]['#text'].length > 0 ? track.image[2]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
     const date = track.date.uts;
     const unixDate = new Date(date * 1000);
     return (
-      <tr key={track.date.uts}>
+    // eslint-disable-next-line react/no-array-index-key
+      <tr key={i}>
         <td>
           <a href={track.url} target="_blank" rel="noreferrer">
             <div className="imageCell">

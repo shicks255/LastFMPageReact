@@ -4,7 +4,7 @@ type Props = {
     small: boolean
 }
 
-function Loader(props: Props) {
+const Loader: React.FC<Props> = ((props: Props): JSX.Element => {
   const { small } = props;
   const clazz = small ? 'fa-5x' : 'fa-7x';
 
@@ -15,6 +15,6 @@ function Loader(props: Props) {
       </div>
     </div>
   );
-}
+});
 
 export default Loader;

@@ -5,7 +5,7 @@ type Props = {
   totalPages: number
 }
 
-export default function Pagination(props: Props) {
+const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
 
   const changePage = (number) => {
@@ -13,6 +13,8 @@ export default function Pagination(props: Props) {
   };
 
   const { totalPages } = props;
+
+  if (totalPages < 1) return <></>;
 
   const last = Number(totalPages);
   const firstPage = state.page === 1;
@@ -100,4 +102,6 @@ export default function Pagination(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default Pagination;

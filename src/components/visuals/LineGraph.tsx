@@ -3,12 +3,13 @@ import { ResponsiveLine } from '@nivo/line';
 import { QueryObserverResult } from 'react-query';
 import Loader from '../Loader';
 import { Track } from '../../types/Track';
+import { chartColors } from '../../utils';
 
 type Props = {
   recentTracksQuery: QueryObserverResult<Track[]>
 }
 
-export default function LineGraph(props: Props) {
+const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
   function trimName(name) {
     if (name.length > 20) { return `${name.slice(0, 20)}...`; }
     return name;
@@ -20,16 +21,21 @@ export default function LineGraph(props: Props) {
   }
 
   const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
+  const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 2);
+  const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);
 
-  const topArtistsFromTracks: {[key: string]: number} = recentTracks.reduce((accum, curr) => {
-    if (Object.prototype.hasOwnProperty.call(accum, (curr.artist['#text']))) {
-      accum[curr.artist['#text']] += 1;
-    } else {
-      accum[curr.artist['#text']] = 1;
-    }
+  const topArtistsFromTracks: {[key: string]: number} = recentTracks
+    .filter((x) => x.date.uts >= oneMonthAgoTimestamp)
+    .reduce((accum, curr) => {
+      if (Object.prototype.hasOwnProperty.call(accum, (curr.artist['#text']))) {
+        accum[curr.artist['#text']] += 1;
+      } else {
+        accum[curr.artist['#text']] = 1;
+      }
 
-    return accum;
-  }, {});
+      return accum;
+    }, {});
 
   const d = Object.entries(topArtistsFromTracks).sort((x, y) => (x[1] > y[1] ? 1 : -1))
     .reverse()
@@ -37,19 +43,22 @@ export default function LineGraph(props: Props) {
     .slice(0, 10);
 
   // return 'artistName': [playDates]
-  const tracksByArtist = recentTracks.filter((x) => d.includes(x.artist['#text'])).reduce((accum, curr) => {
-    if (curr.date) {
-      if (Object.prototype.hasOwnProperty.call(accum, curr.artist['#text'])) {
-        accum[curr.artist['#text']].push(curr.date.uts);
-      } else {
-        const tracks: number[] = [];
-        tracks.push(curr.date.uts);
-        // eslint-disable-next-line no-param-reassign
-        accum[curr.artist['#text']] = tracks;
+  const tracksByArtist = recentTracks
+    .filter((x) => d.includes(x.artist['#text']))
+    .filter((x) => x.date.uts >= oneMonthAgoTimestamp)
+    .reduce((accum, curr) => {
+      if (curr.date) {
+        if (Object.prototype.hasOwnProperty.call(accum, curr.artist['#text'])) {
+          accum[curr.artist['#text']].push(curr.date.uts);
+        } else {
+          const tracks: number[] = [];
+          tracks.push(curr.date.uts);
+          // eslint-disable-next-line no-param-reassign
+          accum[curr.artist['#text']] = tracks;
+        }
       }
-    }
-    return accum;
-  }, {});
+      return accum;
+    }, {});
 
   const ld: {id: string, color: string, data: {x: string, y: number}[]}[] = [];
 
@@ -134,9 +143,7 @@ export default function LineGraph(props: Props) {
             );
           }}
           isInteractive
-          colors={{
-            scheme: 'accent',
-          }}
+          colors={chartColors}
           lineWidth={3}
           pointSize={10}
           xScale={{
@@ -150,7 +157,7 @@ export default function LineGraph(props: Props) {
           yScale={{
             type: 'linear',
             min: 0,
-            max: 10,
+            max: 30,
           }}
           axisLeft={{
             legend: 'Listens',
@@ -178,4 +185,6 @@ export default function LineGraph(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default LineGraph;

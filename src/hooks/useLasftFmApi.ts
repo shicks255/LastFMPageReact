@@ -3,35 +3,18 @@ import { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 import { getActualArtistUrl } from '../utils';
 
-function generateUrl(type, page, period, key) {
-  return `https://ws.audioscrobbler.com/2.0/?method=${type}
-        &user=shicks255
-        &api_key=${key}
-        &format=json
-        &period=${period}
-        &page=${page}`;
-}
-
 export default function useLastFmApi() {
   const { state, actions } = useContext(LocalStateContext);
   const apiKey = process.env.REACT_APP_LAST_FM_KEY;
 
-  const userQuery = useQuery(['user', state.userName], () => {
-    const url = (`https://ws.audioscrobbler.com/2.0/?method=user.getinfo
+  function generateUrl(type, page, period, key) {
+    return `https://ws.audioscrobbler.com/2.0/?method=${type}
         &user=${state.userName}
-        &api_key=${apiKey}
-        &format=json`).trim();
-    return fetch(url)
-      .then((res) => res.json())
-      .then(
-        (res) => res,
-        (err) => {
-          actions.setModalErrorMessage(err);
-          actions.setShowModal(true);
-          actions.setUserName('shicks255');
-        },
-      );
-  });
+        &api_key=${key}
+        &format=json
+        &period=${period}
+        &page=${page}`;
+  }
 
   function handleReturn(res: Response): Promise<any> {
     return Promise.all([res.ok, res.json()])
@@ -43,7 +26,25 @@ export default function useLastFmApi() {
       });
   }
 
-  const recentTracksQuery = useQuery(['recentTracks', state.page], () => {
+  const userQuery = useQuery(['user', state.userName], () => {
+    const url = (`https://ws.audioscrobbler.com/2.0/?method=user.getinfo
+        &user=${state.userName}
+        &api_key=${apiKey}
+        &format=json`).trim();
+    return fetch(url)
+      .then((res) => handleReturn(res))
+      .then((body) => {
+        localStorage.setItem('userName', state.userName);
+        return body;
+      })
+      .catch((err) => {
+        actions.setModalErrorMessage(err.message);
+        actions.setShowModal(true);
+        actions.setUserName('shicks255');
+      });
+  });
+
+  const recentTracksQuery = useQuery(['recentTracks', state.page, state.userName], () => {
     const url = generateUrl('user.getrecenttracks', state.page, '', apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
@@ -62,9 +63,9 @@ export default function useLastFmApi() {
       });
   }, { refetchInterval: 30_000 });
 
-  const recentTracksBigQuery = useQuery(['recentTracks', 'big'], () => {
+  const recentTracksBigQuery = useQuery(['recentTracks', 'big', state.userName], () => {
     const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
-        &user=shicks255
+        &user=${state.userName}
         &api_key=${apiKey}
         &format=json
         &limit=200
@@ -83,7 +84,7 @@ export default function useLastFmApi() {
       });
   });
 
-  const topArtistsQuery = useQuery(['topArtists', state.page, state.timeFrame], () => {
+  const topArtistsQuery = useQuery(['topArtists', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopArtists', state.page, state.timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
@@ -99,7 +100,7 @@ export default function useLastFmApi() {
       });
   });
 
-  const topAlbumsQuery = useQuery(['topAlbums', state.page, state.timeFrame], () => {
+  const topAlbumsQuery = useQuery(['topAlbums', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopAlbums', state.page, state.timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
@@ -115,7 +116,7 @@ export default function useLastFmApi() {
       });
   });
 
-  const topTracksQuery = useQuery(['topTracks', state.page, state.timeFrame], () => {
+  const topTracksQuery = useQuery(['topTracks', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopTracks', state.page, state.timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))

@@ -7,7 +7,7 @@ type Props = {
   title: string,
 }
 
-export default function Button(props: Props) {
+const Button: React.FC<Props> = ((props: Props) => {
   const { state, actions } = useContext(LocalStateContext);
 
   const { id, dataLabel, title } = props;
@@ -41,4 +41,6 @@ export default function Button(props: Props) {
       <b>{title}</b>
     </div>
   );
-}
+});
+
+export default Button;

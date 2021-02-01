@@ -5,7 +5,7 @@ type Props = {
     error: FetchError
 }
 
-export default function ErrorMessage(props: Props) {
+const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
   const { error } = props;
   const { business, technical } = error;
 
@@ -40,4 +40,6 @@ export default function ErrorMessage(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default ErrorMessage;

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 
-export default function NowPlaying() {
+const NowPlaying: React.FC<Record<string, void>> = (() => {
   const { state } = useContext(LocalStateContext);
   const { artist } = state.nowPlaying;
   if (!artist) { return <div />; }
@@ -39,4 +39,6 @@ export default function NowPlaying() {
       </div>
     </div>
   );
-}
+});
+
+export default NowPlaying;

@@ -1,12 +1,12 @@
 import React from 'react';
 
-export default function Footer() {
-  return (
-    <footer className="footer">
-      <div className="content has-text-centered">
-        &copy;&nbsp;
-        <a target="_blank" href="https://shicks255.com" rel="noreferrer">Steven Hicks</a>
-      </div>
-    </footer>
-  );
-}
+const Footer: React.FC<Record<string, null>> = (() => (
+  <footer className="footer">
+    <div className="content has-text-centered">
+      &copy;&nbsp;
+      <a target="_blank" href="https://shicks255.com" rel="noreferrer">Steven Hicks</a>
+    </div>
+  </footer>
+));
+
+export default Footer;

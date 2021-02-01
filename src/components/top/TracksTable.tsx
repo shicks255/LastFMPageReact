@@ -7,7 +7,7 @@ import ArtistImage from '../ArtistImage';
 import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
 
-export default function TracksTable() {
+const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { topTracksQuery } = useLastFmApi();
   const { state } = useContext(LocalStateContext);
 
@@ -111,4 +111,6 @@ export default function TracksTable() {
       <Pagination totalPages={topTracks['@attr'].totalPages} />
     </div>
   );
-}
+});
+
+export default TracksTable;

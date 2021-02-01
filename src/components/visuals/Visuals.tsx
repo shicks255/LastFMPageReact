@@ -8,7 +8,7 @@ import useLastFmApi from '../../hooks/useLasftFmApi';
 import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
 
-export default function Visuals() {
+const Visuals: React.FC<Record<string, void>> = (() => {
   const timeFrames2 = Object.keys(timeFrames)
     .map((value) => <option key={value}>{timeFrames[value]}</option>);
 
@@ -57,4 +57,6 @@ export default function Visuals() {
       </div>
     </>
   );
-}
+});
+
+export default Visuals;

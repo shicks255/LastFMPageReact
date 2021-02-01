@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 import { strategies, timeFrames } from '../utils';
 
-export default function MainMenu() {
+const MainMenu: React.FC<Record<string, void>> = (() => {
   const { state, actions } = useContext(LocalStateContext);
 
   const strategySelects = Object.keys(strategies)
@@ -14,30 +14,39 @@ export default function MainMenu() {
 
   return (
     <div className="columns is-mobile">
-      <div className="box column is-half is-offset-one-quarter">
+      <div className="box column is-half is-offset-one-quarter has-text-centered">
         <table className="menuTable">
           <tbody>
             <tr>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <td><label>Select</label></td>
+              <td><b>View:</b></td>
               <td>
-                <select
-                  defaultValue={state.strategy}
-                  onChange={(event) => actions.setStrategy(event.target.value)}
-                >
-                  {strategySelects}
-                </select>
+                <div className="select is-rounded">
+                  <select
+                    defaultValue={state.strategy}
+                    onChange={(event) => actions.setStrategy(event.target.value)}
+                  >
+                    {strategySelects}
+                  </select>
+                </div>
               </td>
             </tr>
             <tr>
-              <td>Time Frame:</td>
               <td>
-                <select
-                  defaultValue={state.timeFrame}
-                  onChange={(event) => actions.setTimeFrame(event.target.value)}
-                >
-                  {timeFrameSelects}
-                </select>
+                <b>
+                  Time
+                  <br />
+                  Frame:
+                </b>
+              </td>
+              <td>
+                <div className="select is-rounded">
+                  <select
+                    defaultValue={state.timeFrame}
+                    onChange={(event) => actions.setTimeFrame(event.target.value)}
+                  >
+                    {timeFrameSelects}
+                  </select>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -45,4 +54,6 @@ export default function MainMenu() {
       </div>
     </div>
   );
-}
+});
+
+export default MainMenu;

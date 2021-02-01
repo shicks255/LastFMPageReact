@@ -13,7 +13,23 @@ export const strategies = {
   getTopTracks: 'Top Songs',
 };
 
+export const chartColors = [
+  'rgb(190, 174, 212)',
+  'rgb(127, 201, 127)',
+  'rgb(191, 91, 23)',
+  'rgb(240, 2, 127)',
+  'rgb(91,132,186)',
+  'rgb(255, 255, 153)',
+  'rgb(253, 192, 134)',
+  'rgb(202,57,57)',
+  'rgb(84,162,108)',
+  'rgb(156, 121, 201)',
+  'rgb(147,195,9)',
+  'rgb(221,124,60)',
+];
+
 const fanartKey = process.env.REACT_APP_FANART_KEY;
+const noImageUrl = 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png';
 
 function getMusicBrainzId(artistName) {
   const fullName = encodeURI(artistName);
@@ -30,7 +46,7 @@ function getMusicBrainzId(artistName) {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         return getFanArtImage(mbid, artistName, true);
       }
-      return 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';
+      return noImageUrl;
     });
 }
 
@@ -53,20 +69,20 @@ function getFanArtImage(mbid, artistName, secondTry) {
       } else if (!secondTry) {
         return getMusicBrainzId(artistName);
       } else {
-        imageUrl = 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';
+        imageUrl = noImageUrl;
       }
 
       return imageUrl;
     });
 }
 
-export function getActualArtistUrl(mbid, artistName) {
+export function getActualArtistUrl(mbid: string, artistName: string): string {
   return (mbid && mbid.length > 0)
     ? getFanArtImage(mbid, artistName, false)
     : getMusicBrainzId(artistName);
 }
 
-export function convertDurationToTimestamp(duration) {
+export function convertDurationToTimestamp(duration: number): string {
   const min = Math.floor(duration / 60);
   const sec = duration - (min * 60);
   const secString = sec < 10 ? `0${sec.toString()}` : sec.toString();

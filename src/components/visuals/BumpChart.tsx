@@ -3,22 +3,26 @@ import { ResponsiveBump } from '@nivo/bump';
 import { QueryObserverResult } from 'react-query';
 import Loader from '../Loader';
 import { Track } from '../../types/Track';
-
-// todo, if the difference between oldest and newest is more than 30 days, cap it to 30 days
-// so that the bump chart is not insanely long
+import { chartColors } from '../../utils';
 
 type Props = {
   recentTracksQuery: QueryObserverResult<Track[]>
 }
 
-export default function BumpChart(props: Props) {
+const BumpChart: React.FC<Props> = ((props: Props) => {
   const { recentTracksQuery } = props;
 
   if (recentTracksQuery.isLoading || !recentTracksQuery.data) return <Loader small={false} />;
 
+  const mostRecentDate = new Date(recentTracksQuery.data[0].date.uts * 1000);
+  const oneMonthAgo = mostRecentDate;
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);
+
   const recentTracks = recentTracksQuery.data
     .filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'))
-    .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
+    .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'))
+    .filter((x) => x.date.uts >= oneMonthAgoTimestamp);
 
   const tracks = recentTracks.sort((x, y) => (x.date.uts > y.date.uts ? 1 : -1));
   const oldest = tracks[0] ? new Date(tracks[0].date.uts * 1000) : '';
@@ -179,7 +183,7 @@ export default function BumpChart(props: Props) {
           pointSize={12}
           activePointSize={16}
           theme={theme}
-          colors={{ scheme: 'accent' }}
+          colors={chartColors}
           inactivePointSize={8}
           margin={{
             top: 50, right: 150, left: 50, bottom: 75,
@@ -201,4 +205,6 @@ export default function BumpChart(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default BumpChart;

@@ -3,13 +3,14 @@ import { LocalStateContext } from '../LocalStateContext';
 import useLasftFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 
-export default function Profile() {
+const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
   const [tempUserName, setTempUserName] = useState('');
   const { userQuery } = useLasftFmApi();
 
   function submitUsername() {
     actions.setShowModal(false);
+    console.log(tempUserName);
     actions.setUserName(tempUserName);
   }
 
@@ -19,12 +20,6 @@ export default function Profile() {
       if (e.keyCode === 13) { submitUsername(); }
     });
   }, []);
-
-  // componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void
-  // {
-  //     if (prevProps.profileStore.showModal && this.props.profileStore.showModal)
-  //         document.getElementById('newUsername').focus();
-  // }
 
   if (userQuery.isLoading) { return <Loader small={false} />; }
 
@@ -99,8 +94,8 @@ export default function Profile() {
               <b>Play Count:</b>
               {' '}
               {user.playCount}
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,max-len */}
-              {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
+              {/* eslint-disable-next-line max-len */}
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
               <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
             </div>
           </div>
@@ -109,4 +104,6 @@ export default function Profile() {
       {modal}
     </div>
   );
-}
+});
+
+export default Profile;

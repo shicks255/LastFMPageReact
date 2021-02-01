@@ -10,7 +10,7 @@ type Props = {
   value: string,
 }
 
-export default function TreeMap(props: Props) {
+const TreeMap: React.FC<Props> = ((props: Props) => {
   const {
     name, keyy, value,
   } = props;
@@ -84,4 +84,6 @@ export default function TreeMap(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default TreeMap;

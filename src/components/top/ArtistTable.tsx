@@ -4,7 +4,7 @@ import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
 
-export default function ArtistTable() {
+const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topArtistsQuery } = useLastFmApi();
 
   if (topArtistsQuery.isLoading) { return <Loader small={false} />; }
@@ -50,4 +50,6 @@ export default function ArtistTable() {
       <Pagination totalPages={artist['@attr'].totalPages} />
     </div>
   );
-}
+});
+
+export default ArtistTable;

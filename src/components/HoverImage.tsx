@@ -7,7 +7,7 @@ type Props = {
     caption: string,
 }
 
-export default function HoverImage(props: Props) {
+const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
   const { actions } = useContext(LocalStateContext);
   const { src, popupSrc, caption } = props;
 
@@ -31,4 +31,6 @@ export default function HoverImage(props: Props) {
       src={src}
     />
   );
-}
+});
+
+export default HoverImage;
