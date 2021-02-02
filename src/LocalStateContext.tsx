@@ -12,7 +12,7 @@ type State = {
   page: number,
   strategy: string,
   timeFrame: string,
-  nowPlaying: NowPlaying,
+  nowPlaying: NowPlaying | undefined,
   selected: string,
   recentTracksError: FetchError | undefined,
   recentTracksBigError: FetchError | undefined,
@@ -30,7 +30,7 @@ type Actions = {
   setPage: (number) => void,
   setStrategy: (string) => void,
   setTimeFrame: (string) => void,
-  setNowPlaying: (string) => void,
+  setNowPlaying: (x: NowPlaying | undefined) => void,
   setSelected: (string) => void,
   setRecentTracksError: (x: FetchError | undefined) => void,
   setRecentTracksBigError: (x: FetchError | undefined) => void,
@@ -54,7 +54,7 @@ const LocalStateContext: React.Context<ContextProps> = React.createContext<Conte
     page: 1,
     strategy: 'getTopArtists',
     timeFrame: '7day',
-    nowPlaying: { artist: undefined },
+    nowPlaying: undefined,
     selected: 'recent',
     recentTracksError: undefined,
     recentTracksBigError: undefined,
@@ -97,7 +97,7 @@ function Provider(props: Props): JSX.Element {
 
   const [strategy, setStrategy] = useState<string>('getTopArtists');
   const [timeFrame, setTimeFrame] = useState<string>('7day');
-  const [nowPlaying, setNowPlaying] = useState<NowPlaying>({ artist: undefined });
+  const [nowPlaying, setNowPlaying] = useState<NowPlaying>();
   const [selected, setSelected] = useState<string>('recent');
 
   const [recentTracksError, setRecentTracksError] = useState<FetchError>();

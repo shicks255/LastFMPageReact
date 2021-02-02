@@ -14,7 +14,7 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
 
   if (recentTracksQuery.isLoading || !recentTracksQuery.data) return <Loader small={false} />;
 
-  const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
+  const recentTracks = recentTracksQuery.data;
 
   const d: {[key: string]: number} = recentTracks.reduce((accum, item) => {
     const artistName = item.artist['#text'];

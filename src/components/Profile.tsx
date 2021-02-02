@@ -10,7 +10,6 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
 
   function submitUsername() {
     actions.setShowModal(false);
-    console.log(tempUserName);
     actions.setUserName(tempUserName);
   }
 

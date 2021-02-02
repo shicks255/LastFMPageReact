@@ -5,5 +5,5 @@ export type Track = {
         uts: number
     },
     artist: Artist,
-    album: {}
+    album: Record<string, never>
 }

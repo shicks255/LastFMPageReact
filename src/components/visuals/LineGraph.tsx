@@ -20,7 +20,7 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
     return (<Loader small={false} />);
   }
 
-  const recentTracks = recentTracksQuery.data.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
+  const recentTracks = recentTracksQuery.data;
   const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 2);
   const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);

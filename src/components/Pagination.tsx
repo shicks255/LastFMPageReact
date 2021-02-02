@@ -13,6 +13,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
   };
 
   const { totalPages } = props;
+  if (state.page > totalPages) actions.setPage(1);
 
   if (totalPages < 1) return <></>;
 

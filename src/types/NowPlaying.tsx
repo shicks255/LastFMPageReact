@@ -1,5 +1,7 @@
-import { Artist } from './Artist';
+import { Image } from './Image';
 
 export type NowPlaying = {
-    artist: Artist | undefined
+    name: string,
+    artist: string,
+    image: Image[],
 }

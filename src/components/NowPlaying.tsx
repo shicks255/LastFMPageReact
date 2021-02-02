@@ -3,8 +3,8 @@ import { LocalStateContext } from '../LocalStateContext';
 
 const NowPlaying: React.FC<Record<string, void>> = (() => {
   const { state } = useContext(LocalStateContext);
-  const { artist } = state.nowPlaying;
-  if (!artist) { return <div />; }
+  const { nowPlaying } = state;
+  if (!nowPlaying) { return <div />; }
 
   return (
     <div className="nowPlaying">
@@ -15,15 +15,15 @@ const NowPlaying: React.FC<Record<string, void>> = (() => {
             <tbody>
               <tr>
                 <td rowSpan={2}>
-                  <img alt="" className="image" src={artist.image[1]['#text']} />
+                  <img alt="" className="image" src={nowPlaying.image[1]['#text']} />
                 </td>
                 <td>&nbsp;</td>
                 <td style={{ textAlign: 'center' }}>
                   <span className="nowPlaying">
-                    {artist['#text']}
+                    {nowPlaying.artist['#text']}
                     {' '}
                     -
-                    {artist.name}
+                    {nowPlaying.name}
                   </span>
                 </td>
               </tr>

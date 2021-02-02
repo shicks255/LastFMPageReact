@@ -9,10 +9,14 @@ import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
 
 const Visuals: React.FC<Record<string, void>> = (() => {
-  const timeFrames2 = Object.keys(timeFrames)
-    .map((value) => <option key={value}>{timeFrames[value]}</option>);
+  const { state, actions } = useContext(LocalStateContext);
+  const timeFrameSelects = Object.keys(timeFrames)
+    .map((value) => (
+      <option value={value} key={value} selected={value === state.timeFrame}>
+        {timeFrames[value]}
+      </option>
+    ));
 
-  const { state } = useContext(LocalStateContext);
   const { recentTracksBigQuery } = useLastFmApi();
 
   if (state.recentTracksBigError) return <ErrorMessage error={state.recentTracksBigError} />;
@@ -24,11 +28,19 @@ const Visuals: React.FC<Record<string, void>> = (() => {
           <table className="menuTable">
             <tbody>
               <tr>
-                <td>Time Frame:</td>
                 <td>
-                  <select>
-                    {timeFrames2}
-                  </select>
+                  <b>
+                    Time
+                    <br />
+                    Frame:
+                  </b>
+                </td>
+                <td>
+                  <div className="select is-rounded">
+                    <select onChange={(event) => actions.setTimeFrame(event.target.value)}>
+                      {timeFrameSelects}
+                    </select>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -45,7 +57,7 @@ const Visuals: React.FC<Record<string, void>> = (() => {
       </div>
       <hr />
       <div className="columns">
-        <LineGraph recentTracksQuery={recentTracksBigQuery} />
+        {/* <LineGraph recentTracksQuery={recentTracksBigQuery} /> */}
       </div>
       <hr />
       <div className="columns">

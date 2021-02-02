@@ -7,6 +7,11 @@ export default function useLastFmApi() {
   const { state, actions } = useContext(LocalStateContext);
   const apiKey = process.env.REACT_APP_LAST_FM_KEY;
 
+  const queryOptions = {
+    refetchOnWindowFocus: false,
+    staleTime: (1000 * 60 * 10),
+  };
+
   function generateUrl(type, page, period, key) {
     return `https://ws.audioscrobbler.com/2.0/?method=${type}
         &user=${state.userName}
@@ -42,7 +47,7 @@ export default function useLastFmApi() {
         actions.setShowModal(true);
         actions.setUserName('shicks255');
       });
-  });
+  }, queryOptions);
 
   const recentTracksQuery = useQuery(['recentTracks', state.page, state.userName], () => {
     const url = generateUrl('user.getrecenttracks', state.page, '', apiKey);
@@ -51,6 +56,8 @@ export default function useLastFmApi() {
       .then((body) => {
         if (body.recenttracks.track[0]?.['@attr']?.nowplaying) {
           actions.setNowPlaying(body.recenttracks.track[0]);
+        } else {
+          actions.setNowPlaying(undefined);
         }
         actions.setRecentTracksError(undefined);
         return body.recenttracks;
@@ -61,7 +68,7 @@ export default function useLastFmApi() {
           business: 'Problem loading recent tracks',
         });
       });
-  }, { refetchInterval: 30_000 });
+  }, { refetchInterval: 30_000, refetchOnWindowFocus: false });
 
   const recentTracksBigQuery = useQuery(['recentTracks', 'big', state.userName], () => {
     const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
@@ -74,7 +81,9 @@ export default function useLastFmApi() {
       .then((res) => handleReturn(res))
       .then((body) => {
         actions.setRecentTracksBigError(undefined);
-        return body.recenttracks.track.filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'));
+        return body.recenttracks.track
+          .filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'))
+          .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
       })
       .catch((err) => {
         actions.setRecentTracksBigError({
@@ -82,7 +91,7 @@ export default function useLastFmApi() {
           business: 'Problem loading recent tracks',
         });
       });
-  });
+  }, queryOptions);
 
   const topArtistsQuery = useQuery(['topArtists', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopArtists', state.page, state.timeFrame, apiKey);
@@ -98,7 +107,7 @@ export default function useLastFmApi() {
           business: 'Problem loading top artists',
         });
       });
-  });
+  }, queryOptions);
 
   const topAlbumsQuery = useQuery(['topAlbums', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopAlbums', state.page, state.timeFrame, apiKey);
@@ -114,7 +123,7 @@ export default function useLastFmApi() {
           technical: err.message,
         });
       });
-  });
+  }, queryOptions);
 
   const topTracksQuery = useQuery(['topTracks', state.page, state.timeFrame, state.userName], () => {
     const url = generateUrl('user.getTopTracks', state.page, state.timeFrame, apiKey);
@@ -130,9 +139,9 @@ export default function useLastFmApi() {
           business: 'Problem loading top tracks',
         });
       });
-  });
+  }, queryOptions);
 
-  const artistImageQuery = (mbid, artistName) => useQuery(['artistImage', mbid, artistName], () => getActualArtistUrl(mbid, artistName));
+  const artistImageQuery = (mbid, artistName) => useQuery(['artistImage', mbid, artistName], () => getActualArtistUrl(mbid, artistName), queryOptions);
 
   return {
     userQuery,
