@@ -159,13 +159,6 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
 
   const theme = {
     textColor: '#eee',
-    axis: {
-      domain: {
-        line: {
-          stroke: 'red',
-        },
-      },
-    },
   };
 
   return (
@@ -177,10 +170,9 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
         </span>
         <ResponsiveBump
           data={newData}
-          yOuterPadding={-50}
-          // lineWidth={4}
-          // activeLineWidth={6}
+          // yOuterPadding={-50}
           pointSize={12}
+          interpolation="smooth"
           activePointSize={16}
           theme={theme}
           colors={chartColors}
