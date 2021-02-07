@@ -12,7 +12,7 @@ const Visuals: React.FC<Record<string, void>> = (() => {
   const { state, actions } = useContext(LocalStateContext);
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => (
-      <option value={value} key={value} selected={value === state.timeFrame}>
+      <option value={value} key={value}>
         {timeFrames[value]}
       </option>
     ));
@@ -23,48 +23,42 @@ const Visuals: React.FC<Record<string, void>> = (() => {
 
   return (
     <>
-      <div className="columns is-mobile">
-        <div className="box column is-half is-offset-one-quarter">
-          <table className="menuTable">
-            <tbody>
-              <tr>
-                <td>
-                  <b>
-                    Time
-                    <br />
-                    Frame:
-                  </b>
-                </td>
-                <td>
-                  <div className="select is-rounded">
-                    <select onChange={(event) => actions.setTimeFrame(event.target.value)}>
-                      {timeFrameSelects}
-                    </select>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="is-mobile">
+        <div className="box column is-half is-offset-one-quarter has-text-centered">
+          <div className="columns has-text-black" style={{ padding: '10px' }}>
+            <div className="column has-text-right-tablet" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+              <b>
+                Time Frame:
+              </b>
+            </div>
+            <div className="column has-text-left-tablet">
+              <div className="select is-danger">
+                <select onChange={(event) => actions.setTimeFrame(event.target.value)}>
+                  {timeFrameSelects}
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <hr />
-      <div className="columns">
+      <div className="mainContent">
         <TreeMap name="Artists" keyy="name" value="playcount" />
       </div>
       <hr />
-      <div className="columns">
+      <div>
         <TreeMap name="Albums" keyy="name" value="playcount" />
       </div>
       <hr />
-      <div className="columns">
-        {/* <LineGraph recentTracksQuery={recentTracksBigQuery} /> */}
+      <div>
+        <LineGraph recentTracksQuery={recentTracksBigQuery} />
       </div>
       <hr />
-      <div className="columns">
+      <div>
         <Sunburst recentTracksQuery={recentTracksBigQuery} />
       </div>
       <hr />
-      <div className="columns">
+      <div>
         <BumpChart recentTracksQuery={recentTracksBigQuery} />
       </div>
     </>

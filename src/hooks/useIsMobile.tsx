@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-function useIsMobile() {
-  const [size, setSize] = useState(undefined);
+export default function useIsMobile(): boolean {
+  const [size, setSize] = useState<number>(0);
 
   useEffect(() => {
     setSize(window.innerWidth);
@@ -12,5 +12,5 @@ function useIsMobile() {
     window.addEventListener('resize', handleResize);
   }, []);
 
-  return (size && size <= 768);
+  return size <= 768;
 }

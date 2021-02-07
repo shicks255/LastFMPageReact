@@ -56,33 +56,33 @@ const TreeMap: React.FC<Props> = ((props: Props) => {
   }
 
   return (
-    <div className="column is-full has-text-centered">
-      <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <span style={{ color: '#eee' }}>
-          {name}
-          {' '}
-          Heat Map
-        </span>
-        <ResponsiveTreeMap
-          data={treeData}
-          identity="name"
-          value="value"
-          colors={{
-            scheme: 'accent',
-          }}
-          nodeOpacity={0.75}
+  // <div className="column is-full has-text-centered">
+    <div style={{ height: '350px', fontWeight: 'bold' }}>
+      <span style={{ color: '#eee' }}>
+        {name}
+        {' '}
+        Heat Map
+      </span>
+      <ResponsiveTreeMap
+        data={treeData}
+        identity="name"
+        value="value"
+        colors={{
+          scheme: 'accent',
+        }}
+        nodeOpacity={0.75}
           // @ts-ignore
-          label={(node) => trimName(node)}
-          margin={{
-            top: 10, right: 10, bottom: 10, left: 10,
-          }}
-          labelSkipSize={45}
-          labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
-          parentLabelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
-          borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
-        />
-      </div>
+        label={(node) => trimName(node)}
+        margin={{
+          top: 10, right: 10, bottom: 10, left: 10,
+        }}
+        labelSkipSize={45}
+        labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
+        parentLabelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
+        borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
+      />
     </div>
+  // </div>
   );
 });
 

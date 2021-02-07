@@ -36,7 +36,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
 
   return (
     <div>
-      <div className="columns" role="navigation" aria-label="pagination">
+      <div className="" role="navigation" aria-label="pagination">
         <div className="column is-half is-offset-one-quarter has-text-centered">
           {
                         firstPage
@@ -66,7 +66,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
                     }
         </div>
       </div>
-      <div className="columns">
+      <div className="">
         <div className="column is-half is-offset-one-quarter has-text-centered is-centered">
           {
                         firstPage

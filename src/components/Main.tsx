@@ -28,11 +28,9 @@ const Main: React.FC<Record<string, void>> = ((): JSX.Element => {
   }
 
   return (
-    <div className="columns">
-      <div className="column is-10 is-offset-1">
-        <MainMenu />
-        {mainContent}
-      </div>
+    <div className="">
+      <MainMenu />
+      {mainContent}
     </div>
   );
 });

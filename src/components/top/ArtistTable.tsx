@@ -3,6 +3,7 @@ import useLastFmApi from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
+import useIsMobile from '../../hooks/useIsMobile';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topArtistsQuery } = useLastFmApi();
@@ -33,7 +34,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
   return (
     <div>
       <Pagination totalPages={artist['@attr'].totalPages} />
-      <table className="table is-fullwidth">
+      <table className="table is-fullwidth mainContent">
         <thead>
           <tr>
             <th aria-label="Rank Header" />

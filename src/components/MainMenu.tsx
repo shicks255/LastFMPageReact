@@ -13,44 +13,36 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
   if (state.selected !== 'top') return <></>;
 
   return (
-    <div className="columns is-mobile">
+    <div className="is-mobile">
       <div className="box column is-half is-offset-one-quarter has-text-centered">
-        <table className="menuTable">
-          <tbody>
-            <tr>
-              <td><b>View:</b></td>
-              <td>
-                <div className="select is-rounded">
-                  <select
-                    defaultValue={state.strategy}
-                    onChange={(event) => actions.setStrategy(event.target.value)}
-                  >
-                    {strategySelects}
-                  </select>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  Time
-                  <br />
-                  Frame:
-                </b>
-              </td>
-              <td>
-                <div className="select is-rounded">
-                  <select
-                    defaultValue={state.timeFrame}
-                    onChange={(event) => actions.setTimeFrame(event.target.value)}
-                  >
-                    {timeFrameSelects}
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="columns has-text-black">
+          <div className="column">
+            <span>
+              <b>View:</b>
+              <br />
+              <div className="select is-danger">
+                <select
+                  defaultValue={state.strategy}
+                  onChange={(event) => actions.setStrategy(event.target.value)}
+                >
+                  {strategySelects}
+                </select>
+              </div>
+            </span>
+          </div>
+          <div className="column">
+            <b>Time Frame:</b>
+            <br />
+            <div className="select is-danger">
+              <select
+                defaultValue={state.timeFrame}
+                onChange={(event) => actions.setTimeFrame(event.target.value)}
+              >
+                {timeFrameSelects}
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

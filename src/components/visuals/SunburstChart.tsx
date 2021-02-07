@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResponsiveSunburst } from 'nivo';
 import { QueryObserverResult } from 'react-query';
+import { ResponsiveSunburst, Sunburst } from '@nivo/sunburst';
 import Loader from '../Loader';
 import { Track } from '../../types/Track';
 import { chartColors } from '../../utils';
@@ -45,6 +45,7 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
     .map((k) => {
       const albumData = Object.entries(k[1]).map((i) => ({
         id: i[0],
+        // id: `${k[0]} - ${i[0]}`,
         value: i[1],
       }));
 
@@ -68,14 +69,11 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
         </span>
         <ResponsiveSunburst
           data={data}
-                    // theme={theme}
           margin={{ top: 15, bottom: 20 }}
           colors={chartColors}
-          borderWith={1}
           borderColor="#4E4E50"
           cornerRadius={3}
           borderWidth={4}
-          motionConfig="gentle"
           isInteractive
         />
       </div>

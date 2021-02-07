@@ -14,10 +14,14 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   }
 
   useEffect(() => {
-    document.addEventListener('keyup', (e) => {
-      if (e.keyCode === 27) { actions.setShowModal(false); }
-      if (e.keyCode === 13) { submitUsername(); }
-    });
+    const handleKeys = (event) => {
+      if (event.keyCode === 27) { actions.setShowModal(false); }
+      if (event.keyCode === 13) { submitUsername(); }
+    };
+
+    window.addEventListener('keyup', handleKeys);
+    // return cleanup function
+    return () => window.removeEventListener('keydown', handleKeys);
   }, []);
 
   if (userQuery.isLoading) { return <Loader small={false} />; }
@@ -35,9 +39,8 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
     registered: new Date(userQuery.data.user.registered.unixtime * 1000),
   };
 
-  const modalClass = state.showModal ? 'modal is-active' : 'modal';
-  const modal = (
-    <div className={modalClass}>
+  const modal = state.showModal ? (
+    <div className="modal is-active">
       <div className="modal-background extraModal" />
       <div className="modal-content">
         <div className="box">
@@ -63,40 +66,38 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
         aria-label="close"
       />
     </div>
-  );
+  ) : '';
 
   return (
-    <div className="columns">
-      <div className="column is-half is is-offset-one-quarter has-text-centered">
-        <div className="box relative">
-          <div className="columns is-centered">
-            <div className="column is-two-fifths is-narrow">
-              <figure className="image is-128x128">
-                <img alt="" className="image is-rounded" src={user.avatar} />
-              </figure>
-            </div>
-            <div className="card-stacked column is-three-fifths is-narrow">
-              <h3 className="title" style={{ marginBottom: '0' }}>
-                {state.userName}
-              </h3>
-              <br />
-              <b>Registered:</b>
-              {' '}
-              {user.registered.toLocaleString(undefined, {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-              })}
-              <br />
-              <b>Play Count:</b>
-              {' '}
-              {user.playCount}
-              {/* eslint-disable-next-line max-len */}
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-              <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
-            </div>
+    <div className="column is-half is is-offset-one-quarter has-text-centered">
+      <div className="box relative has-text-centered is-half">
+        <div className="columns is-centered">
+          <div className="column is-two-fifths is-narrow has-text-right">
+            <figure className="image is-128x128">
+              <img alt="" className="image is-rounded" src={user.avatar} />
+            </figure>
+          </div>
+          <div className="card-stacked column is-three-fifths is-narrow">
+            <h3 className="title" style={{ marginBottom: '0' }}>
+              {state.userName}
+            </h3>
+            <br />
+            <b>Registered:</b>
+            {' '}
+            {user.registered.toLocaleString(undefined, {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+            })}
+            <br />
+            <b>Play Count:</b>
+            {' '}
+            {user.playCount}
+            {/* eslint-disable-next-line max-len */}
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+            <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
           </div>
         </div>
       </div>

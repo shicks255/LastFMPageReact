@@ -215,6 +215,17 @@ h1 {
     padding: 3px;
 }
 
+.mainContent {
+    max-width: 85%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 576px) {
+    .mainContent {
+        max-width: 100%;
+        margin: auto;
+    }
+}
 
 @media only screen and (max-width: 760px){
     .userIcon{

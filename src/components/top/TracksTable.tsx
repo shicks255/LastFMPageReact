@@ -6,10 +6,12 @@ import { convertDurationToTimestamp } from '../../utils';
 import ArtistImage from '../ArtistImage';
 import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
+import useIsMobile from '../../hooks/useIsMobile';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { topTracksQuery } = useLastFmApi();
   const { state } = useContext(LocalStateContext);
+  const isMobile = useIsMobile();
 
   if (topTracksQuery.isLoading) { return <Loader small={false} />; }
   if (state.topTracksError) return <ErrorMessage error={state.topTracksError} />;
@@ -19,66 +21,44 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
 
   if (!tracks) return <Loader small={false} />;
 
-  const bigContent = tracks.map((val) => {
-    const time = convertDurationToTimestamp(val.duration);
+  function renderTable() {
+    if (isMobile) {
+      return (
+        <tbody>
+          {tracks.map((val) => {
+            const time = convertDurationToTimestamp(val.duration);
 
-    const title = val.name;
-    const { rank } = val['@attr'];
+            const title = val.name;
+            const { rank } = val['@attr'];
+            return (
+              <tr key={title}>
+                <td className="alignRight">
+                  {rank}
+                  .
+                </td>
+                <td>
+                  <div className="imageCell">
+                    <a href={val.url} target="_blank" rel="noreferrer">
+                      <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <a href={val.url} target="_blank" rel="noreferrer">{val.name}</a>
+                  <br />
+                  {val.artist.name}
+                  <br />
+                  {time}
+                </td>
+                <td>{val.playcount}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      );
+    }
     return (
-      <tr key={title}>
-        <td className="alignRight">
-          {rank}
-          .
-        </td>
-        <td>
-          <div className="imageCell">
-            <a href={val.url} target="_blank" rel="noreferrer">
-              <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
-            </a>
-          </div>
-        </td>
-        <td><a href={val.url} target="_blank" rel="noreferrer">{val.name}</a></td>
-        <td>{val.artist.name}</td>
-        <td>{val.playcount}</td>
-        <td>{time}</td>
-      </tr>
-    );
-  });
-
-  const mobileContent = tracks.map((val) => {
-    const time = convertDurationToTimestamp(val.duration);
-
-    const title = val.name;
-    const { rank } = val['@attr'];
-    return (
-      <tr key={title}>
-        <td className="alignRight">
-          {rank}
-          .
-        </td>
-        <td>
-          <div className="imageCell">
-            <a href={val.url} target="_blank" rel="noreferrer">
-              <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
-            </a>
-          </div>
-        </td>
-        <td>
-          <a href={val.url} target="_blank" rel="noreferrer">{val.name}</a>
-          <br />
-          {val.artist.name}
-          <br />
-          {time}
-        </td>
-        <td>{val.playcount}</td>
-      </tr>
-    );
-  });
-
-  return (
-    <div>
-      <Pagination totalPages={topTracks['@attr'].totalPages} />
-      <table className="table is-striped is-hoverable is-fullwidth is-hidden-mobile">
+      <>
         <thead>
           <tr>
             <th aria-label="Rank Header" />
@@ -89,24 +69,42 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
             <th>Length</th>
           </tr>
         </thead>
-
         <tbody>
-          {bigContent}
-        </tbody>
-      </table>
-      <table className="table is-striped is-hoverable is-fullwidth is-hidden-tablet">
-        <thead>
-          <tr>
-            <th aria-label="Rank Header" />
-            <th aria-label="Image Header" />
-            <th aria-label="Info Header" />
-            <th>Plays</th>
-          </tr>
-        </thead>
+          {tracks.map((val) => {
+            const time = convertDurationToTimestamp(val.duration);
 
-        <tbody>
-          {mobileContent}
+            const title = val.name;
+            const { rank } = val['@attr'];
+            return (
+              <tr key={title}>
+                <td className="alignRight">
+                  {rank}
+                  .
+                </td>
+                <td>
+                  <div className="imageCell">
+                    <a href={val.url} target="_blank" rel="noreferrer">
+                      <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
+                    </a>
+                  </div>
+                </td>
+                <td><a href={val.url} target="_blank" rel="noreferrer">{val.name}</a></td>
+                <td>{val.artist.name}</td>
+                <td>{val.playcount}</td>
+                <td>{time}</td>
+              </tr>
+            );
+          })}
         </tbody>
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <Pagination totalPages={topTracks['@attr'].totalPages} />
+      <table className="table is-striped is-hoverable is-fullwidth mainContent">
+        {renderTable()}
       </table>
       <Pagination totalPages={topTracks['@attr'].totalPages} />
     </div>
