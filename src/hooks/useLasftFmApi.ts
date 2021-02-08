@@ -8,7 +8,7 @@ import { TopAlbums } from '../types/TopAlbums';
 import { TopTracks } from '../types/TopTracks';
 
 export default function useLastFmApi() {
-  const { state } = useContext(LocalStateContext);
+  const { state, actions } = useContext(LocalStateContext);
   const apiKey = process.env.REACT_APP_LAST_FM_KEY;
 
   const queryOptions = {
@@ -28,6 +28,8 @@ export default function useLastFmApi() {
   function handleReturn(res: Response): Promise<any> {
     return Promise.all([res.ok, res.json()])
       .then(([ok, body]) => {
+        console.log(ok);
+        console.log(body);
         if (ok) {
           return body;
         }
@@ -47,9 +49,9 @@ export default function useLastFmApi() {
         return body;
       })
       .catch((err) => {
-        // actions.setModalErrorMessage(err.message);
-        // actions.setShowModal(true);
-        // actions.setUserName('shicks255');
+        actions.setModalErrorMessage(err.message);
+        actions.setShowModal(true);
+        actions.setUserName('shicks255');
       });
   }, queryOptions);
 
@@ -88,9 +90,16 @@ export default function useLastFmApi() {
   const topArtistsQuery: (string, number) => QueryObserverResult<TopArtists, Error> = (timeFrame, page) => useQuery(['topArtists', state.userName, timeFrame, page], () => {
     const url = generateUrl('user.getTopArtists', page, timeFrame, apiKey);
     return fetch(url)
-      .then((res) => handleReturn(res))
+      .then(
+        (res) => handleReturn(res),
+        (err) => {
+          console.log(err);
+          return Error('Failed to fetch');
+        },
+      )
       .then((body) => body.topartists)
       .catch((err) => {
+        console.log('Error in top artists');
         throw Error(JSON.stringify({
           technical: err.message,
           business: 'Problem loading top artists',

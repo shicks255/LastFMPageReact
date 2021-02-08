@@ -27,8 +27,8 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
 
   if (userQueryResult.isLoading) { return <Loader small={false} />; }
 
-  if (!userQueryResult.data || userQueryResult.data.error) {
-    actions.setModalErrorMessage(userQueryResult.data.message);
+  if (userQueryResult.data.error) {
+    actions.setModalErrorMessage('smoething wrong');
     actions.setUserName('shicks255');
     actions.setShowModal(false);
     return <div />;

@@ -10,18 +10,20 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
-const isLocalhost = Boolean(
-  window.location.hostname === 'localhost'
-    // [::1] is the IPv6 localhost address.
-    || window.location.hostname === '[::1]'
-    // 127.0.0.1/8 is considered localhost for IPv4.
-    || window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
-    ),
-);
+console.log('does this do anything');
+const isLocalhost = false;
+// const isLocalhost = Boolean(
+//   window.location.hostname === 'localhost'
+//     // [::1] is the IPv6 localhost address.
+//     || window.location.hostname === '[::1]'
+//     // 127.0.0.1/8 is considered localhost for IPv4.
+//     || window.location.hostname.match(
+//       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
+//     ),
+// );
 
 export function register(config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -32,10 +34,11 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      const swUrl = `${process.env.PUBLIC_URL}/service-worker-old.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         checkValidServiceWorker(swUrl, config);
 
         // Add some additional logging to localhost, pointing developers to the
@@ -48,6 +51,7 @@ export function register(config) {
         });
       } else {
         // Is not localhost. Just register service worker
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         registerValidSW(swUrl, config);
       }
     });

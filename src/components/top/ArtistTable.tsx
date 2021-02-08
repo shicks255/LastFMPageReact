@@ -10,6 +10,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topArtistsQuery } = useLastFmApi();
   const { timeFrame, page } = useApiState();
   const topArtistQueryResult = topArtistsQuery(timeFrame, page);
+  console.log(topArtistQueryResult);
 
   if (topArtistQueryResult.isLoading) { return <Loader small={false} />; }
   if (topArtistQueryResult.error) return <ErrorMessage error={topArtistQueryResult.error} />;

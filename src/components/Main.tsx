@@ -1,11 +1,17 @@
-import React from 'react';
-import ArtistTable from './top/ArtistTable';
-import AlbumTable from './top/AlbumTable';
-import TracksTable from './top/TracksTable';
+import React, { lazy, Suspense } from 'react';
+// import ArtistTable from './top/ArtistTable';
+// import AlbumTable from './top/AlbumTable';
+// import TracksTable from './top/TracksTable';
 import MainMenu from './MainMenu';
-import Visuals from './visuals/Visuals';
 import RecentTracksTable from './RecentTracksTable';
 import { useApiState } from '../ApiContext';
+import Loader from './Loader';
+// import Visuals from './visuals/Visuals';
+
+const AlbumTable = lazy(() => import('./top/AlbumTable'));
+const ArtistTable = lazy(() => import('./top/ArtistTable'));
+const TracksTable = lazy(() => import('./top/TracksTable'));
+const Visuals = lazy(() => import('./visuals/Visuals'));
 
 const Main: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { selected, strategy } = useApiState();
@@ -29,8 +35,10 @@ const Main: React.FC<Record<string, void>> = ((): JSX.Element => {
 
   return (
     <div className="">
-      <MainMenu />
-      {mainContent}
+      <Suspense fallback={<Loader small={false} />}>
+        <MainMenu />
+        {mainContent}
+      </Suspense>
     </div>
   );
 });
