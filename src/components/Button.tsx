@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
+import { useApiDispatch, useApiState } from '../ApiContext';
 
 type Props = {
   id: string,
@@ -8,7 +8,8 @@ type Props = {
 }
 
 const Button: React.FC<Props> = ((props: Props) => {
-  const { state, actions } = useContext(LocalStateContext);
+  const { selected } = useApiState();
+  const { setSelected } = useApiDispatch();
 
   const { id, dataLabel, title } = props;
 
@@ -27,13 +28,13 @@ const Button: React.FC<Props> = ((props: Props) => {
       classs += '';
   }
 
-  if (state.selected === dataLabel) { classs += ' selected'; }
+  if (selected === dataLabel) { classs += ' selected'; }
 
   return (
     <div style={{ display: 'inline-block' }}>
       <i
         id={id}
-        onClick={() => actions.setSelected(dataLabel)}
+        onClick={() => setSelected(dataLabel)}
         className={classs}
         aria-hidden="true"
       />

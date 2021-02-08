@@ -1,27 +1,27 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
 import ArtistTable from './top/ArtistTable';
 import AlbumTable from './top/AlbumTable';
 import TracksTable from './top/TracksTable';
 import MainMenu from './MainMenu';
 import Visuals from './visuals/Visuals';
 import RecentTracksTable from './RecentTracksTable';
+import { useApiState } from '../ApiContext';
 
 const Main: React.FC<Record<string, void>> = ((): JSX.Element => {
-  const { state } = useContext(LocalStateContext);
+  const { selected, strategy } = useApiState();
 
   let mainContent: JSX.Element = <RecentTracksTable />;
-  if (state.selected === 'top') {
-    if (state.strategy === 'getTopArtists') {
+  if (selected === 'top') {
+    if (strategy === 'getTopArtists') {
       mainContent = <ArtistTable />;
     }
-    if (state.strategy === 'getTopAlbums') {
+    if (strategy === 'getTopAlbums') {
       mainContent = <AlbumTable />;
     }
-    if (state.strategy === 'getTopTracks') {
+    if (strategy === 'getTopTracks') {
       mainContent = <TracksTable />;
     }
-  } else if (state.selected === 'vis') {
+  } else if (selected === 'vis') {
     mainContent = <Visuals />;
   } else {
     mainContent = <RecentTracksTable />;

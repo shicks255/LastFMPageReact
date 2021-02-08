@@ -1,65 +1,38 @@
-import React, { useContext } from 'react';
-import TreeMap from './TreeMap';
+import React from 'react';
 import LineGraph from './LineGraph';
-import { timeFrames } from '../../utils';
 import Sunburst from './SunburstChart';
 import BumpChart from './BumpChart';
 import useLastFmApi from '../../hooks/useLasftFmApi';
-import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
+import Loader from '../Loader';
+import TreeMaps from './TreeMaps';
 
 const Visuals: React.FC<Record<string, void>> = (() => {
-  const { state, actions } = useContext(LocalStateContext);
-  const timeFrameSelects = Object.keys(timeFrames)
-    .map((value) => (
-      <option value={value} key={value}>
-        {timeFrames[value]}
-      </option>
-    ));
-
   const { recentTracksBigQuery } = useLastFmApi();
+  const recentTracksBigQueryResult = recentTracksBigQuery();
 
-  if (state.recentTracksBigError) return <ErrorMessage error={state.recentTracksBigError} />;
+  if (recentTracksBigQueryResult.isLoading) return <Loader small />;
+  if (recentTracksBigQueryResult.error) {
+    return <ErrorMessage error={recentTracksBigQueryResult.error} />;
+  }
+  if (!recentTracksBigQueryResult.data) return <ErrorMessage error={new Error('')} />;
+
+  const recentTracks = recentTracksBigQueryResult.data.track
+    .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
 
   return (
     <>
-      <div className="is-mobile">
-        <div className="box column is-half is-offset-one-quarter has-text-centered">
-          <div className="columns has-text-black" style={{ padding: '10px' }}>
-            <div className="column has-text-right-tablet" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-              <b>
-                Time Frame:
-              </b>
-            </div>
-            <div className="column has-text-left-tablet">
-              <div className="select is-danger">
-                <select onChange={(event) => actions.setTimeFrame(event.target.value)}>
-                  {timeFrameSelects}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="mainContent">
-        <TreeMap name="Artists" keyy="name" value="playcount" />
+      <TreeMaps />
+      <div>
+        <LineGraph recentTracks={recentTracks} />
       </div>
       <hr />
       <div>
-        <TreeMap name="Albums" keyy="name" value="playcount" />
+        <Sunburst recentTracks={recentTracks} />
       </div>
       <hr />
       <div>
-        <LineGraph recentTracksQuery={recentTracksBigQuery} />
-      </div>
-      <hr />
-      <div>
-        <Sunburst recentTracksQuery={recentTracksBigQuery} />
-      </div>
-      <hr />
-      <div>
-        <BumpChart recentTracksQuery={recentTracksBigQuery} />
+        <BumpChart recentTracks={recentTracks} />
       </div>
     </>
   );

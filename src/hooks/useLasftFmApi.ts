@@ -1,10 +1,14 @@
-import { useQuery } from 'react-query';
+import { QueryObserverResult, useQuery } from 'react-query';
 import { useContext } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
 import { getActualArtistUrl } from '../utils';
+import { RecentTracks } from '../types/RecentTracks';
+import { TopArtists } from '../types/TopArtists';
+import { TopAlbums } from '../types/TopAlbums';
+import { TopTracks } from '../types/TopTracks';
 
 export default function useLastFmApi() {
-  const { state, actions } = useContext(LocalStateContext);
+  const { state } = useContext(LocalStateContext);
   const apiKey = process.env.REACT_APP_LAST_FM_KEY;
 
   const queryOptions = {
@@ -31,9 +35,9 @@ export default function useLastFmApi() {
       });
   }
 
-  const userQuery = useQuery(['user', state.userName], () => {
+  const userQuery = (userName) => useQuery(['user', userName], () => {
     const url = (`https://ws.audioscrobbler.com/2.0/?method=user.getinfo
-        &user=${state.userName}
+        &user=${userName}
         &api_key=${apiKey}
         &format=json`).trim();
     return fetch(url)
@@ -43,34 +47,27 @@ export default function useLastFmApi() {
         return body;
       })
       .catch((err) => {
-        actions.setModalErrorMessage(err.message);
-        actions.setShowModal(true);
-        actions.setUserName('shicks255');
+        // actions.setModalErrorMessage(err.message);
+        // actions.setShowModal(true);
+        // actions.setUserName('shicks255');
       });
   }, queryOptions);
 
-  const recentTracksQuery = useQuery(['recentTracks', state.page, state.userName], () => {
-    const url = generateUrl('user.getrecenttracks', state.page, '', apiKey);
+  const recentTracksQuery: (number) => QueryObserverResult<RecentTracks, Error> = (page: number) => useQuery(['recentTracks', state.userName, page], () => {
+    const url = generateUrl('user.getrecenttracks', page, '', apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
-      .then((body) => {
-        if (body.recenttracks.track[0]?.['@attr']?.nowplaying) {
-          actions.setNowPlaying(body.recenttracks.track[0]);
-        } else {
-          actions.setNowPlaying(undefined);
-        }
-        actions.setRecentTracksError(undefined);
-        return body.recenttracks;
-      })
+      .then((body) => body.recenttracks)
       .catch((err) => {
-        actions.setRecentTracksError({
+        throw Error(JSON.stringify({
           technical: err.message,
           business: 'Problem loading recent tracks',
-        });
+        }));
       });
-  }, { refetchInterval: 30_000, refetchOnWindowFocus: false });
+  },
+  { refetchInterval: 30000, refetchOnWindowFocus: false });
 
-  const recentTracksBigQuery = useQuery(['recentTracks', 'big', state.userName], () => {
+  const recentTracksBigQuery: () => QueryObserverResult<RecentTracks, Error> = () => useQuery(['recentTracks', 'big', state.userName], () => {
     const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
         &user=${state.userName}
         &api_key=${apiKey}
@@ -79,65 +76,51 @@ export default function useLastFmApi() {
         &page=1`;
     return fetch(url)
       .then((res) => handleReturn(res))
-      .then((body) => {
-        actions.setRecentTracksBigError(undefined);
-        return body.recenttracks.track
-          .filter((x) => Object.prototype.hasOwnProperty.call(x, 'artist'))
-          .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
-      })
+      .then((body) => body.recenttracks)
       .catch((err) => {
-        actions.setRecentTracksBigError({
+        throw Error(JSON.stringify({
           technical: err.message,
           business: 'Problem loading recent tracks',
-        });
+        }));
       });
   }, queryOptions);
 
-  const topArtistsQuery = useQuery(['topArtists', state.page, state.timeFrame, state.userName], () => {
-    const url = generateUrl('user.getTopArtists', state.page, state.timeFrame, apiKey);
+  const topArtistsQuery: (string, number) => QueryObserverResult<TopArtists, Error> = (timeFrame, page) => useQuery(['topArtists', state.userName, timeFrame, page], () => {
+    const url = generateUrl('user.getTopArtists', page, timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
-      .then((body) => {
-        actions.setTopArtistsError(undefined);
-        return body.topartists;
-      })
+      .then((body) => body.topartists)
       .catch((err) => {
-        actions.setTopArtistsError({
+        throw Error(JSON.stringify({
           technical: err.message,
           business: 'Problem loading top artists',
-        });
+        }));
       });
   }, queryOptions);
 
-  const topAlbumsQuery = useQuery(['topAlbums', state.page, state.timeFrame, state.userName], () => {
-    const url = generateUrl('user.getTopAlbums', state.page, state.timeFrame, apiKey);
+  const topAlbumsQuery: (string, number) => QueryObserverResult<TopAlbums, Error> = (timeFrame, page) => useQuery(['topAlbums', state.userName, timeFrame, page], () => {
+    const url = generateUrl('user.getTopAlbums', page, timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
-      .then((body) => {
-        actions.setTopAlbumsError(undefined);
-        return body.topalbums;
-      })
+      .then((body) => body.topalbums)
       .catch((err) => {
-        actions.setTopAlbumsError({
+        throw Error(JSON.stringify({
           business: 'Problem loading top albums',
           technical: err.message,
-        });
+        }));
       });
   }, queryOptions);
 
-  const topTracksQuery = useQuery(['topTracks', state.page, state.timeFrame, state.userName], () => {
-    const url = generateUrl('user.getTopTracks', state.page, state.timeFrame, apiKey);
+  const topTracksQuery: (string, number) => QueryObserverResult<TopTracks, Error> = (timeFrame, page) => useQuery(['topTracks', state.userName, timeFrame, page], () => {
+    const url = generateUrl('user.getTopTracks', page, timeFrame, apiKey);
     return fetch(url)
       .then((res) => handleReturn(res))
-      .then((body) => {
-        actions.setTopTracksError(undefined);
-        return body.toptracks;
-      })
+      .then((body) => body.toptracks)
       .catch((err) => {
-        actions.setTopTracksError({
+        throw Error(JSON.stringify({
           technical: err.message,
           business: 'Problem loading top tracks',
-        });
+        }));
       });
   }, queryOptions);
 

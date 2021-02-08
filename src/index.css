@@ -16,6 +16,10 @@ body {
     background-color: black;
 }
 
+@font-face {
+    font-display: swap;
+}
+
 figure {
     margin: 0 auto !important;
 }

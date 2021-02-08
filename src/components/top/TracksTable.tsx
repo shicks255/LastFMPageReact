@@ -4,19 +4,21 @@ import Pagination from '../Pagination';
 import Loader from '../Loader';
 import { convertDurationToTimestamp } from '../../utils';
 import ArtistImage from '../ArtistImage';
-import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
 import useIsMobile from '../../hooks/useIsMobile';
+import { useApiState } from '../../ApiContext';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { topTracksQuery } = useLastFmApi();
-  const { state } = useContext(LocalStateContext);
+  const { timeFrame, page } = useApiState();
   const isMobile = useIsMobile();
+  const topTracksQueryResult = topTracksQuery(timeFrame, page);
 
-  if (topTracksQuery.isLoading) { return <Loader small={false} />; }
-  if (state.topTracksError) return <ErrorMessage error={state.topTracksError} />;
+  if (topTracksQueryResult.isLoading) { return <Loader small={false} />; }
+  if (topTracksQueryResult.error) return <ErrorMessage error={topTracksQueryResult.error} />;
+  if (!topTracksQueryResult.data) return <ErrorMessage error={new Error('')} />;
 
-  const topTracks = topTracksQuery.data;
+  const topTracks = topTracksQueryResult.data;
   const tracks = topTracks.track;
 
   if (!tracks) return <Loader small={false} />;

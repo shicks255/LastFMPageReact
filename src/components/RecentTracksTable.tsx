@@ -1,49 +1,55 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Pagination from './Pagination';
 import useLastFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 import HoverImage from './HoverImage';
-import { LocalStateContext } from '../LocalStateContext';
 import ErrorMessage from './ErrorMessage';
 import useIsMobile from '../hooks/useIsMobile';
+import { useApiState } from '../ApiContext';
 
-export default function RecentTracksTable() {
+const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   const { recentTracksQuery } = useLastFmApi();
-  const { state } = useContext(LocalStateContext);
+  const { page } = useApiState();
   const isMobile = useIsMobile();
 
-  if (recentTracksQuery.isLoading) { return <Loader small={false} />; }
-  if (state.recentTracksError) return <ErrorMessage error={state.recentTracksError} />;
+  const recentTracksQueryResult = recentTracksQuery(page);
 
-  const recentTracks = recentTracksQuery.data;
+  if (recentTracksQueryResult.isLoading) return <Loader small={false} />;
+  if (recentTracksQueryResult.error) return <ErrorMessage error={recentTracksQueryResult.error} />;
+  if (!recentTracksQueryResult.data) return <ErrorMessage error={new Error('')} />;
+
+  const recentTracks = recentTracksQueryResult.data;
 
   function renderTable() {
     if (isMobile) {
       return (
-        recentTracks.track.filter((x) => x.date).map((track, i) => {
-          const url = track.image[2]['#text'].length > 0 ? track.image[2]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-          const date = track.date.uts;
-          const unixDate = new Date(date * 1000);
-          return (
-          // eslint-disable-next-line react/no-array-index-key
-            <tr key={i}>
-              <td>
-                <a href={track.url} target="_blank" rel="noreferrer">
-                  <div className="imageCell">
-                    <img alt="" className="image" height="64" width="64" src={url} />
-                  </div>
-                </a>
-              </td>
-              <td>
-                {unixDate.toLocaleString()}
-                <br />
-                <i>{track.name}</i>
-                <br />
-                <b>{track.artist['#text']}</b>
-              </td>
-            </tr>
-          );
-        }));
+        <tbody>
+          {recentTracks.track.filter((x) => x.date).map((track, i) => {
+            const url = track.image[2]['#text'].length > 0 ? track.image[2]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+            const date = track.date.uts;
+            const unixDate = new Date(date * 1000);
+            return (
+            // eslint-disable-next-line react/no-array-index-key
+              <tr key={i}>
+                <td>
+                  <a href={track.url} target="_blank" rel="noreferrer">
+                    <div className="imageCell">
+                      <img alt="" className="image" height="64" width="64" src={url} />
+                    </div>
+                  </a>
+                </td>
+                <td>
+                  {unixDate.toLocaleString()}
+                  <br />
+                  <i>{track.name}</i>
+                  <br />
+                  <b>{track.artist['#text']}</b>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      );
     }
     return (
       <>
@@ -93,4 +99,6 @@ export default function RecentTracksTable() {
       <Pagination totalPages={recentTracks['@attr'].totalPages} />
     </div>
   );
-}
+});
+
+export default RecentTracksTable;

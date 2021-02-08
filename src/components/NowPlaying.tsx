@@ -1,10 +1,20 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
+import useLastFmApi from '../hooks/useLasftFmApi';
+import Loader from './Loader';
+import ErrorMessage from './ErrorMessage';
 
 const NowPlaying: React.FC<Record<string, void>> = (() => {
-  const { state } = useContext(LocalStateContext);
-  const { nowPlaying } = state;
-  if (!nowPlaying) { return <div />; }
+  const { recentTracksQuery } = useLastFmApi();
+
+  const recentTracks = recentTracksQuery(1);
+  if (recentTracks.isLoading) return <Loader small />;
+  if (recentTracks.error) return <ErrorMessage error={recentTracks.error} />;
+  if (!recentTracks.data) return <ErrorMessage error={new Error('')} />;
+
+  const isNowPlaying = recentTracks.data.track[0]?.['@attr']?.nowplaying;
+  if (!isNowPlaying) { return <div />; }
+
+  const nowPlaying = recentTracks.data.track[0];
 
   return (
     <div className="nowPlaying">

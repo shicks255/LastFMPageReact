@@ -1,20 +1,14 @@
 import React from 'react';
-import { QueryObserverResult } from 'react-query';
-import { ResponsiveSunburst, Sunburst } from '@nivo/sunburst';
-import Loader from '../Loader';
+import { ResponsiveSunburst } from '@nivo/sunburst';
 import { Track } from '../../types/Track';
 import { chartColors } from '../../utils';
 
 type Props = {
-  recentTracksQuery: QueryObserverResult<Track[]>
+  recentTracks: Track[]
 }
 
 const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
-  const { recentTracksQuery } = props;
-
-  if (recentTracksQuery.isLoading || !recentTracksQuery.data) return <Loader small={false} />;
-
-  const recentTracks = recentTracksQuery.data;
+  const { recentTracks } = props;
 
   const d: {[key: string]: number} = recentTracks.reduce((accum, item) => {
     const artistName = item.artist['#text'];

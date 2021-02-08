@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../../LocalStateContext';
+import React from 'react';
+import { useModalState } from '../../ModalContext';
 
-export default function ImageModal() {
-  const { state } = useContext(LocalStateContext);
+const ImageModal: React.FC<Record<string, void>> = (() => {
+  const { state } = useModalState();
 
   if (!state.modalImageSrc) return <div />;
 
@@ -14,4 +14,6 @@ export default function ImageModal() {
       </span>
     </div>
   );
-}
+});
+
+export default ImageModal;

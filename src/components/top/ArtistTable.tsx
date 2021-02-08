@@ -3,13 +3,19 @@ import useLastFmApi from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
-import useIsMobile from '../../hooks/useIsMobile';
+import ErrorMessage from '../ErrorMessage';
+import { useApiState } from '../../ApiContext';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topArtistsQuery } = useLastFmApi();
+  const { timeFrame, page } = useApiState();
+  const topArtistQueryResult = topArtistsQuery(timeFrame, page);
 
-  if (topArtistsQuery.isLoading) { return <Loader small={false} />; }
-  const artist = topArtistsQuery.data;
+  if (topArtistQueryResult.isLoading) { return <Loader small={false} />; }
+  if (topArtistQueryResult.error) return <ErrorMessage error={topArtistQueryResult.error} />;
+  if (!topArtistQueryResult.data) return <ErrorMessage error={new Error('')} />;
+
+  const artist = topArtistQueryResult.data;
   const artists = artist.artist;
 
   const content = artists.map((val) => {

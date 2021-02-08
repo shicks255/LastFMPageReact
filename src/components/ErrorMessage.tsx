@@ -1,16 +1,15 @@
 import React from 'react';
-import { FetchError } from '../types/FetchError';
 
 type Props = {
-    error: FetchError
+    error: Error
 }
 
 const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
   const { error } = props;
-  const { business, technical } = error;
+  const { business, technical } = JSON.parse(error.message);
 
   return (
-    <div className="box">
+    <div className="box mainContent">
       <div className="has-text-centered column is-full">
         <h3 className="title is-3 has-text-black">
           Something went wrong (;_;)

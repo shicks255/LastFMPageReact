@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
+import { useModalState } from '../ModalContext';
 
 type Props = {
     src: string,
@@ -8,7 +8,8 @@ type Props = {
 }
 
 const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
-  const { actions } = useContext(LocalStateContext);
+  console.log('hovering hoverImage');
+  const { actions } = useModalState();
   const { src, popupSrc, caption } = props;
 
   function handleHoverIn() {

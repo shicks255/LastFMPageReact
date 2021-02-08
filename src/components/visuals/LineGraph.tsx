@@ -1,12 +1,10 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { QueryObserverResult } from 'react-query';
-import Loader from '../Loader';
 import { Track } from '../../types/Track';
 import { chartColors } from '../../utils';
 
 type Props = {
-  recentTracksQuery: QueryObserverResult<Track[]>
+  recentTracks: Track[]
 }
 
 const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
@@ -15,12 +13,8 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
     return name;
   }
 
-  const { recentTracksQuery } = props;
-  if (recentTracksQuery.isLoading || !recentTracksQuery.data) {
-    return (<Loader small={false} />);
-  }
+  const { recentTracks } = props;
 
-  const recentTracks = recentTracksQuery.data;
   const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 2);
   const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);

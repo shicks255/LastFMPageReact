@@ -7,6 +7,7 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
   const [tempUserName, setTempUserName] = useState('');
   const { userQuery } = useLasftFmApi();
+  const userQueryResult = userQuery(state.userName);
 
   function submitUsername() {
     actions.setShowModal(false);
@@ -24,19 +25,19 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
     return () => window.removeEventListener('keydown', handleKeys);
   }, []);
 
-  if (userQuery.isLoading) { return <Loader small={false} />; }
+  if (userQueryResult.isLoading) { return <Loader small={false} />; }
 
-  if (!userQuery.data || userQuery.data.error) {
-    actions.setModalErrorMessage(userQuery.data.message);
+  if (!userQueryResult.data || userQueryResult.data.error) {
+    actions.setModalErrorMessage(userQueryResult.data.message);
     actions.setUserName('shicks255');
     actions.setShowModal(false);
     return <div />;
   }
 
   const user = {
-    playCount: userQuery.data.user.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    avatar: userQuery.data.user.image[1]['#text'],
-    registered: new Date(userQuery.data.user.registered.unixtime * 1000),
+    playCount: userQueryResult.data.user.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    avatar: userQueryResult.data.user.image[1]['#text'],
+    registered: new Date(userQueryResult.data.user.registered.unixtime * 1000),
   };
 
   const modal = state.showModal ? (
@@ -74,7 +75,7 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
         <div className="columns is-centered">
           <div className="column is-two-fifths is-narrow has-text-right">
             <figure className="image is-128x128">
-              <img alt="" className="image is-rounded" src={user.avatar} />
+              <img height={300} width={300} alt="" className="image is-rounded" src={user.avatar} />
             </figure>
           </div>
           <div className="card-stacked column is-three-fifths is-narrow">

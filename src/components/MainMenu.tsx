@@ -1,16 +1,17 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
 import { strategies, timeFrames } from '../utils';
+import { useApiDispatch, useApiState } from '../ApiContext';
 
 const MainMenu: React.FC<Record<string, void>> = (() => {
-  const { state, actions } = useContext(LocalStateContext);
+  const { selected, strategy, timeFrame } = useApiState();
+  const { setStrategy, setTimeFrame } = useApiDispatch();
 
   const strategySelects = Object.keys(strategies)
     .map((value) => <option key={value} value={value}>{strategies[value]}</option>);
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => <option key={value} value={value}>{timeFrames[value]}</option>);
 
-  if (state.selected !== 'top') return <></>;
+  if (selected !== 'top') return <></>;
 
   return (
     <div className="is-mobile">
@@ -22,8 +23,8 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
               <br />
               <div className="select is-danger">
                 <select
-                  defaultValue={state.strategy}
-                  onChange={(event) => actions.setStrategy(event.target.value)}
+                  defaultValue={strategy}
+                  onChange={(event) => setStrategy(event.target.value)}
                 >
                   {strategySelects}
                 </select>
@@ -35,8 +36,8 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
             <br />
             <div className="select is-danger">
               <select
-                defaultValue={state.timeFrame}
-                onChange={(event) => actions.setTimeFrame(event.target.value)}
+                defaultValue={timeFrame}
+                onChange={(event) => setTimeFrame(event.target.value)}
               >
                 {timeFrameSelects}
               </select>

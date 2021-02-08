@@ -1,37 +1,38 @@
-import React, { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import React from 'react';
+import { useApiDispatch, useApiState } from '../ApiContext';
 
 type Props = {
   totalPages: number
 }
 
 const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
-  const { state, actions } = useContext(LocalStateContext);
+  const { page } = useApiState();
+  const { setPage } = useApiDispatch();
 
   const changePage = (number) => {
-    actions.setPage(number);
+    setPage(number);
   };
 
   const { totalPages } = props;
-  if (state.page > totalPages) actions.setPage(1);
+  if (page > totalPages) setPage(1);
 
   if (totalPages < 1) return <></>;
 
   const last = Number(totalPages);
-  const firstPage = state.page === 1;
-  const secondPage = state.page === 2;
-  const thirdPage = state.page === 3;
+  const firstPage = page === 1;
+  const secondPage = page === 2;
+  const thirdPage = page === 3;
 
-  const lastPage = state.page === last;
-  const penultimatePage = state.page === last - 1;
-  const penultimatePage2 = state.page === last - 2;
+  const lastPage = page === last;
+  const penultimatePage = page === last - 1;
+  const penultimatePage2 = page === last - 2;
 
-  const pre = state.page > 1 ? state.page - 1 : '';
-  const post = state.page < last ? state.page + 1 : '';
+  const pre = page > 1 ? page - 1 : '';
+  const post = page < last ? page + 1 : '';
 
   const firstLink = <button type="button" className="button pagination-link" onClick={() => changePage(1)}>1</button>;
-  const preLink = <button type="button" className="button pagination-link" onClick={() => changePage(state.page - 1)}>{pre}</button>;
-  const postLink = <button type="button" className="button pagination-link" onClick={() => changePage(state.page + 1)}>{post}</button>;
+  const preLink = <button type="button" className="button pagination-link" onClick={() => changePage(page - 1)}>{pre}</button>;
+  const postLink = <button type="button" className="button pagination-link" onClick={() => changePage(page + 1)}>{post}</button>;
   const lastLink = <button type="button" className="button pagination-link" onClick={() => changePage(last)}>{String(last)}</button>;
 
   return (
@@ -45,7 +46,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
                             <button
                               type="button"
                               className="pagination-previous button"
-                              onClick={() => changePage(state.page - 1)}
+                              onClick={() => changePage(page - 1)}
                             >
                               Previous
                             </button>
@@ -58,7 +59,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
                             <button
                               type="button"
                               className="pagination-next button"
-                              onClick={() => changePage(state.page + 1)}
+                              onClick={() => changePage(page + 1)}
                             >
                               Next
                             </button>
@@ -83,7 +84,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
                           ? ''
                           : preLink
                     }
-          <button type="button" className="pagination-link is-current button">{state.page}</button>
+          <button type="button" className="pagination-link is-current button">{page}</button>
           {
                         lastPage
                           ? ''

@@ -4,15 +4,21 @@ import Profile from './Profile';
 import ButtonGroup from './ButtonGroup';
 import Main from './Main';
 import ImageModal from './modals/ImageModal';
+import { ApiContextProvider } from '../ApiContext';
+import { ModalContextProvider } from '../ModalContext';
 
-export default function Body() {
-  return (
-    <div className="container">
-      <NowPlaying />
-      <Profile />
-      <ButtonGroup />
-      <Main />
-      <ImageModal />
-    </div>
-  );
-}
+const Body: React.FC<Record<string, void>> = (() => (
+  <div className="container">
+    <ApiContextProvider>
+      <ModalContextProvider>
+        <NowPlaying />
+        <Profile />
+        <ButtonGroup />
+        <Main />
+        <ImageModal />
+      </ModalContextProvider>
+    </ApiContextProvider>
+  </div>
+));
+
+export default Body;

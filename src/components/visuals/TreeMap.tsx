@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from 'react';
+import React, { useContext } from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
 import useLastFmApi from '../../hooks/useLasftFmApi';
 import Loader from '../Loader';
+import { LocalStateContext } from '../../LocalStateContext';
+import ErrorMessage from '../ErrorMessage';
+import { useApiState } from '../../ApiContext';
 
 type Props = {
   name: string,
@@ -16,12 +19,18 @@ const TreeMap: React.FC<Props> = ((props: Props) => {
   } = props;
 
   const { topArtistsQuery, topAlbumsQuery } = useLastFmApi();
+  const { state } = useContext(LocalStateContext);
+  const { timeFrame, page } = useApiState();
 
-  const query = name === 'Albums' ? topAlbumsQuery : topArtistsQuery;
+  const query = name === 'Albums' ? topAlbumsQuery(timeFrame, page) : topArtistsQuery(timeFrame, page);
 
   if (query.isLoading) return <Loader small={false} />;
+  if (query.error) return <ErrorMessage error={query.error} />;
+  if (!query.data) return <ErrorMessage error={new Error('')} />;
 
-  const data = name === 'Albums' ? query.data.album : query.data.artist;
+  let data;
+  if ('album' in query.data) data = query.data.album;
+  else data = query.data.artist;
 
   const dataPoints = data.map((item) => {
     if (name === 'Albums') {

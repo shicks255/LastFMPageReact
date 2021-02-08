@@ -4,13 +4,20 @@ import useLastFmApi from '../../hooks/useLasftFmApi';
 import Loader from '../Loader';
 import HoverImage from '../HoverImage';
 import useIsMobile from '../../hooks/useIsMobile';
+import ErrorMessage from '../ErrorMessage';
+import { useApiState } from '../../ApiContext';
 
-export default function AlbumTable() {
+const AlbumTable: React.FC<Record<string, void>> = (() => {
+  const { timeFrame, page } = useApiState();
   const { topAlbumsQuery } = useLastFmApi();
+  const topAlbumsQueryResult = topAlbumsQuery(timeFrame, page);
   const isMobile = useIsMobile();
 
-  if (topAlbumsQuery.isLoading) { return <Loader small={false} />; }
-  const topAlbums = topAlbumsQuery.data;
+  if (topAlbumsQueryResult.isLoading) { return <Loader small={false} />; }
+  if (topAlbumsQueryResult.error) { return <ErrorMessage error={topAlbumsQueryResult.error} />; }
+  if (!topAlbumsQueryResult.data) return <ErrorMessage error={new Error('')} />;
+
+  const topAlbums = topAlbumsQueryResult.data;
 
   function renderTable() {
     if (isMobile) {
@@ -91,4 +98,6 @@ export default function AlbumTable() {
       <Pagination totalPages={topAlbums['@attr'].totalPages} />
     </div>
   );
-}
+});
+
+export default AlbumTable;
