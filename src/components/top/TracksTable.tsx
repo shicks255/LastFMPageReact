@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import useLastFmApi from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import { convertDurationToTimestamp } from '../../utils';
@@ -7,18 +6,20 @@ import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useApiState } from '../../ApiContext';
+import { useTopTracks } from '../../hooks/useLasftFmApi';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
-  const { topTracksQuery } = useLastFmApi();
   const { timeFrame, page } = useApiState();
+  const {
+    isLoading, isError, error, data,
+  } = useTopTracks(timeFrame, page);
   const isMobile = useIsMobile();
-  const topTracksQueryResult = topTracksQuery(timeFrame, page);
 
-  if (topTracksQueryResult.isLoading) { return <Loader small={false} />; }
-  if (topTracksQueryResult.error) return <ErrorMessage error={topTracksQueryResult.error} />;
-  if (!topTracksQueryResult.data) return <ErrorMessage error={new Error('')} />;
+  if (isLoading) { return <Loader small={false} />; }
+  if (error) return <ErrorMessage error={error} />;
+  if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const topTracks = topTracksQueryResult.data;
+  const topTracks = data;
   const tracks = topTracks.track;
 
   if (!tracks) return <Loader small={false} />;

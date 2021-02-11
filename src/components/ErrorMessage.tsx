@@ -5,7 +5,6 @@ type Props = {
 }
 
 const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
-  console.log(props);
   const { error } = props;
   const { business, technical } = JSON.parse(error.message);
 
@@ -33,7 +32,10 @@ const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
             </tr>
             <tr>
               <td><b>Details:</b></td>
-              <td>{technical}</td>
+              <td>
+                $
+                {technical}
+              </td>
             </tr>
           </table>
         </div>

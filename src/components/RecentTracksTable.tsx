@@ -1,24 +1,24 @@
 import React from 'react';
 import Pagination from './Pagination';
-import useLastFmApi from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 import HoverImage from './HoverImage';
 import ErrorMessage from './ErrorMessage';
 import useIsMobile from '../hooks/useIsMobile';
 import { useApiState } from '../ApiContext';
+import { useRecentTracks } from '../hooks/useLasftFmApi';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {
-  const { recentTracksQuery } = useLastFmApi();
   const { page } = useApiState();
+  const {
+    isLoading, error, data,
+  } = useRecentTracks(page);
   const isMobile = useIsMobile();
 
-  const recentTracksQueryResult = recentTracksQuery(page);
+  if (isLoading) return <Loader small={false} />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!data) return <ErrorMessage error={new Error('')} />;
 
-  if (recentTracksQueryResult.isLoading) return <Loader small={false} />;
-  if (recentTracksQueryResult.error) return <ErrorMessage error={recentTracksQueryResult.error} />;
-  if (!recentTracksQueryResult.data) return <ErrorMessage error={new Error('')} />;
-
-  const recentTracks = recentTracksQueryResult.data;
+  const recentTracks = data;
 
   function renderTable() {
     if (isMobile) {

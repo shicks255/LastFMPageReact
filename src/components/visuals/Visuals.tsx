@@ -2,22 +2,23 @@ import React from 'react';
 import LineGraph from './LineGraph';
 import Sunburst from './SunburstChart';
 import BumpChart from './BumpChart';
-import useLastFmApi from '../../hooks/useLasftFmApi';
 import ErrorMessage from '../ErrorMessage';
 import Loader from '../Loader';
 import TreeMaps from './TreeMaps';
+import { useRecentTracksBig } from '../../hooks/useLasftFmApi';
 
 const Visuals: React.FC<Record<string, void>> = (() => {
-  const { recentTracksBigQuery } = useLastFmApi();
-  const recentTracksBigQueryResult = recentTracksBigQuery();
+  const {
+    isLoading, isError, error, data,
+  } = useRecentTracksBig();
 
-  if (recentTracksBigQueryResult.isLoading) return <Loader small />;
-  if (recentTracksBigQueryResult.error) {
-    return <ErrorMessage error={recentTracksBigQueryResult.error} />;
+  if (isLoading) return <Loader small />;
+  if (error) {
+    return <ErrorMessage error={error} />;
   }
-  if (!recentTracksBigQueryResult.data) return <ErrorMessage error={new Error('')} />;
+  if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const recentTracks = recentTracksBigQueryResult.data.track
+  const recentTracks = data.track
     .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
 
   return (

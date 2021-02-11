@@ -1,17 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LocalStateContext } from '../LocalStateContext';
-import useLasftFmApi from '../hooks/useLasftFmApi';
+import { checkUserName, useUserQuery } from '../hooks/useLasftFmApi';
 import Loader from './Loader';
+import ErrorMessage from './ErrorMessage';
 
 const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
   const [tempUserName, setTempUserName] = useState('');
-  const { userQuery } = useLasftFmApi();
-  const userQueryResult = userQuery(state.userName);
+  const {
+    isLoading, error, data,
+  } = useUserQuery(state.userName);
 
-  function submitUsername() {
-    actions.setShowModal(false);
-    actions.setUserName(tempUserName);
+  async function submitUsername() {
+    const userExists = await checkUserName(tempUserName);
+    if (userExists) {
+      actions.setShowModal(false);
+      setTempUserName('');
+      actions.setModalErrorMessage('');
+      actions.setUserName(tempUserName);
+    } else {
+      actions.setModalErrorMessage(`Username ${tempUserName} does not exist`);
+    }
   }
 
   useEffect(() => {
@@ -25,19 +34,15 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
     return () => window.removeEventListener('keydown', handleKeys);
   }, []);
 
-  if (userQueryResult.isLoading) { return <Loader small={false} />; }
+  if (error) return <ErrorMessage error={error} />;
+  if (isLoading) { return <Loader small={false} />; }
+  if (!data) return <div />;
 
-  if (userQueryResult.data.error) {
-    actions.setModalErrorMessage('smoething wrong');
-    actions.setUserName('shicks255');
-    actions.setShowModal(false);
-    return <div />;
-  }
-
+  console.log(data);
   const user = {
-    playCount: userQueryResult.data.user.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    avatar: userQueryResult.data.user.image[1]['#text'],
-    registered: new Date(userQueryResult.data.user.registered.unixtime * 1000),
+    playCount: data.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    avatar: data.image[1]['#text'],
+    registered: new Date(data.registered.unixtime * 1000),
   };
 
   const modal = state.showModal ? (

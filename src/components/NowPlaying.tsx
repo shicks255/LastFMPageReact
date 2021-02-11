@@ -1,18 +1,17 @@
 import React from 'react';
-import useLastFmApi from '../hooks/useLasftFmApi';
 import ErrorMessage from './ErrorMessage';
+import { useRecentTracks } from '../hooks/useLasftFmApi';
 
 const NowPlaying: React.FC<Record<string, void>> = (() => {
-  const { recentTracksQuery } = useLastFmApi();
+  const { error, data } = useRecentTracks(1);
 
-  const recentTracks = recentTracksQuery(1);
-  if (recentTracks.error) return <ErrorMessage error={recentTracks.error} />;
-  if (!recentTracks.data) return <div />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!data) return <div />;
 
-  const isNowPlaying = recentTracks.data.track[0]?.['@attr']?.nowplaying;
+  const isNowPlaying = data.track[0]?.['@attr']?.nowplaying;
   if (!isNowPlaying) { return <div />; }
 
-  const nowPlaying = recentTracks.data.track[0];
+  const nowPlaying = data.track[0];
 
   return (
     <div className="nowPlaying">

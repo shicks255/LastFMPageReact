@@ -61,31 +61,50 @@ self.addEventListener('install', (event) => {
 // we intercept that request and serve up the matching files
 // if we have them
 self.addEventListener('fetch', (event) => {
-  console.log('fetching');
-  console.log(event.request.url);
   const { url } = event.request;
   if (url.includes('getrecenttracks')
       || url.includes('getTopArtists')
       || url.includes('getTopAlbums')
       || url.includes('getTopTracks')
   ) {
+    console.log(`${url} at ${new Date()}`);
     console.log('audioscrollber request');
-    return fetch(event.request).then(
-      (res) => res,
-      (err) => {
-        console.log('erro');
-        throw Error('uh oh');
-      },
-    ).catch((e) => {
-      console.log(e);
-    });
+    event.respondWith(async function () {
+      const re = await fetch(event.request)
+        .then(
+          (res) => {
+            console.log(`${res} at ${new Date()}`);
+            return res;
+          },
+          (err) => {
+            console.log('erro');
+            console.log(`${err} at ${new Date()}`);
+            return new Response(JSON.stringify({
+              technical: err.message,
+              business: 'Problem loading top artists',
+            }), {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            });
+          // return err;
+          // eslint-disable-next-line prefer-promise-reject-errors
+          // return Promise.reject(JSON.stringify({
+          //   technical: err.message,
+          //   business: 'Problem loading top artists',
+          // }));
+          },
+        );
+      console.log(re);
+      return re;
+    }());
+  } else {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => cache.match(event.request)
+        .then((response) => response || fetch(event.request)
+          .then((res) => {
+            cache.put(event.request, res.clone());
+            return res;
+          }))),
+    );
   }
-  event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => cache.match(event.request)
-      .then((response) => response || fetch(event.request)
-        .then((res) => {
-          cache.put(event.request, res.clone());
-          return res;
-        }))),
-  );
 });

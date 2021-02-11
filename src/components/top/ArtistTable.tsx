@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import useLastFmApi from '../../hooks/useLasftFmApi';
+import { useTopArtists } from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
@@ -7,16 +8,23 @@ import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../ApiContext';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
-  const { topArtistsQuery } = useLastFmApi();
   const { timeFrame, page } = useApiState();
-  const topArtistQueryResult = topArtistsQuery(timeFrame, page);
-  console.log(topArtistQueryResult);
+  const {
+    isLoading, isError, error, data,
+  } = useTopArtists(timeFrame, page);
+  console.log(isLoading);
+  console.log(isError);
+  console.log(error);
+  console.log(data);
 
-  if (topArtistQueryResult.isLoading) { return <Loader small={false} />; }
-  if (topArtistQueryResult.error) return <ErrorMessage error={topArtistQueryResult.error} />;
-  if (!topArtistQueryResult.data) return <ErrorMessage error={new Error('')} />;
+  if (isLoading) { return <Loader small={false} />; }
+  if (isError) { // @ts-ignore
+    return <ErrorMessage error={error} />;
+  }
+  if (!data) return <div>ahh</div>;
+  // if (!topArtistQueryResult.data) return <ErrorMessage error={new Error('')} />;
 
-  const artist = topArtistQueryResult.data;
+  const artist = data;
   const artists = artist.artist;
 
   const content = artists.map((val) => {

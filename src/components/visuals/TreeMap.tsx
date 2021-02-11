@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useContext } from 'react';
+import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
-import useLastFmApi from '../../hooks/useLasftFmApi';
 import Loader from '../Loader';
-import { LocalStateContext } from '../../LocalStateContext';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../ApiContext';
+import { useTopAlbums, useTopArtists } from '../../hooks/useLasftFmApi';
 
 type Props = {
   name: string,
@@ -18,19 +17,18 @@ const TreeMap: React.FC<Props> = ((props: Props) => {
     name, keyy, value,
   } = props;
 
-  const { topArtistsQuery, topAlbumsQuery } = useLastFmApi();
-  const { state } = useContext(LocalStateContext);
   const { timeFrame, page } = useApiState();
 
-  const query = name === 'Albums' ? topAlbumsQuery(timeFrame, page) : topArtistsQuery(timeFrame, page);
+  const queryResult = name === 'Albums'
+    ? useTopAlbums(timeFrame, page) : useTopArtists(timeFrame, page);
 
-  if (query.isLoading) return <Loader small={false} />;
-  if (query.error) return <ErrorMessage error={query.error} />;
-  if (!query.data) return <ErrorMessage error={new Error('')} />;
+  if (queryResult.isLoading) return <Loader small={false} />;
+  if (queryResult.isError) return <ErrorMessage error={queryResult.error} />;
+  if (!queryResult.data) return <ErrorMessage error={new Error('')} />;
 
   let data;
-  if ('album' in query.data) data = query.data.album;
-  else data = query.data.artist;
+  if ('album' in queryResult.data) data = queryResult.data.album;
+  else data = queryResult.data.artist;
 
   const dataPoints = data.map((item) => {
     if (name === 'Albums') {

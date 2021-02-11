@@ -8,7 +8,6 @@ type Props = {
 }
 
 const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
-  console.log('hovering hoverImage');
   const { actions } = useModalState();
   const { src, popupSrc, caption } = props;
 
