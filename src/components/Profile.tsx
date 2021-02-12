@@ -1,78 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
-import { checkUserName, useUserQuery } from '../hooks/useLasftFmApi';
+import React, { useContext } from 'react';
+import { LocalStateContext } from '../contexts/LocalStateContext';
+import { useUserQuery } from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
+import ProfileModal from './modals/ProfileModal';
 
 const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
-  const [tempUserName, setTempUserName] = useState('');
   const {
     isLoading, error, data,
   } = useUserQuery(state.userName);
-
-  async function submitUsername() {
-    const userExists = await checkUserName(tempUserName);
-    if (userExists) {
-      actions.setShowModal(false);
-      setTempUserName('');
-      actions.setModalErrorMessage('');
-      actions.setUserName(tempUserName);
-    } else {
-      actions.setModalErrorMessage(`Username ${tempUserName} does not exist`);
-    }
-  }
-
-  useEffect(() => {
-    const handleKeys = (event) => {
-      if (event.keyCode === 27) { actions.setShowModal(false); }
-      if (event.keyCode === 13) { submitUsername(); }
-    };
-
-    window.addEventListener('keyup', handleKeys);
-    // return cleanup function
-    return () => window.removeEventListener('keydown', handleKeys);
-  }, []);
 
   if (error) return <ErrorMessage error={error} />;
   if (isLoading) { return <Loader small={false} />; }
   if (!data) return <div />;
 
-  console.log(data);
   const user = {
     playCount: data.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
     avatar: data.image[1]['#text'],
     registered: new Date(data.registered.unixtime * 1000),
   };
-
-  const modal = state.showModal ? (
-    <div className="modal is-active">
-      <div className="modal-background extraModal" />
-      <div className="modal-content">
-        <div className="box">
-          <label htmlFor="newUsername">
-            Enter a new Username:
-            &nbsp;&nbsp;
-            <input
-              onChange={(e) => setTempUserName(e.target.value)}
-              type="text"
-              id="newUsername"
-              aria-placeholder="Username"
-            />
-          </label>
-          <button type="submit" onClick={submitUsername}>Submit</button>
-          <br />
-          <span><b><i>{state.modalErrorMessage}</i></b></span>
-        </div>
-      </div>
-      <button
-        type="button"
-        onClick={() => actions.setShowModal(false)}
-        className="modal-close is-large"
-        aria-label="close"
-      />
-    </div>
-  ) : '';
 
   return (
     <div className="column is-half is is-offset-one-quarter has-text-centered">
@@ -107,7 +54,7 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
           </div>
         </div>
       </div>
-      {modal}
+      {state.showModal ? <ProfileModal /> : ''}
     </div>
   );
 });

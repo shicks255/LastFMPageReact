@@ -4,7 +4,7 @@ import Loader from './Loader';
 import HoverImage from './HoverImage';
 import ErrorMessage from './ErrorMessage';
 import useIsMobile from '../hooks/useIsMobile';
-import { useApiState } from '../ApiContext';
+import { useApiState } from '../contexts/ApiContext';
 import { useRecentTracks } from '../hooks/useLasftFmApi';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {

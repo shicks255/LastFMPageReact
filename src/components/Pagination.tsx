@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApiDispatch, useApiState } from '../ApiContext';
+import { useApiDispatch, useApiState } from '../contexts/ApiContext';
 
 type Props = {
   totalPages: number

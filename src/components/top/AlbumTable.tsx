@@ -4,7 +4,7 @@ import Loader from '../Loader';
 import HoverImage from '../HoverImage';
 import useIsMobile from '../../hooks/useIsMobile';
 import ErrorMessage from '../ErrorMessage';
-import { useApiState } from '../../ApiContext';
+import { useApiState } from '../../contexts/ApiContext';
 import { useTopAlbums } from '../../hooks/useLasftFmApi';
 
 const AlbumTable: React.FC<Record<string, void>> = (() => {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { NowPlaying } from './types/NowPlaying';
+import { NowPlaying } from '../types/NowPlaying';
 
 type State = {
   userName: string,

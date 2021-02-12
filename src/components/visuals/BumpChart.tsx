@@ -19,8 +19,7 @@ type DataPoint = {
 const BumpChart: React.FC<Props> = ((props: Props) => {
   const { recentTracks } = props;
 
-  const mostRecentDate = new Date(recentTracks[0].date.uts * 1000);
-  const oneMonthAgo = mostRecentDate;
+  const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);
 
@@ -143,7 +142,7 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
         };
       });
 
-      const r = dateData.sort((x, y) => {
+      dayRanks[key] = dateData.sort((x, y) => {
         if (x.data.length === 0) {
           return 1;
         }
@@ -156,8 +155,6 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
 
         return 1;
       }).map((i) => i.id);
-
-      dayRanks[key] = r;
     }
 
     const newData: ChartData[] = data.map((d) => {
@@ -171,8 +168,6 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
         data: newd,
       };
     });
-
-    console.log('processing');
 
     return newData;
   }, [recentTracks]);

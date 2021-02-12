@@ -3,7 +3,7 @@ import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
 import Loader from '../Loader';
 import ErrorMessage from '../ErrorMessage';
-import { useApiState } from '../../ApiContext';
+import { useApiState } from '../../contexts/ApiContext';
 import { useTopAlbums, useTopArtists } from '../../hooks/useLasftFmApi';
 
 type Props = {

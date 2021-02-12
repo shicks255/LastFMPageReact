@@ -1,6 +1,6 @@
 import React from 'react';
 import { strategies, timeFrames } from '../utils';
-import { useApiDispatch, useApiState } from '../ApiContext';
+import { useApiDispatch, useApiState } from '../contexts/ApiContext';
 
 const MainMenu: React.FC<Record<string, void>> = (() => {
   const { selected, strategy, timeFrame } = useApiState();

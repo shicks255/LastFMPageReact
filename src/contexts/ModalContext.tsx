@@ -16,7 +16,7 @@ const ModalContext = React.createContext<Type | undefined>(undefined);
 type Props = {
     children: JSX.Element[]
 }
-function ModalContextProvider(props: Props) {
+function ModalContextProvider(props: Props): JSX.Element {
   const [modalImageSrc, setModalImageSrc] = useState<string>('');
   const [modalImageCaption, setModalImageCaption] = useState<string>('');
 
@@ -36,7 +36,7 @@ function ModalContextProvider(props: Props) {
   );
 }
 
-function useModalState() {
+function useModalState(): Type {
   const context = React.useContext(ModalContext);
   if (context === undefined) {
     throw Error('');

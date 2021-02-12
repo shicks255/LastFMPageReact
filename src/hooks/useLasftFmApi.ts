@@ -1,6 +1,6 @@
 import { QueryObserverResult, useQuery } from 'react-query';
 import { useContext } from 'react';
-import { LocalStateContext } from '../LocalStateContext';
+import { LocalStateContext } from '../contexts/LocalStateContext';
 import { getActualArtistUrl } from '../utils';
 import { RecentTracks } from '../types/RecentTracks';
 import { TopAlbums } from '../types/TopAlbums';

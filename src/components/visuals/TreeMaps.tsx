@@ -1,9 +1,9 @@
 import React from 'react';
-import { useApiDispatch } from '../../ApiContext';
+import { useApiDispatch } from '../../contexts/ApiContext';
 import { timeFrames } from '../../utils';
 import TreeMap from './TreeMap';
 
-const TreeMaps = () => {
+const TreeMaps: () => JSX.Element = () => {
   const { setTimeFrame } = useApiDispatch();
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => (

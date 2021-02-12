@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { NowPlaying } from './types/NowPlaying';
 
 type State = {
   page: number,
@@ -20,12 +19,11 @@ const ApiContextDispatch = React.createContext<Actions | undefined>(undefined);
 type Props = {
   children: JSX.Element
 }
-function ApiContextProvider(props: Props) {
+function ApiContextProvider(props: Props): JSX.Element {
   const { children } = props;
   const [page, setPage] = useState<number>(1);
   const [strategy, setStrategy] = useState<string>('getTopArtists');
   const [timeFrame, setTimeFrame] = useState<string>('7day');
-  const [nowPlaying, setNowPlaying] = useState<NowPlaying>();
   const [selected, setSelected] = useState<string>('recent');
 
   const state = {
@@ -45,7 +43,7 @@ function ApiContextProvider(props: Props) {
   );
 }
 
-function useApiState() {
+function useApiState(): State {
   const context = React.useContext(ApiContextState);
   if (context === undefined) {
     throw Error('');
@@ -53,7 +51,7 @@ function useApiState() {
   return context;
 }
 
-function useApiDispatch() {
+function useApiDispatch(): Actions {
   const context = React.useContext(ApiContextDispatch);
   if (context === undefined) {
     throw Error('');

@@ -5,24 +5,19 @@ import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
-import { useApiState } from '../../ApiContext';
+import { useApiState } from '../../contexts/ApiContext';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { timeFrame, page } = useApiState();
   const {
-    isLoading, isError, error, data,
+    isLoading, error, data,
   } = useTopArtists(timeFrame, page);
-  console.log(isLoading);
-  console.log(isError);
-  console.log(error);
-  console.log(data);
 
   if (isLoading) { return <Loader small={false} />; }
-  if (isError) { // @ts-ignore
+  if (error) {
     return <ErrorMessage error={error} />;
   }
   if (!data) return <div>ahh</div>;
-  // if (!topArtistQueryResult.data) return <ErrorMessage error={new Error('')} />;
 
   const artist = data;
   const artists = artist.artist;

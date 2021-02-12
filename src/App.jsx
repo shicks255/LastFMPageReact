@@ -6,11 +6,11 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Body from './components/Body';
-import { Provider } from './LocalStateContext';
+import { Provider } from './contexts/LocalStateContext';
 
 const queryClient = new QueryClient();
 
-export default function App() {
+export default function App(): JSX.Element {
   return (
     <Provider>
       <QueryClientProvider client={queryClient}>

@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import { convertDurationToTimestamp } from '../../utils';
 import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
 import useIsMobile from '../../hooks/useIsMobile';
-import { useApiState } from '../../ApiContext';
+import { useApiState } from '../../contexts/ApiContext';
 import { useTopTracks } from '../../hooks/useLasftFmApi';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { timeFrame, page } = useApiState();
   const {
-    isLoading, isError, error, data,
+    isLoading, error, data,
   } = useTopTracks(timeFrame, page);
   const isMobile = useIsMobile();
 
