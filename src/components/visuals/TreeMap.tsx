@@ -65,10 +65,8 @@ const TreeMap: React.FC<Props> = ((props: Props) => {
   return (
   // <div className="column is-full has-text-centered">
     <div style={{ height: '350px', fontWeight: 'bold' }}>
-      <span style={{ color: '#eee' }}>
+      <span className="myTitle">
         {name}
-        {' '}
-        Heat Map
       </span>
       <ResponsiveTreeMap
         data={treeData}

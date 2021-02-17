@@ -9,7 +9,7 @@ import { useRecentTracksBig } from '../../hooks/useLasftFmApi';
 
 const Visuals: React.FC<Record<string, void>> = (() => {
   const {
-    isLoading, isError, error, data,
+    isLoading, error, data,
   } = useRecentTracksBig();
 
   if (isLoading) return <Loader small />;
@@ -23,18 +23,27 @@ const Visuals: React.FC<Record<string, void>> = (() => {
 
   return (
     <>
+      <section className="mainContent">
+        <h1 className="title myTitle has-text-centered">Charts & Graphs</h1>
+      </section>
       <TreeMaps />
       <div>
         <LineGraph recentTracks={recentTracks} />
       </div>
+      <br />
+      <br />
       <hr />
       <div>
         <Sunburst recentTracks={recentTracks} />
       </div>
+      <br />
+      <br />
       <hr />
       <div>
         <BumpChart recentTracks={recentTracks} />
       </div>
+      <br />
+      <br />
     </>
   );
 });

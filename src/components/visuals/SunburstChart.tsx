@@ -58,9 +58,12 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
   return (
     <div className="column is-full has-text-centered">
       <div style={{ height: '500px', fontWeight: 'bold' }}>
-        <span style={{ color: '#eee' }}>
-          Recent Tracks Album Pie Chart
-        </span>
+        <section className="mainContent">
+          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Album Pie Chart</h1>
+          <h2 className="myTitle has-text-left-tablet leftPadding">
+            (Using last 200 plays)
+          </h2>
+        </section>
         <ResponsiveSunburst
           data={data}
           margin={{ top: 15, bottom: 20 }}

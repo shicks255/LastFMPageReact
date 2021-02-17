@@ -180,9 +180,12 @@ const BumpChart: React.FC<Props> = ((props: Props) => {
 
     <div className="column is-full has-text-centered">
       <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <span style={{ color: '#eee' }}>
-          Artist Rank By Day
-        </span>
+        <section className="mainContent">
+          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Artist Rank By Day</h1>
+          <h2 className="myTitle has-text-left-tablet leftPadding">
+            (Using last 200 plays)
+          </h2>
+        </section>
         <ResponsiveBump
         // @ts-ignore
           data={chartData}

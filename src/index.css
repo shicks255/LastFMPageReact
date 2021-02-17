@@ -219,8 +219,28 @@ h1 {
     padding: 3px;
 }
 
+.myTitle {
+    color: #e3ecfa !important;
+}
+
+.noMarginBottom {
+    margin-bottom: 0 !important;
+}
+
+.marginBottom {
+    margin-bottom: 16px !important;
+}
+
+.leftPadding {
+    padding-left: 2px !important;
+}
+
 .mainContent {
     max-width: 85%;
+    margin: auto;
+}
+
+.mainContent h1 {
     margin: auto;
 }
 

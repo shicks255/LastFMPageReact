@@ -14,38 +14,43 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
   if (selected !== 'top') return <></>;
 
   return (
-    <div className="is-mobile">
-      <div className="box column is-half is-offset-one-quarter has-text-centered">
-        <div className="columns has-text-black">
-          <div className="column">
-            <span>
-              <b>View:</b>
+    <>
+      <section className="mainContent marginBottom">
+        <h1 className="title myTitle has-text-centered">Top Charts</h1>
+      </section>
+      <div className="is-mobile">
+        <div className="box column is-half is-offset-one-quarter has-text-centered">
+          <div className="columns has-text-black">
+            <div className="column">
+              <span>
+                <b>View:</b>
+                <br />
+                <div className="select is-danger">
+                  <select
+                    defaultValue={strategy}
+                    onChange={(event) => setStrategy(event.target.value)}
+                  >
+                    {strategySelects}
+                  </select>
+                </div>
+              </span>
+            </div>
+            <div className="column">
+              <b>Time Frame:</b>
               <br />
               <div className="select is-danger">
                 <select
-                  defaultValue={strategy}
-                  onChange={(event) => setStrategy(event.target.value)}
+                  defaultValue={timeFrame}
+                  onChange={(event) => setTimeFrame(event.target.value)}
                 >
-                  {strategySelects}
+                  {timeFrameSelects}
                 </select>
               </div>
-            </span>
-          </div>
-          <div className="column">
-            <b>Time Frame:</b>
-            <br />
-            <div className="select is-danger">
-              <select
-                defaultValue={timeFrame}
-                onChange={(event) => setTimeFrame(event.target.value)}
-              >
-                {timeFrameSelects}
-              </select>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 });
 

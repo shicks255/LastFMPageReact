@@ -101,9 +101,12 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
   return (
     <div className="column is-full has-text-centered">
       <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
-        <span style={{ color: '#eee' }}>
-          Play Count by Day
-        </span>
+        <section className="mainContent">
+          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Play Count By Day</h1>
+          <h2 className="myTitle has-text-left-tablet leftPadding">
+            (Using last 200 plays)
+          </h2>
+        </section>
         <ResponsiveLine
           data={ld}
           margin={{

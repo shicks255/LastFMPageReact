@@ -90,6 +90,9 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
 
   return (
     <div className="mainContent">
+      <section className="mainContent">
+        <h1 className="title myTitle has-text-centered">Recent Tracks</h1>
+      </section>
       <Pagination totalPages={recentTracks['@attr'].totalPages} />
       <div>
         <table className="table is-striped is-hoverable is-fullwidth">
