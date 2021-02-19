@@ -5,8 +5,33 @@ type Props = {
 }
 
 const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
+  console.log(props);
   const { error } = props;
   const { business, technical } = JSON.parse(error.message);
+
+  if (technical === 'No connection') {
+    return (
+      <div className="box mainContent">
+        <div className="column">
+          <table id="errorTable" className="table is-fullwidth">
+            <tr>
+              <td>
+                <div
+                  className="column"
+                  style={{
+                    margin: 'auto', left: '50%', top: '50%', color: '#C3073F',
+                  }}
+                >
+                  <i className="fas fa-plug fa-5x" />
+                </div>
+              </td>
+              <td>No Connection</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="box mainContent">
@@ -32,10 +57,7 @@ const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
             </tr>
             <tr>
               <td><b>Details:</b></td>
-              <td>
-                $
-                {technical}
-              </td>
+              <td>{technical}</td>
             </tr>
           </table>
         </div>

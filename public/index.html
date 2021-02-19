@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+<!--     Global site tag (gtag.js) - Google Analytics-->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93228543-3"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -38,19 +38,17 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script>
-      // if ('serviceWorker' in navigator) {
-      //   window.addEventListener('load', () => {
-      //     navigator.serviceWorker.register('service-worker-old.js')
-      //     .then((registration) => {
-      //       console.log('registerd service worker');
-      //       console.log(registration.scope);
-      //     }, (err) => {
-      //       console.log(err)
-      //     }).catch((err) => console.log(err));
-      //   })
-      // } else {
-      //   console.log('service worker is not supported');
-      // }
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('service-worker-old.js')
+          .then((registration) => {
+          }, (err) => {
+            console.log(err)
+          }).catch((err) => console.log(err));
+        })
+      } else {
+        console.log('service worker is not supported');
+      }
     </script>
   </body>
 </html>

@@ -1,12 +1,8 @@
 import React, { lazy, Suspense } from 'react';
-// import ArtistTable from './top/ArtistTable';
-// import AlbumTable from './top/AlbumTable';
-// import TracksTable from './top/TracksTable';
 import MainMenu from './MainMenu';
 import RecentTracksTable from './RecentTracksTable';
 import { useApiState } from '../contexts/ApiContext';
 import Loader from './Loader';
-// import Visuals from './visuals/Visuals';
 
 const AlbumTable = lazy(() => import('./top/AlbumTable'));
 const ArtistTable = lazy(() => import('./top/ArtistTable'));

@@ -22,6 +22,7 @@ function generateUrl(type, page, period, key, userName) {
 const queryOptions = {
   refetchOnWindowFocus: false,
   staleTime: (1000 * 60 * 10),
+  retry: false,
 };
 
 const userQuery = async (userName) => {
@@ -58,7 +59,7 @@ function checkUserName(userName: string): Promise<boolean> {
     .then((ok) => ok);
 }
 
-const recentTracksQuery = async (page, userName) => {
+const recentTracksQuery = (page, userName) => {
   const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
@@ -75,7 +76,15 @@ const recentTracksQuery = async (page, userName) => {
 
 function useRecentTracks(page: number): QueryObserverResult<RecentTracks, Error> {
   const { state } = useContext(LocalStateContext);
-  return useQuery(['recentTracks', state.userName, page], () => recentTracksQuery(page, state.userName), { refetchInterval: 30000, refetchOnWindowFocus: false });
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return useQuery(['recentTracks', state.userName, page],
+    () => recentTracksQuery(page, state.userName),
+    {
+      refetchInterval: 30000,
+      refetchOnWindowFocus: false,
+      retry: false,
+    });
 }
 
 const recentTracksBigQuery = async (userName) => {
@@ -174,4 +183,5 @@ export {
   useTopTracks,
   useArtistImage,
   checkUserName,
+  recentTracksQuery,
 };
