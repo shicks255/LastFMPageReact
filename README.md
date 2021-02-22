@@ -1,3 +1,6 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b5ce25fe-3f90-494e-980d-0402b34fd721/deploy-status)](https://app.netlify.com/sites/compassionate-roentgen-0f4e10/deploys)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
