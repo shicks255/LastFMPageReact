@@ -9,17 +9,16 @@ import { useRecentTracks } from '../hooks/useLasftFmApi';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   const { page } = useApiState();
-  // const {
-  //   isLoading, error, data,
-  // } = useRecentTracks(page);
+  const {
+    isLoading, error, data,
+  } = useRecentTracks(page);
   const isMobile = useIsMobile();
-  const result = useRecentTracks(page);
 
-  if (result.isLoading) return <Loader small={false} />;
-  if (result.error) return <ErrorMessage error={result.error} />;
-  if (!result.data) return <ErrorMessage error={new Error('')} />;
+  if (isLoading) return <Loader small={false} />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const recentTracks = result.data;
+  const recentTracks = data;
 
   function renderTable() {
     if (isMobile) {

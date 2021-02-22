@@ -5,7 +5,10 @@ import { useRecentTracks } from '../hooks/useLasftFmApi';
 const NowPlaying: React.FC<Record<string, void>> = (() => {
   const { error, data } = useRecentTracks(1);
 
-  if (error) return <ErrorMessage error={error} />;
+  if (error) {
+    const { technical } = JSON.parse(error.message);
+    if (technical !== 'No connection') return <ErrorMessage error={error} />;
+  }
   if (!data) return <div />;
 
   const isNowPlaying = data.track[0]?.['@attr']?.nowplaying;

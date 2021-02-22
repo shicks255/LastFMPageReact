@@ -1,4 +1,4 @@
-import { QueryObserverResult, useQuery } from 'react-query';
+import { QueryObserverResult, useQuery, onlineManager } from 'react-query';
 import { useContext } from 'react';
 import { LocalStateContext } from '../contexts/LocalStateContext';
 import { getActualArtistUrl } from '../utils';
@@ -19,10 +19,20 @@ function generateUrl(type, page, period, key, userName) {
         &page=${page}`;
 }
 
+function throwErrorIfOffline(businessError) {
+  if (!onlineManager.isOnline()) {
+    onlineManager.setOnline(true);
+    throw new Error(JSON.stringify({
+      technical: 'No connection',
+      business: businessError,
+    }));
+  }
+}
+
 const queryOptions = {
   refetchOnWindowFocus: false,
   staleTime: (1000 * 60 * 10),
-  retry: false,
+  retry: 2,
 };
 
 const userQuery = async (userName) => {
@@ -30,6 +40,7 @@ const userQuery = async (userName) => {
         &user=${userName}
         &api_key=${apiKey}
         &format=json`);
+  throwErrorIfOffline('Problem loading user');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
@@ -37,7 +48,7 @@ const userQuery = async (userName) => {
         localStorage.setItem('userName', 'shicks255');
         throw new Error(JSON.stringify({
           technical: body.message,
-          business: 'Problem loading recent tracks',
+          business: 'Problem loading user',
         }));
       }
       localStorage.setItem('userName', userName);
@@ -61,6 +72,7 @@ function checkUserName(userName: string): Promise<boolean> {
 
 const recentTracksQuery = (page, userName) => {
   const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
+  throwErrorIfOffline('Problem loading recent tracks');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
@@ -83,7 +95,7 @@ function useRecentTracks(page: number): QueryObserverResult<RecentTracks, Error>
     {
       refetchInterval: 30000,
       refetchOnWindowFocus: false,
-      retry: false,
+      retry: 2,
     });
 }
 
@@ -94,6 +106,7 @@ const recentTracksBigQuery = async (userName) => {
         &format=json
         &limit=200
         &page=1`;
+  throwErrorIfOffline('Problem loading recent tracks');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
@@ -114,6 +127,7 @@ function useRecentTracksBig(): QueryObserverResult<RecentTracks, Error> {
 
 const topAlbumsQuery = async (timeFrame, page, userName) => {
   const url = generateUrl('user.getTopAlbums', page, timeFrame, apiKey, userName);
+  throwErrorIfOffline('Problem loading top albums');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
@@ -134,6 +148,7 @@ function useTopAlbums(timeFrame: string, page: number): QueryObserverResult<TopA
 
 const topTracksQuery = async (timeFrame, page, userName) => {
   const url = generateUrl('user.getTopTracks', page, timeFrame, apiKey, userName);
+  throwErrorIfOffline('Problem loading top tracks');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
@@ -156,6 +171,7 @@ const useArtistImage: (string, number) => QueryObserverResult<string, Error> = (
 
 const topArtistsQuery = async (timeFrame, page, userName) => {
   const url = generateUrl('user.getTopArtists', page, timeFrame, apiKey, userName);
+  throwErrorIfOffline('Problem loading top artists');
   return fetch(url)
     .then((res) => Promise.all([res.ok, res.json()]))
     .then(([ok, body]) => {
