@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ResponsiveSunburst } from '@nivo/sunburst';
 import { Track } from '../../types/Track';
-import { chartColors } from '../../utils';
+import { chartColors, getDateRangeFromTimeFrame } from '../../utils';
+import { LocalStateContext } from '../../contexts/LocalStateContext';
+import TimeFrameSelect from '../TimeFrameSelect';
 
 type Props = {
   recentTracks: Track[]
@@ -10,49 +12,70 @@ type Props = {
 const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
   const { recentTracks } = props;
 
-  const d: {[key: string]: number} = recentTracks.reduce((accum, item) => {
-    const artistName = item.artist['#text'];
-    const albumName = item.album['#text'];
+  const { state } = useContext(LocalStateContext);
+  const [trackz, setTrackz] = useState(undefined);
+  const [timeFrame, setTimeFrame] = useState('7day');
+  const [loading, setLoading] = useState(false);
 
-    if (Object.prototype.hasOwnProperty.call(accum, artistName)) {
-      if (Object.prototype.hasOwnProperty.call(accum[artistName], albumName)) {
-        accum[artistName][albumName] += 1;
-      } else {
-        accum[artistName][albumName] = 1;
-      }
+  useEffect(() => {
+    setLoading(true);
+    const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+
+    fetch(`http://localhost:8686/api/v1/scrobbles/albumsGrouped?userName=${state.userName}&from=${start}&to=${end}&limit=50`)
+      .then((res) => res.json())
+      .then((res) => {
+        setTrackz(res);
+        setLoading(false);
+      });
+  }, [timeFrame]);
+
+  if (!trackz) {
+    return <></>;
+  }
+
+  const t = {};
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const xper = trackz.data.forEach((item) => {
+    const id = item.artistName;
+    if (Object.prototype.hasOwnProperty.call(t, id)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const th = t[id];
+      const album = item.albumName;
+      const { plays } = item.data[0];
+      const newTh = {
+        id: album,
+        value: plays,
+      };
+      th.push(newTh);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      t[id] = th;
     } else {
-      accum[artistName] = {
-        [albumName]: 1,
+      const album = item.albumName;
+      const { total } = item;
+      const newTh = {
+        id: album,
+        value: total,
       };
+      const children = [newTh];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      t[id] = children;
     }
-    return accum;
-  }, {});
+  });
 
-  const dp = Object.entries(d)
-    .sort((x, y) => {
-      const xCount = Object.values(x[1]).reduce((accum, cur) => accum + cur, 0);
-      const yCount = Object.values(y[1]).reduce((accum, cur) => accum + cur, 0);
-
-      return xCount > yCount ? -1 : 1;
-    })
-    .slice(0, 20)
-    .map((k) => {
-      const albumData = Object.entries(k[1]).map((i) => ({
-        id: i[0],
-        // id: `${k[0]} - ${i[0]}`,
-        value: i[1],
-      }));
-
-      return {
-        id: k[0],
-        children: albumData,
-      };
-    });
+  const pp = Object.entries(t).map((k, v) => ({
+    id: k[0],
+    children: k[1],
+  }));
 
   const data = {
     id: 'albums',
     color: '#a32929',
-    children: dp,
+    children: pp,
   };
 
   return (
@@ -60,9 +83,10 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
       <div style={{ height: '500px', fontWeight: 'bold' }}>
         <section className="mainContent">
           <h1 className="title myTitle has-text-left-tablet noMarginBottom">Album Pie Chart</h1>
-          <h2 className="myTitle has-text-left-tablet leftPadding">
-            (Using last 200 plays)
-          </h2>
+          <TimeFrameSelect
+            timeFrameSelected={timeFrame}
+            onChange={(e: string) => setTimeFrame(e)}
+          />
         </section>
         <ResponsiveSunburst
           data={data}

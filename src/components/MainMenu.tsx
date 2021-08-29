@@ -1,10 +1,27 @@
 import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { strategies, timeFrames } from '../utils';
-import { useApiDispatch, useApiState } from '../contexts/ApiContext';
+import { useApiState } from '../contexts/ApiContext';
 
 const MainMenu: React.FC<Record<string, void>> = (() => {
-  const { selected, strategy, timeFrame } = useApiState();
-  const { setStrategy, setTimeFrame } = useApiDispatch();
+  const history = useHistory();
+  const { pathname, search } = useLocation();
+  const { selected, topItemsStrategy, topItemsTimeFrame } = useApiState();
+
+  let transformedStrategy;
+  switch (topItemsStrategy) {
+    case 'artists':
+      transformedStrategy = 'getTopArtists';
+      break;
+    case 'albums':
+      transformedStrategy = 'getTopAlbums';
+      break;
+    case 'tracks':
+      transformedStrategy = 'getTopTracks';
+      break;
+    default:
+      transformedStrategy = 'getTopArtists';
+  }
 
   const strategySelects = Object.keys(strategies)
     .map((value) => <option key={value} value={value}>{strategies[value]}</option>);
@@ -16,7 +33,7 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
   return (
     <>
       <section className="mainContent marginBottom">
-        <h1 className="title myTitle has-text-centered">Top Charts</h1>
+        <h1 className="title myTitle has-text-centered">Charts</h1>
       </section>
       <div className="is-mobile">
         <div className="box column is-half is-offset-one-quarter has-text-centered">
@@ -27,8 +44,22 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
                 <br />
                 <div className="select is-danger">
                   <select
-                    defaultValue={strategy}
-                    onChange={(event) => setStrategy(event.target.value)}
+                    value={transformedStrategy}
+                    onChange={(event) => {
+                      switch (event.target.value) {
+                        case 'getTopArtists':
+                          history.push(`/top/artists${search}`);
+                          break;
+                        case 'getTopAlbums':
+                          history.push(`/top/albums${search}`);
+                          break;
+                        case 'getTopTracks':
+                          history.push(`/top/tracks${search}`);
+                          break;
+                        default:
+                          history.push(`/top/artists${search}`);
+                      }
+                    }}
                   >
                     {strategySelects}
                   </select>
@@ -40,8 +71,31 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
               <br />
               <div className="select is-danger">
                 <select
-                  defaultValue={timeFrame}
-                  onChange={(event) => setTimeFrame(event.target.value)}
+                  value={topItemsTimeFrame}
+                  onChange={(event) => {
+                    switch (event.target.value) {
+                      case '7day':
+                        history.push(`${pathname}?timeFrame=7day`);
+                        break;
+                      case '1month':
+                        history.push(`${pathname}?timeFrame=1month`);
+                        break;
+                      case '3month':
+                        history.push(`${pathname}?timeFrame=3month`);
+                        break;
+                      case '6month':
+                        history.push(`${pathname}?timeFrame=6month`);
+                        break;
+                      case '12month':
+                        history.push(`${pathname}?timeFrame=12month`);
+                        break;
+                      case 'overall':
+                        history.push(`${pathname}?timeFrame=overall`);
+                        break;
+                      default:
+                        history.push(`${pathname}?timeFrame=7day`);
+                    }
+                  }}
                 >
                   {timeFrameSelects}
                 </select>

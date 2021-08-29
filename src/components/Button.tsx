@@ -13,7 +13,7 @@ const Button: React.FC<Props> = ((props: Props) => {
 
   const { id, dataLabel, title } = props;
 
-  let classs = 'fas fa-5x clicky';
+  let classs = 'fas fa-5x clicky2';
   switch (props.id) {
     case 'recentButton':
       classs += ' fa-history';
@@ -39,7 +39,6 @@ const Button: React.FC<Props> = ((props: Props) => {
         aria-hidden="true"
       />
       <br />
-      <b>{title}</b>
     </div>
   );
 });

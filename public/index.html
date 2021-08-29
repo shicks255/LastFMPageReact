@@ -37,18 +37,18 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('service-worker-old.js')
-          .then((registration) => {
-          }, (err) => {
-            console.log(err)
-          }).catch((err) => console.log(err));
-        })
-      } else {
-        console.log('service worker is not supported');
-      }
-    </script>
+<!--    <script>-->
+<!--      if ('serviceWorker' in navigator) {-->
+<!--        window.addEventListener('load', () => {-->
+<!--          navigator.serviceWorker.register('service-worker-old.js')-->
+<!--          .then((registration) => {-->
+<!--          }, (err) => {-->
+<!--            console.log(err)-->
+<!--          }).catch((err) => console.log(err));-->
+<!--        })-->
+<!--      } else {-->
+<!--        console.log('service worker is not supported');-->
+<!--      }-->
+<!--    </script>-->
   </body>
 </html>

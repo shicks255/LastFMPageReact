@@ -5,7 +5,6 @@ type Props = {
 }
 
 const ErrorMessage: React.FC<Props> = ((props: Props): JSX.Element => {
-  console.log(props);
   const { error } = props;
   const { business, technical } = JSON.parse(error.message);
 

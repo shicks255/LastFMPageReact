@@ -8,10 +8,10 @@ import { useApiState } from '../../contexts/ApiContext';
 import { useTopAlbums } from '../../hooks/useLasftFmApi';
 
 const AlbumTable: React.FC<Record<string, void>> = (() => {
-  const { timeFrame, page } = useApiState();
+  const { topItemsTimeFrame, topItemsPage } = useApiState();
   const {
     isLoading, error, data,
-  } = useTopAlbums(timeFrame, page);
+  } = useTopAlbums(topItemsTimeFrame, topItemsPage);
   const isMobile = useIsMobile();
 
   if (isLoading) { return <Loader small={false} />; }
@@ -92,11 +92,11 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
 
   return (
     <div>
-      <Pagination totalPages={topAlbums['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
       <table className="table is-striped is-hoverable is-fullwidth mainContent">
         {renderTable()}
       </table>
-      <Pagination totalPages={topAlbums['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
     </div>
   );
 });

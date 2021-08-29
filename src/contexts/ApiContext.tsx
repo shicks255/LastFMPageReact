@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 
 type State = {
-  page: number,
-  strategy: string,
-  timeFrame: string,
   selected: string,
+  recentTracksPage: number,
+  topItemsPage: number,
+  topItemsStrategy: string,
+  topItemsTimeFrame: string,
+  timeFrame: string,
+  page: number,
 }
 type Actions = {
-  setPage: (x: number) => void,
-  setStrategy: (x: string) => void,
-  setTimeFrame: (x: string) => void,
   setSelected: (x: string) => void,
+  setRecentTracksPage: (x: number) => void,
+  setTopItemsPage: (x: number) => void,
+  setTopItemsStrategy: (x: string) => void,
+  setTopItemsTimeFrame: (x: string) => void,
+  setTimeFrame: (x: string) => void,
+  setPage: (x: number) => void,
 }
 
 const ApiContextState = React.createContext<State | undefined>(undefined);
@@ -21,17 +27,26 @@ type Props = {
 }
 function ApiContextProvider(props: Props): JSX.Element {
   const { children } = props;
-  const [page, setPage] = useState<number>(1);
-  const [strategy, setStrategy] = useState<string>('getTopArtists');
-  const [timeFrame, setTimeFrame] = useState<string>('7day');
   const [selected, setSelected] = useState<string>('recent');
+  const [recentTracksPage, setRecentTracksPage] = useState<number>(1);
+  const [topItemsPage, setTopItemsPage] = useState<number>(1);
+  const [topItemsStrategy, setTopItemsStrategy] = useState<string>('getTopArtists');
+  const [topItemsTimeFrame, setTopItemsTimeFrame] = useState<string>('7day');
+  const [timeFrame, setTimeFrame] = useState<string>('7day');
+  const [page, setPage] = useState<number>(1);
 
   const state = {
-    page, strategy, timeFrame, selected,
+    recentTracksPage, topItemsPage, page, timeFrame, topItemsTimeFrame, selected, topItemsStrategy,
   };
 
   const actions = {
-    setPage, setStrategy, setTimeFrame, setSelected,
+    setRecentTracksPage,
+    setTopItemsPage,
+    setPage,
+    setTimeFrame,
+    setTopItemsTimeFrame,
+    setSelected,
+    setTopItemsStrategy,
   };
 
   return (

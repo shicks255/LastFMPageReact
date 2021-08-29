@@ -6,12 +6,14 @@ import ErrorMessage from './ErrorMessage';
 import useIsMobile from '../hooks/useIsMobile';
 import { useApiState } from '../contexts/ApiContext';
 import { useRecentTracks } from '../hooks/useLasftFmApi';
+import useRecentTracksNavPageSync from '../hooks/useRecentTracksNavPageSync';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {
-  const { page } = useApiState();
+  useRecentTracksNavPageSync();
+  const { recentTracksPage } = useApiState();
   const {
     isLoading, error, data,
-  } = useRecentTracks(page);
+  } = useRecentTracks(recentTracksPage);
   const isMobile = useIsMobile();
 
   if (isLoading) return <Loader small={false} />;
@@ -91,15 +93,15 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   return (
     <div className="mainContent">
       <section className="mainContent">
-        <h1 className="title myTitle has-text-centered">Recent Tracks</h1>
+        <h1 className="title myTitle has-text-centered">Tracks</h1>
       </section>
-      <Pagination totalPages={recentTracks['@attr'].totalPages} />
+      <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
       <div>
         <table className="table is-striped is-hoverable is-fullwidth">
           {renderTable()}
         </table>
       </div>
-      <Pagination totalPages={recentTracks['@attr'].totalPages} />
+      <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
     </div>
   );
 });

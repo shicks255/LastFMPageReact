@@ -1,22 +1,25 @@
+/* eslint-disable */
 import React from 'react';
-import { useApiDispatch, useApiState } from '../contexts/ApiContext';
+import { Link, Redirect, useRouteMatch, useLocation } from 'react-router-dom';
 
 type Props = {
+  page: number
   totalPages: number
 }
 
 const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
-  const { page } = useApiState();
-  const { setPage } = useApiDispatch();
 
-  const changePage = (number) => {
-    setPage(number);
-  };
+  function replacePageParam(newPage: number): string {
+    return location.search.replace(`page=${page}`, `page=${newPage}`)
+  }
 
-  const { totalPages } = props;
-  if (page > totalPages) setPage(1);
+  const { totalPages, page } = props;
+  const { url } = useRouteMatch();
+  const location = useLocation();
 
   if (totalPages < 1) return <></>;
+
+  if (page > totalPages) return <Redirect to={`${url}?page=1`} />
 
   const last = Number(totalPages);
   const firstPage = page === 1;
@@ -30,10 +33,10 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
   const pre = page > 1 ? page - 1 : '';
   const post = page < last ? page + 1 : '';
 
-  const firstLink = <button type="button" className="button pagination-link" onClick={() => changePage(1)}>1</button>;
-  const preLink = <button type="button" className="button pagination-link" onClick={() => changePage(page - 1)}>{pre}</button>;
-  const postLink = <button type="button" className="button pagination-link" onClick={() => changePage(page + 1)}>{post}</button>;
-  const lastLink = <button type="button" className="button pagination-link" onClick={() => changePage(last)}>{String(last)}</button>;
+  const firstLink = <Link to={replacePageParam(1)}><button type="button" className="button pagination-link">1</button></Link>
+  const preLink =  <Link to={replacePageParam(page -1)}><button type="button" className="button pagination-link">{pre}</button></Link>
+  const postLink = <Link to={replacePageParam(page + 1)}><button type="button" className="button pagination-link">{post}</button></Link>
+  const lastLink = <Link to={replacePageParam(last)}><button type="button" className="button pagination-link">{String(last)}</button></Link>
 
   return (
     <div>
@@ -41,29 +44,17 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
         <div className="column is-half is-offset-one-quarter has-text-centered">
           {
                         firstPage
-                          ? <button type="button" className="pagination-previous button disabled">Previous</button>
-                          : (
-                            <button
-                              type="button"
-                              className="pagination-previous button"
-                              onClick={() => changePage(page - 1)}
-                            >
-                              Previous
-                            </button>
-                          )
+                          ? <i className="fas fa-arrow-left paginate-icon disabled" />
+                          : <Link to={replacePageParam(page-1)}>
+                              <i className="fas fa-arrow-left paginate-icon" />
+                            </Link>
                     }
           {
                         lastPage
-                          ? <button type="button" className="pagination-next button disabled">Next</button>
-                          : (
-                            <button
-                              type="button"
-                              className="pagination-next button"
-                              onClick={() => changePage(page + 1)}
-                            >
-                              Next
-                            </button>
-                          )
+                          ? <i className="fas fa-arrow-right paginate-icon disabled" />
+                          : <Link to={replacePageParam(page+1)}>
+                              <i className="fas fa-arrow-right paginate-icon" />
+                            </Link>
                     }
         </div>
       </div>

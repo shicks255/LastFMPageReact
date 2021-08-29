@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import { Track } from '../../types/Track';
-import { chartColors } from '../../utils';
+import { chartColors, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
+import TimeFrameSelect from '../TimeFrameSelect';
+import { LocalStateContext } from '../../contexts/LocalStateContext';
 
 type Props = {
   recentTracks: Track[]
@@ -13,78 +15,82 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
     return name;
   }
 
+  const { state, actions } = useContext(LocalStateContext);
+  const [resourceType, setResourceType] = useState<string>('album');
+  const [trackz, setTrackz] = useState(undefined);
+  const [timeFrame, setTimeFrame] = useState('7day');
+  const [format1, setFormat1] = useState('%Y-%m-%d');
+  const [precision, setPrecision] = useState<'day' | 'month' | 'year'>('day');
+  const [tickValues, setTickValues] = useState('every 1 day');
+  const [bottomXFormat, setBottomXFormat] = useState('%b %d');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+
+    if (timeFrame === '7day' || timeFrame === '1month') setBottomXFormat('%b %d');
+    if (timeFrame === '3month') setBottomXFormat('%b %Y');
+    if (timeFrame === '6month' || timeFrame === '12month') setBottomXFormat('%b %Y');
+    if (timeFrame === '1year' || timeFrame === 'overall') setBottomXFormat('%Y');
+
+    if (timeFrame === '7day' || timeFrame === '1month') setFormat1('%Y-%m-%d');
+    if (timeFrame === '3month') setFormat1('%Y-%m');
+    if (timeFrame === '6month' || timeFrame === '12month') setFormat1('%Y-%m');
+    if (timeFrame === '1year' || timeFrame === 'overall') setFormat1('%Y');
+
+    if (timeFrame === '7day' || timeFrame === '1month') setPrecision('day');
+    if (timeFrame === '3month') setPrecision('month');
+    if (timeFrame === '6month' || timeFrame === '12month') setPrecision('month');
+    if (timeFrame === '1year' || timeFrame === 'overall') setPrecision('year');
+
+    if (timeFrame === '7day' || timeFrame === '1month') setTickValues('every 1 day');
+    if (timeFrame === '3month') setTickValues('every 1 month');
+    if (timeFrame === '6month' || timeFrame === '12month') setTickValues('every 1 month');
+    if (timeFrame === '1year' || timeFrame === 'overall') setTickValues('every 1 year');
+    const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+    const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
+
+    const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
+    fetch(`https://musicapi.shicks255.com/api/v1/scrobbles/${resource}?userName=${state.userName}&from=${start}&to=${end}&timeGroup=${timeGroup}&empties=true&limit=12`)
+      .then((res) => res.json())
+      .then((res) => {
+        setTrackz(res);
+        setLoading(false);
+      });
+  }, [timeFrame, resourceType]);
+
   const { recentTracks } = props;
 
-  const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
-  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 2);
-  const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);
+  if (!trackz) {
+    return <></>;
+  }
 
-  const topArtistsFromTracks: {[key: string]: number} = recentTracks
-    .filter((x) => x.date.uts >= oneMonthAgoTimestamp)
-    .reduce((accum, curr) => {
-      if (Object.prototype.hasOwnProperty.call(accum, (curr.artist['#text']))) {
-        accum[curr.artist['#text']] += 1;
-      } else {
-        accum[curr.artist['#text']] = 1;
-      }
+  if (loading) {
+    return <></>;
+  }
 
-      return accum;
-    }, {});
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const chartNew = trackz.data.map((item) => {
+    // eslint-dot-notation
+    const id = resourceType === 'artist' ? item.artistName : item.albumName;
+    const dataPoints = item.data;
 
-  const d = Object.entries(topArtistsFromTracks).sort((x, y) => (x[1] > y[1] ? 1 : -1))
-    .reverse()
-    .map((x) => x[0])
-    .slice(0, 10);
+    const dd = dataPoints
+      .sort((dp1, dp2) => {
+        if (dp1.timeGroup > dp2.timeGroup) return 1;
 
-  // return 'artistName': [playDates]
-  const tracksByArtist = recentTracks
-    .filter((x) => d.includes(x.artist['#text']))
-    .filter((x) => x.date.uts >= oneMonthAgoTimestamp)
-    .reduce((accum, curr) => {
-      if (curr.date) {
-        if (Object.prototype.hasOwnProperty.call(accum, curr.artist['#text'])) {
-          accum[curr.artist['#text']].push(curr.date.uts);
-        } else {
-          const tracks: number[] = [];
-          tracks.push(curr.date.uts);
-          // eslint-disable-next-line no-param-reassign
-          accum[curr.artist['#text']] = tracks;
-        }
-      }
-      return accum;
-    }, {});
+        return -1;
+      })
+      .map((dp) => ({
+        x: dp.timeGroup,
+        y: dp.plays,
+      }));
 
-  const ld: {id: string, color: string, data: {x: string, y: number}[]}[] = [];
-
-  Object.keys(tracksByArtist).forEach((artistName) => {
-    const artistAndPlayCounts = tracksByArtist[artistName];
-    tracksByArtist[artistName] = artistAndPlayCounts.map((i) => new Date(i * 1000).toLocaleDateString('en-US'));
-
-    const artistPlayCount:
-        {[key: string]: number} = tracksByArtist[artistName].reduce((accum, date) => {
-          if (accum && Object.prototype.hasOwnProperty.call(accum, date)) {
-            accum[date] += 1;
-          } else {
-            accum[date] = 1;
-          }
-
-          return accum;
-        }, {});
-
-    tracksByArtist[artistName] = artistPlayCount;
-
-    const trackData = Object.entries(artistPlayCount).map((k) => ({
-      x: k[0],
-      y: k[1],
-    }));
-
-    const data = {
-      id: artistName,
-      color: 'hsl(333, 70%, 40%)',
-      data: trackData,
+    return {
+      id,
+      data: dd,
     };
-
-    ld.push(data);
   });
 
   const theme = {
@@ -99,16 +105,21 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
   };
 
   return (
-    <div className="column is-full has-text-centered">
+    <div className="column is-full has-text-centered ">
       <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
         <section className="mainContent">
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Play Count By Day</h1>
-          <h2 className="myTitle has-text-left-tablet leftPadding">
-            (Using last 200 plays)
-          </h2>
+          <TimeFrameSelect
+            timeFrameSelected={timeFrame}
+            onChange={(e: string) => setTimeFrame(e)}
+          />
+          <select onChange={(e) => setResourceType(e.target.value)}>
+            <option value="album" key="album" selected={resourceType === 'album'}>Albums</option>
+            <option value="artist" key="artist" selected={resourceType === 'artist'}>Artists</option>
+          </select>
+          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Plays Line Chart</h1>
         </section>
         <ResponsiveLine
-          data={ld}
+          data={chartNew}
           margin={{
             top: 50, right: 150, left: 50, bottom: 50,
           }}
@@ -118,6 +129,7 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
           enableSlices="x"
           sliceTooltip={(e) => {
             const rows = e.slice.points
+              .filter((v) => v.data.y > 0)
               .sort((x, y) => {
                 if (x.data.y > y.data.y) { return -1; }
                 return 1;
@@ -145,16 +157,16 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
           pointSize={10}
           xScale={{
             type: 'time',
-            format: '%m/%d/%Y',
+            format: format1,
             useUTC: false,
-            precision: 'day',
+            precision,
             stacked: true,
           }}
-          xFormat="time:%m/%d/%Y"
+          // xFormat="time:%m/%d/%Y"
           yScale={{
             type: 'linear',
             min: 0,
-            max: 30,
+            // max: 30,
           }}
           axisLeft={{
             legend: 'Listens',
@@ -162,8 +174,8 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
             legendPosition: 'middle',
           }}
           axisBottom={{
-            format: '%b %d',
-            tickValues: 'every 1 day',
+            format: bottomXFormat,
+            tickValues,
             tickRotation: -75,
           }}
           legends={[

@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useMemo } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { ResponsiveBump } from '@nivo/bump';
 import { Track } from '../../types/Track';
-import { chartColors } from '../../utils';
+import { chartColors, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
+import { LocalStateContext } from '../../contexts/LocalStateContext';
+import TimeFrameSelect from '../TimeFrameSelect';
 
-type Props = {
-  recentTracks: Track[]
-}
+// type Props = {
+//   recentTracks: Track[]
+// }
 type ChartData = {
   id: string,
   data: DataPoint[]
@@ -16,186 +20,140 @@ type DataPoint = {
   y: number,
 }
 
-const BumpChart: React.FC<Props> = ((props: Props) => {
-  const { recentTracks } = props;
+const BumpChart: React.FC<Record<string, void>> = (() => {
+  const { state } = useContext(LocalStateContext);
+  const [timeFrame, setTimeFrame] = useState('7day');
+  const [trackzz, setTrackzz] = useState(undefined);
+  const [resourceType, setResourceType] = useState<string>('artist');
+  const [loading, setLoading] = useState(false);
 
-  const oneMonthAgo = new Date(recentTracks[0].date.uts * 1000);
-  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.valueOf() / 1000);
+  const setTimeFrame2 = (e) => {
+    setTrackzz(undefined);
+    setTimeFrame(e);
+  };
 
-  const chartData: JSX.Element | ChartData[] = useMemo(() => {
-    const recentTracksFiltered = recentTracks
-      .filter((x) => x.date.uts >= oneMonthAgoTimestamp);
+  useEffect(() => {
+    setLoading(true);
+    const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+    const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
-    const tracks = recentTracksFiltered.sort((x, y) => (x.date.uts > y.date.uts ? 1 : -1));
-    const oldest = tracks[0] ? new Date(tracks[0].date.uts * 1000) : '';
-    const newest = tracks[tracks.length - 1]
-      ? new Date(tracks[tracks.length - 1].date.uts * 1000)
-      : new Date();
-
-    if (tracks.length <= 0) {
-      return <div>Loading...</div>;
-    }
-
-    newest.setHours(23);
-    newest.setMinutes(59);
-    newest.setSeconds(59);
-
-    // returns {"Pink Floyd": [PlayTimestamps]
-    const tracksByArtist:
-        { [key: string]: number[] } = tracks.reduce((accum, curr) => {
-          if (curr.date) {
-            if (Object.prototype.hasOwnProperty.call(accum, curr.artist['#text'])) {
-              accum[curr.artist['#text']].push(curr.date.uts);
-            } else {
-              const trackz: number[] = [];
-              trackz.push(curr.date.uts);
-              accum[curr.artist['#text']] = trackz;
-            }
-          }
-          return accum;
-        }, { '': [] });
-
-    const data: { id: string, data: { x: string, y: number }[] }[] = [];
-    const tracksByArtistNameString: { [key: string]: string[] } = {};
-
-    Object.entries(tracksByArtist)
-      .sort((x, y) => {
-        if (x[1].length > y[1].length) {
-          return -1;
-        }
-        return 1;
-      })
-      .slice(0, 15)
-      .forEach((a) => {
-        const artistName = a[0];
-        // make the dates actual days
-        tracksByArtistNameString[artistName] = tracksByArtist[artistName].map((i) => {
-          const d = new Date(i * 1000);
-          return `${d.getMonth() + 1}/${(`0${d.getDate()}`).slice(-2)}/${d.getFullYear()}`;
-        });
-
-        // returns {12/25: 5, 12/26: 1}
-        const dayPlayCount:
-              { [key: string]: number } = tracksByArtistNameString[artistName]
-                .reduce((accum, date) => {
-                  if (accum && Object.prototype.hasOwnProperty.call(accum, date)) {
-                    accum[date] += 1;
-                  } else {
-                    accum[date] = 1;
-                  }
-
-                  return accum;
-                }, {});
-
-        // adds any missing dates with 0 playcount
-        for (let d = new Date(oldest); d <= newest; d.setDate(d.getDate() + 1)) {
-          const key = `${d.getMonth() + 1}/${(`0${d.getDate()}`).slice(-2)}/${d.getFullYear()}`;
-          if (!Object.prototype.hasOwnProperty.call(dayPlayCount, key)) {
-            dayPlayCount[key] = 0;
-          }
-        }
-
-        // sorts the dayPlayCount
-        const dayPlayCountArray = Object.entries(dayPlayCount)
-          .sort((x, y) => (x[0] > y[0] ? 1 : -1));
-
-        // Replace each days total with the running total for this period
-        let runningTotal = 0;
-        const dayDataPoints = dayPlayCountArray.map((i) => {
-          runningTotal += i[1];
-          return {
-            x: i[0],
-            y: runningTotal,
-          };
-        });
-
-        dayDataPoints.sort((x, y) => (x.x > y.x ? 1 : -1));
-
-        data.push({
-          id: artistName,
-          data: dayDataPoints,
-        });
+    const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
+    fetch(`https://musicapi.shicks255.com/api/v1/scrobbles/${resource}?userName=${state.userName}&from=${start}&to=${end}&timeGroup=${timeGroup}&limit=12&empties=true`)
+      .then((res) => res.json())
+      .then((res) => {
+        setTrackzz(res);
+        setLoading(false);
       });
-
-    // At this point we have an array of
-    // {
-    //     "id": "Pink Floyd",
-    //     "data": [{x: 12/28, y: 4}, {x: 12/29, y: 8}]
-    // }
-    // Now we need instead of the running play count, the ranking each day
-
-    // Now create objects of rankings like...
-    // Index of artist +1 is ranking that day
-    // {
-    //     "12/28": ['Pink Floyd', 'AFI']
-    // }
-    const dayRanks = {};
-    for (let d = new Date(oldest); d <= newest; d.setDate(d.getDate() + 1)) {
-      const key = `${d.getMonth() + 1}/${(`0${d.getDate()}`).slice(-2)}/${d.getFullYear()}`;
-
-      const dateData = data.map((obj) => {
-        const keep = obj.data.filter((x) => x.x === key);
-        return {
-          id: obj.id,
-          data: keep,
-        };
-      });
-
-      dayRanks[key] = dateData.sort((x, y) => {
-        if (x.data.length === 0) {
-          return 1;
-        }
-        if (y.data.length === 0) {
-          return -1;
-        }
-        if (x.data[0].y > y.data[0].y) {
-          return -1;
-        }
-
-        return 1;
-      }).map((i) => i.id);
-    }
-
-    const newData: ChartData[] = data.map((d) => {
-      const newd = d.data.map((dat) => ({
-        x: dat.x.slice(0, -5),
-        y: dayRanks[dat.x].indexOf(d.id) + 1,
-      }));
-
-      return {
-        id: d.id,
-        data: newd,
-      };
-    });
-
-    return newData;
-  }, [recentTracks]);
+  }, [timeFrame, resourceType]);
 
   const theme = {
     textColor: '#eee',
   };
 
-  return (
+  if (!trackzz) {
+    return <></>;
+  }
 
+  // @ts-ignore
+  const aa = trackzz.data.map((result) => {
+    const items = result.data;
+    let runningTotal = 0;
+    const nestedPlays = items.map((item) => {
+      runningTotal += item.plays;
+      return {
+        plays: runningTotal,
+        timeGroup: item.timeGroup,
+      };
+    });
+
+    if (resourceType === 'artist') {
+      return {
+        artistName: result.artistName,
+        data: nestedPlays,
+      };
+    }
+    return {
+      albumName: result.albumName,
+      data: nestedPlays,
+    };
+  });
+
+  const darRanks = {};
+  const timeGroups = aa[0].data.map((x) => x.timeGroup);
+  timeGroups.forEach((tg) => {
+    const dayRank: string[] = [];
+    const itemsForDay = aa.map((item) => {
+      const dayPlay = item.data.filter((x) => x.timeGroup === tg);
+      if (resourceType === 'artist') {
+        return {
+          name: item.artistName,
+          plays: dayPlay[0].plays,
+        };
+      }
+      return {
+        name: item.albumName,
+        plays: dayPlay[0].plays,
+      };
+    })
+      .sort((item1, item2) => {
+        if (item1.plays > item2.plays) return 1;
+        return -1;
+      });
+
+    itemsForDay.sort((ifd1, ifd2) => {
+      if (ifd1.plays > ifd2.plays) return 1;
+      return -1;
+    })
+      .reverse()
+      .forEach((d) => {
+        dayRank.push(d.name);
+      });
+
+    darRanks[tg] = dayRank;
+  });
+
+  const artists = resourceType === 'artist'
+  // @ts-ignore
+    ? trackzz.data.map((x) => x.artistName)
+  // @ts-ignore
+    : trackzz.data.map((x) => x.albumName);
+  const finalNewChart = artists.map((artist) => {
+    const myRanks = Object.entries(darRanks).map(([k, v]) => ({
+      x: k,
+      // @ts-ignore
+      y: v.indexOf(artist) + 1,
+    }));
+
+    return {
+      id: artist,
+      data: myRanks,
+    };
+  });
+
+  return (
     <div className="column is-full has-text-centered">
       <div style={{ height: '350px', fontWeight: 'bold' }}>
         <section className="mainContent">
+          <TimeFrameSelect
+            timeFrameSelected={timeFrame}
+            onChange={(e: string) => setTimeFrame2(e)}
+          />
+          <select onChange={(e) => setResourceType(e.target.value)}>
+            <option value="album" key="album" selected={resourceType === 'album'}>Albums</option>
+            <option value="artist" key="artist" selected={resourceType === 'artist'}>Artists</option>
+          </select>
           <h1 className="title myTitle has-text-left-tablet noMarginBottom">Artist Rank By Day</h1>
-          <h2 className="myTitle has-text-left-tablet leftPadding">
-            (Using last 200 plays)
-          </h2>
         </section>
         <ResponsiveBump
         // @ts-ignore
-          data={chartData}
+          data={finalNewChart}
           // yOuterPadding={-50}
           pointSize={12}
           interpolation="smooth"
           activePointSize={16}
-          theme={theme}
-          colors={chartColors}
           inactivePointSize={8}
+          // theme={theme}
+          // colors={chartColors}
           margin={{
             top: 50, right: 150, left: 50, bottom: 75,
           }}

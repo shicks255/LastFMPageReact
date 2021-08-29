@@ -8,10 +8,10 @@ import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
-  const { timeFrame, page } = useApiState();
+  const { topItemsTimeFrame, topItemsPage } = useApiState();
   const {
     isLoading, error, data,
-  } = useTopArtists(timeFrame, page);
+  } = useTopArtists(topItemsTimeFrame, topItemsPage);
 
   if (isLoading) { return <Loader small={false} />; }
   if (error) {
@@ -43,7 +43,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
 
   return (
     <div>
-      <Pagination totalPages={artist['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
       <table className="table is-fullwidth mainContent">
         <thead>
           <tr>
@@ -58,7 +58,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
           {content}
         </tbody>
       </table>
-      <Pagination totalPages={artist['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
     </div>
   );
 });

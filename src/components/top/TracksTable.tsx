@@ -9,10 +9,10 @@ import { useApiState } from '../../contexts/ApiContext';
 import { useTopTracks } from '../../hooks/useLasftFmApi';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
-  const { timeFrame, page } = useApiState();
+  const { topItemsTimeFrame, topItemsPage } = useApiState();
   const {
     isLoading, error, data,
-  } = useTopTracks(timeFrame, page);
+  } = useTopTracks(topItemsTimeFrame, topItemsPage);
   const isMobile = useIsMobile();
 
   if (isLoading) { return <Loader small={false} />; }
@@ -105,11 +105,11 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
 
   return (
     <div>
-      <Pagination totalPages={topTracks['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
       <table className="table is-striped is-hoverable is-fullwidth mainContent">
         {renderTable()}
       </table>
-      <Pagination totalPages={topTracks['@attr'].totalPages} />
+      <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
     </div>
   );
 });
