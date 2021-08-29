@@ -1,21 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { Track } from '../../types/Track';
 import { chartColors, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
 import TimeFrameSelect from '../TimeFrameSelect';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
 
-type Props = {
-  recentTracks: Track[]
-}
-
-const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
+const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
   function trimName(name) {
     if (name.length > 20) { return `${name.slice(0, 20)}...`; }
     return name;
   }
 
-  const { state, actions } = useContext(LocalStateContext);
+  const { state } = useContext(LocalStateContext);
   const [resourceType, setResourceType] = useState<string>('album');
   const [trackz, setTrackz] = useState(undefined);
   const [timeFrame, setTimeFrame] = useState('7day');
@@ -58,8 +53,6 @@ const LineGraph: React.FC<Props> = ((props: Props): JSX.Element => {
         setLoading(false);
       });
   }, [timeFrame, resourceType]);
-
-  const { recentTracks } = props;
 
   if (!trackz) {
     return <></>;

@@ -1,21 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ResponsiveSunburst } from '@nivo/sunburst';
-import { Track } from '../../types/Track';
 import { chartColors, getDateRangeFromTimeFrame } from '../../utils';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
 import TimeFrameSelect from '../TimeFrameSelect';
 
-type Props = {
-  recentTracks: Track[]
-}
-
-const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
-  const { recentTracks } = props;
-
+const SunburstChart: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { state } = useContext(LocalStateContext);
   const [trackz, setTrackz] = useState(undefined);
   const [timeFrame, setTimeFrame] = useState('7day');
   const [loading, setLoading] = useState(false);
+
+  if (loading) return <></>;
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +32,7 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const xper = trackz.data.forEach((item) => {
+  trackz.data.forEach((item) => {
     const id = item.artistName;
     if (Object.prototype.hasOwnProperty.call(t, id)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -67,7 +62,7 @@ const SunburstChart: React.FC<Props> = ((props: Props): JSX.Element => {
     }
   });
 
-  const pp = Object.entries(t).map((k, v) => ({
+  const pp = Object.entries(t).map((k) => ({
     id: k[0],
     children: k[1],
   }));

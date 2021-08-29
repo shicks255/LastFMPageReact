@@ -70,7 +70,7 @@ function checkUserName(userName: string): Promise<boolean> {
     .then((ok) => ok);
 }
 
-const recentTracksQuery = (page, userName) => {
+const recentTracksQuery = (page: number, userName: string) => {
   const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
   throwErrorIfOffline('Problem loading recent tracks');
   return fetch(url)

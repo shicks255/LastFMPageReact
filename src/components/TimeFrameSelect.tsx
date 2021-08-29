@@ -6,7 +6,7 @@ interface Props {
     onChange: (e: string) => void
 }
 
-export default function TimeFrameSelect(props: Props) {
+const TimeFrameSelect: React.FC<Props> = ((props: Props) => {
   const { timeFrameSelected, onChange } = props;
 
   const timeFrameSelects = Object.keys(timeFrames)
@@ -22,4 +22,6 @@ export default function TimeFrameSelect(props: Props) {
     </select>
 
   );
-}
+});
+
+export default TimeFrameSelect;

@@ -1,10 +1,10 @@
-import { useLocation, useRouteMatch, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useApiDispatch } from '../contexts/ApiContext';
 
-function useNavPathToStrategySync() {
+const useNavPathToStrategySync: (() => void) = (() => {
   const { setSelected } = useApiDispatch();
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     switch (pathname) {
@@ -21,6 +21,6 @@ function useNavPathToStrategySync() {
         setSelected('recent');
     }
   }, [pathname]);
-}
+});
 
 export default useNavPathToStrategySync;

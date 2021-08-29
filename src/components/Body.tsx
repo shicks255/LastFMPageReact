@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import NowPlaying from './NowPlaying';
 import Profile from './Profile';
 import ButtonGroup from './ButtonGroup';

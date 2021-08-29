@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useApiDispatch } from '../contexts/ApiContext';
 import { stripPageQueryParam, stripTimeFrameQueryParam } from '../utils';
@@ -8,7 +8,7 @@ interface QueryParams {
   timeFrame: string
 }
 
-function useTopNavSync() {
+const useTopNavSync: (() => void) = (() => {
   const { pathname, search } = useLocation();
   const history = useHistory();
   const { setTopItemsPage, setTopItemsTimeFrame, setTopItemsStrategy } = useApiDispatch();
@@ -46,6 +46,6 @@ function useTopNavSync() {
       history.push(redirectPath);
     }
   }, [pathname, search]);
-}
+});
 
 export default useTopNavSync;

@@ -1,4 +1,4 @@
-import React, { RefObject, SyntheticEvent, useEffect } from 'react';
+import { RefObject, SyntheticEvent, useEffect } from 'react';
 
 function useClickOutside(
   ref: RefObject<HTMLDivElement | null>, callback: (e: SyntheticEvent) => void,

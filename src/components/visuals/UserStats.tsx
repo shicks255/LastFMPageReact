@@ -19,7 +19,7 @@ interface userStats {
   oldestAndNewestArtist: stat,
 }
 
-export default function UserStats() {
+const UserStats: React.FC<Record<string, void>> = (() => {
   const [stats, setStats] = useState<userStats | undefined>();
 
   async function fetchStats() {
@@ -32,7 +32,7 @@ export default function UserStats() {
       },
     )
       .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([ok, body]) => {
+      .then(([, body]) => {
         setStats(body);
       });
   }
@@ -40,8 +40,6 @@ export default function UserStats() {
   useEffect(() => {
     fetchStats();
   }, []);
-
-  console.log(stats);
 
   if (!stats) {
     return <></>;
@@ -68,4 +66,6 @@ export default function UserStats() {
       <br />
     </div>
   );
-}
+});
+
+export default UserStats;

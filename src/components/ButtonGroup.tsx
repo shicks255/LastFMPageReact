@@ -6,13 +6,13 @@ const ButtonGroup: React.FC<Record<string, void>> = (() => (
   <div className="menuButtons">
     <div className="column flex-buttons is-half is-offset-one-quarter has-text-centered">
       <Link to="/">
-        <Button id="recentButton" dataLabel="recent" title="Recent" />
+        <Button id="recentButton" dataLabel="recent" />
       </Link>
       <Link to="/top">
-        <Button id="topButton" dataLabel="top" title="Top" />
+        <Button id="topButton" dataLabel="top" />
       </Link>
       <Link to="/visuals/tree">
-        <Button id="vis" dataLabel="vis" title="Visualization" />
+        <Button id="vis" dataLabel="vis" />
       </Link>
     </div>
   </div>

@@ -1,24 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import { ResponsiveBump } from '@nivo/bump';
-import { Track } from '../../types/Track';
-import { chartColors, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
+import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
 import TimeFrameSelect from '../TimeFrameSelect';
 
-// type Props = {
-//   recentTracks: Track[]
+// type ChartData = {
+//   id: string,
+//   data: DataPoint[]
 // }
-type ChartData = {
-  id: string,
-  data: DataPoint[]
-}
-type DataPoint = {
-  x: string,
-  y: number,
-}
+// type DataPoint = {
+//   x: string,
+//   y: number,
+// }
 
 const BumpChart: React.FC<Record<string, void>> = (() => {
   const { state } = useContext(LocalStateContext);
@@ -31,6 +27,8 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
     setTrackzz(undefined);
     setTimeFrame(e);
   };
+
+  if (loading) return <></>;
 
   useEffect(() => {
     setLoading(true);
@@ -45,10 +43,6 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
         setLoading(false);
       });
   }, [timeFrame, resourceType]);
-
-  const theme = {
-    textColor: '#eee',
-  };
 
   if (!trackzz) {
     return <></>;

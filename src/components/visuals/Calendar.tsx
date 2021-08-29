@@ -8,8 +8,8 @@ interface calData {
   timeGroup: string,
 }
 
-export default function Calendar() {
-  const { state, actions } = useContext(LocalStateContext);
+const Calendar: React.FC<Record<string, void>> = (() => {
+  const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('2021');
   const [chartData, setChartData] = useState([]);
   const year = years[timeFrame];
@@ -23,7 +23,7 @@ export default function Calendar() {
       },
     )
       .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([ok, body]) => {
+      .then(([, body]) => {
         setChartData(body);
         return body;
       });
@@ -94,4 +94,6 @@ export default function Calendar() {
       </div>
     </div>
   );
-}
+});
+
+export default Calendar;

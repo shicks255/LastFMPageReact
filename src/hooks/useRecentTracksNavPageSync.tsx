@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useApiDispatch, useApiState } from '../contexts/ApiContext';
+import { useApiDispatch } from '../contexts/ApiContext';
 
-function useRecentTracksNavPageSync() {
+const useRecentTracksNavPageSync: (() => void) = (() => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   const { setRecentTracksPage } = useApiDispatch();
@@ -20,6 +20,6 @@ function useRecentTracksNavPageSync() {
       history.push(`${pathname}?page=1`);
     }
   }, [pathname, search]);
-}
+});
 
 export default useRecentTracksNavPageSync;

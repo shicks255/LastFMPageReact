@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import {
-  Switch, Route, Redirect, useRouteMatch,
+  Switch, Route, useRouteMatch,
 } from 'react-router-dom';
 import Loader from '../Loader';
 import useTopNavSync from '../../hooks/useTopNavSync';
@@ -10,7 +10,7 @@ const LazyAlbumTable = lazy(() => import('./AlbumTable'));
 const LazyArtistTable = lazy(() => import('./ArtistTable'));
 const LazyTracksTable = lazy(() => import('./TracksTable'));
 
-function TopContainer() {
+const TopContainer: React.FC<Record<string, void>> = (() => {
   const { url } = useRouteMatch();
 
   useTopNavSync();
@@ -33,6 +33,6 @@ function TopContainer() {
       </Suspense>
     </div>
   );
-}
+});
 
 export default TopContainer;

@@ -9,12 +9,8 @@ interface calData {
   timeGroup: string,
 }
 
-interface calData2 {
-  [key: string]: number,
-}
-
-export default function Radar() {
-  const { state, actions } = useContext(LocalStateContext);
+const Radar: React.FC<Record<string, void>> = (() => {
+  const { state } = useContext(LocalStateContext);
   const [chartData, setChartData] = useState([]);
   const [chartData2, setChartData2] = useState([]);
   const [chartData3, setChartData3] = useState([]);
@@ -32,7 +28,7 @@ export default function Radar() {
       },
     )
       .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([ok, body]) => {
+      .then(([, body]) => {
         setChartData(body);
         return body;
       });
@@ -48,7 +44,7 @@ export default function Radar() {
       },
     )
       .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([ok, body]) => {
+      .then(([, body]) => {
         setChartData2(body);
         return body;
       });
@@ -79,7 +75,7 @@ export default function Radar() {
       },
     )
       .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([ok, body]) => {
+      .then(([, body]) => {
         setChartData3(body);
         return body;
       });
@@ -229,4 +225,6 @@ export default function Radar() {
       </div>
     </>
   );
-}
+});
+
+export default Radar;

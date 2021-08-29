@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Simulate } from 'react-dom/test-utils';
 import {
-  Switch, Link, Route, useRouteMatch, useParams, BrowserRouter, useLocation,
+  Switch, Link, Route, useRouteMatch,
 } from 'react-router-dom';
 import LineGraph from './LineGraph';
 import Sunburst from './SunburstChart';
@@ -11,7 +10,6 @@ import Loader from '../Loader';
 import TreeMaps from './TreeMaps';
 import { useRecentTracksBig } from '../../hooks/useLasftFmApi';
 import CalendarChart from './Calendar';
-import Calendar from './Calendar';
 import Radar from './Radar';
 import UserStats from './UserStats';
 import DataLoadingModal from '../modals/DataLoadingModal';
@@ -25,11 +23,7 @@ interface ILoadStatus {
 
 const Visuals: React.FC<Record<string, void>> = (() => {
   const { url, path } = useRouteMatch();
-  const { slug } = useParams();
-  const location = useLocation();
-  console.log(location);
-  const { state, actions } = useContext(LocalStateContext);
-  const [selectedChart, setSelectedChart] = useState('heatMap');
+  const { state } = useContext(LocalStateContext);
   const [loadStatus, setLoadStatus] = useState<ILoadStatus>({
     currentPage: 0,
     totalPages: 100,

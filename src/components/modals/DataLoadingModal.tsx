@@ -6,7 +6,7 @@ interface Props {
     message: string,
 }
 
-export default function DataLoadingModal(props: Props) {
+const DataLoadingModal: React.FC<Props> = ((props: Props) => {
   const {
     done,
     total,
@@ -34,4 +34,6 @@ export default function DataLoadingModal(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default DataLoadingModal;
