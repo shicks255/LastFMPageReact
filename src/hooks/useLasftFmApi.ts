@@ -70,21 +70,22 @@ function checkUserName(userName: string): Promise<boolean> {
     .then((ok) => ok);
 }
 
-const recentTracksQuery = (page: number, userName: string) => {
-  const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
-  throwErrorIfOffline('Problem loading recent tracks');
-  return fetch(url)
-    .then((res) => Promise.all([res.ok, res.json()]))
-    .then(([ok, body]) => {
-      if (!ok) {
-        throw new Error(JSON.stringify({
-          technical: body.message,
-          business: 'Problem loading recent tracks',
-        }));
-      }
-      return body.recenttracks;
-    });
-};
+const recentTracksQuery:(number, string) =>
+    Promise<Response> = (page: number, userName: string) => {
+      const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
+      throwErrorIfOffline('Problem loading recent tracks');
+      return fetch(url)
+        .then((res) => Promise.all([res.ok, res.json()]))
+        .then(([ok, body]) => {
+          if (!ok) {
+            throw new Error(JSON.stringify({
+              technical: body.message,
+              business: 'Problem loading recent tracks',
+            }));
+          }
+          return body.recenttracks;
+        });
+    };
 
 function useRecentTracks(page: number): QueryObserverResult<RecentTracks, Error> {
   const { state } = useContext(LocalStateContext);
