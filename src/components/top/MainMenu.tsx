@@ -30,8 +30,6 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
 
   if (selected !== 'top') return <></>;
 
-  console.log(strategySelects);
-
   return (
     <>
       <div className="is-mobile">

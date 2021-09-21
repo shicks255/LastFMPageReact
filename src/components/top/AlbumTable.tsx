@@ -2,7 +2,6 @@ import React from 'react';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import HoverImage from '../HoverImage';
-import useIsMobile from '../../hooks/useIsMobile';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
 import { useTopAlbums } from '../../hooks/useLasftFmApi';
@@ -12,7 +11,6 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
   const {
     isLoading, error, data,
   } = useTopAlbums(topItemsTimeFrame, topItemsPage);
-  const isMobile = useIsMobile();
 
   if (isLoading) { return <Loader small={false} />; }
   if (error) { return <ErrorMessage error={error} />; }

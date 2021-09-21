@@ -67,8 +67,8 @@ const Visuals: React.FC<Record<string, void>> = (() => {
   }
   if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const recentTracks = data.track
-    .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
+  // const recentTracks = data.track
+  //   .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
 
   if (loadStatus.currentPage !== loadStatus.totalPages) {
     return (
