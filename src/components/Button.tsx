@@ -34,10 +34,11 @@ const Button: React.FC<Props> = ((props: Props) => {
       <i
         id={id}
         onClick={() => setSelected(dataLabel)}
-        className={classs}
+        // className={classs}
         aria-hidden="true"
       />
       <br />
+      Test
     </div>
   );
 });

@@ -27,37 +27,49 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   function renderTable() {
     if (isMobile) {
       return (
-        <tbody>
-          {tracks.map((val) => {
-            const time = convertDurationToTimestamp(val.duration);
+        <>
+          <thead>
+            <tr>
+              <th aria-label="Rank Header" />
+              <th aria-label="Image Header" />
+              <th>Name</th>
+              <th>Plays</th>
+              <th>Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tracks.map((val) => {
+              const time = convertDurationToTimestamp(val.duration);
 
-            const title = val.name;
-            const { rank } = val['@attr'];
-            return (
-              <tr key={title}>
-                <td className="alignRight">
-                  {rank}
-                  .
-                </td>
-                <td>
-                  <div className="imageCell">
-                    <a href={val.url} target="_blank" rel="noreferrer">
-                      <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <a href={val.url} target="_blank" rel="noreferrer">{val.name}</a>
-                  <br />
-                  {val.artist.name}
-                  <br />
-                  {time}
-                </td>
-                <td>{val.playcount}</td>
-              </tr>
-            );
-          })}
-        </tbody>
+              const title = val.name;
+              const { rank } = val['@attr'];
+              return (
+                <tr key={title}>
+                  <td className="alignRight">
+                    {rank}
+                    .
+                  </td>
+                  <td>
+                    <div className="imageCell">
+                      <a href={val.url} target="_blank" rel="noreferrer">
+                        <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <a href={val.url} target="_blank" rel="noreferrer">{val.name}</a>
+                    <br />
+                    {val.artist.name}
+                  </td>
+                  <td>{val.playcount}</td>
+                  <td>
+                    {time}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </>
       );
     }
     return (
@@ -66,10 +78,10 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
           <tr>
             <th aria-label="Rank Header" />
             <th aria-label="Image Header" />
-            <th>Name</th>
-            <th>Artist</th>
-            <th>Plays</th>
-            <th>Length</th>
+            <th className="text-left">Name</th>
+            <th className="text-left">Artist</th>
+            <th className="text-right">Plays</th>
+            <th className="text-right">Length</th>
           </tr>
         </thead>
         <tbody>
@@ -79,10 +91,9 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
             const title = val.name;
             const { rank } = val['@attr'];
             return (
-              <tr key={title}>
-                <td className="alignRight">
+              <tr key={title} className="hover:bg-gray-400">
+                <td className="font-semibold text-right">
                   {rank}
-                  .
                 </td>
                 <td>
                   <div className="imageCell">
@@ -91,10 +102,10 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
                     </a>
                   </div>
                 </td>
-                <td><a href={val.url} target="_blank" rel="noreferrer">{val.name}</a></td>
-                <td>{val.artist.name}</td>
-                <td>{val.playcount}</td>
-                <td>{time}</td>
+                <td><a href={val.url} target="_blank" rel="noreferrer"><i>{val.name}</i></a></td>
+                <td className="font-semibold">{val.artist.name}</td>
+                <td className="text-right">{val.playcount}</td>
+                <td className="text-right">{time}</td>
               </tr>
             );
           })}
@@ -106,7 +117,7 @@ const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
-      <table className="table is-striped is-hoverable is-fullwidth mainContent">
+      <table className="table-auto">
         {renderTable()}
       </table>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />

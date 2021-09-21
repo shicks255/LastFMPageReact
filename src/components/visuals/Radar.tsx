@@ -36,7 +36,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
 
   async function myFetch2() {
     fetch(
-      `http://localhost:8686/api/v1/scrobbles/grouped?userName=${state.userName}&from=2005-01-01&to=2021-12-31&timeGroup=MONTH`,
+      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=2005-01-01&to=2021-12-31&timeGroup=MONTH`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
     const toArg = `${to.getFullYear()}-${monthArg}-${to.getDate()}`;
 
     fetch(
-      `http://localhost:8686/api/v1/scrobbles/grouped?userName=${state.userName}&from=${fromArg}&to=${toArg}&timeGroup=DAY`,
+      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=${fromArg}&to=${toArg}&timeGroup=DAY`,
       {
         headers: {
           'Content-Type': 'application/json',

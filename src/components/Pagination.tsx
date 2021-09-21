@@ -33,33 +33,28 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
   const pre = page > 1 ? page - 1 : '';
   const post = page < last ? page + 1 : '';
 
-  const firstLink = <Link to={replacePageParam(1)}><button type="button" className="button pagination-link">1</button></Link>
-  const preLink =  <Link to={replacePageParam(page -1)}><button type="button" className="button pagination-link">{pre}</button></Link>
-  const postLink = <Link to={replacePageParam(page + 1)}><button type="button" className="button pagination-link">{post}</button></Link>
-  const lastLink = <Link to={replacePageParam(last)}><button type="button" className="button pagination-link">{String(last)}</button></Link>
+  const firstLink = <Link to={replacePageParam(1)}><button type="button" className="p-2 bg-blue-200">1</button></Link>
+  const preLink =  <Link to={replacePageParam(page -1)}><button type="button" className="p-2 bg-blue-200">{pre}</button></Link>
+  const postLink = <Link to={replacePageParam(page + 1)}><button type="button" className="p-2 bg-blue-200">{post}</button></Link>
+  const lastLink = <Link to={replacePageParam(last)}><button type="button" className="p-2 bg-blue-200">{String(last)}</button></Link>
 
   return (
     <div>
-      <div className="" role="navigation" aria-label="pagination">
-        <div className="column is-half is-offset-one-quarter has-text-centered">
+      <span className="" role="navigation" aria-label="pagination">
+        <span className="">
           {
                         firstPage
-                          ? <i className="fas fa-arrow-left paginate-icon disabled" />
+                          ? <i className="fas fa-arrow-left text-gray-500" />
                           : <Link to={replacePageParam(page-1)}>
-                              <i className="fas fa-arrow-left paginate-icon" />
+                              <i className="fas fa-arrow-left " />
                             </Link>
                     }
-          {
-                        lastPage
-                          ? <i className="fas fa-arrow-right paginate-icon disabled" />
-                          : <Link to={replacePageParam(page+1)}>
-                              <i className="fas fa-arrow-right paginate-icon" />
-                            </Link>
-                    }
-        </div>
-      </div>
-      <div className="">
-        <div className="column is-half is-offset-one-quarter has-text-centered is-centered">
+
+                    <span className="ml-2 mr-2"/>
+        </span>
+      </span>
+      <span className="">
+        <span className="">
           {
                         firstPage
                           ? ''
@@ -75,7 +70,7 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
                           ? ''
                           : preLink
                     }
-          <button type="button" className="pagination-link is-current button">{page}</button>
+          <button type="button" className="p-3 bg-blue-400 border-solid">{page}</button>
           {
                         lastPage
                           ? ''
@@ -84,15 +79,25 @@ const Pagination: React.FC<Props> = ((props: Props): JSX.Element => {
           {
                         lastPage || penultimatePage || penultimatePage2
                           ? ''
-                          : <span className="pagination-ellipsis">&hellip;</span>
+                          : <span className="">&hellip;</span>
                     }
           {
                         penultimatePage || lastPage
                           ? ''
                           : lastLink
                     }
-        </div>
-      </div>
+        </span>
+        <span>
+                              <span className="ml-2 mr-2"/>
+                    {
+                      lastPage
+                          ? <i className="fas fa-arrow-right text-gray-500" />
+                          : <Link to={replacePageParam(page+1)}>
+                            <i className="fas fa-arrow-right" />
+                          </Link>
+                    }
+        </span>
+      </span>
     </div>
   );
 });

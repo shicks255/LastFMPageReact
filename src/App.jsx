@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.css';
-import 'bulma/css/bulma.css';
+// import './App.css';
+// import 'bulma/css/bulma.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';

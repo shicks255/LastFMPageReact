@@ -26,7 +26,7 @@ const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
       alt=""
       onMouseEnter={handleHoverIn}
       onMouseLeave={handleHoverOut}
-      className="image"
+      className="image w-16"
       height="64"
       src={src}
     />

@@ -1,15 +1,15 @@
 import React from 'react';
 
 const Header: React.FC<Record<string, null>> = (() => (
-  <nav className="navbar" role="navigation" aria-label="main navigation">
-    <div className="column is-3 bannerImage">
+  <nav className="" role="navigation" aria-label="main navigation">
+    <div className="p-2">
       <a href="/">
-        <img alt="Steve FM Logo" src={`${process.env.PUBLIC_URL}/LastFmReactTitle.png`} />
+        <img className=" max-h-20" alt="Steve FM Logo" src={`${process.env.PUBLIC_URL}/LastFmReactTitle.png`} />
       </a>
     </div>
 
-    <div className="column is-9 has-text-centered">
-      <h1 className="title">
+    <div className="">
+      <h1 className="">
         Last FM Listening Habits
       </h1>
     </div>

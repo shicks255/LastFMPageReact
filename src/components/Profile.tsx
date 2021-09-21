@@ -22,36 +22,37 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   };
 
   return (
-    <div className="column is-half is is-offset-one-quarter has-text-centered">
-      <div className="box relative has-text-centered is-half">
-        <div className="columns is-centered">
-          <div className="column is-two-fifths is-narrow has-text-right">
-            <figure className="image is-128x128">
-              <img height={300} width={300} alt="" className="image is-rounded" src={user.avatar} />
-            </figure>
-          </div>
-          <div className="card-stacked column is-three-fifths is-narrow">
-            <h3 className="title" style={{ marginBottom: '0' }}>
-              {state.userName}
-            </h3>
-            <br />
-            <b>Registered:</b>
+    <div className="">
+      <div className="columns is-centered">
+        <div className="column is-two-fifths is-narrow has-text-right">
+          <figure className="h-24 w-24">
+            <img height={300} width={300} alt="" className="rounded-full" src={user.avatar} />
+          </figure>
+        </div>
+        <div className="card-stacked column is-three-fifths is-narrow">
+          <h3 className="title" style={{ marginBottom: '0' }}>
+            {state.userName}
+          </h3>
+          <br />
+          <span className="font-normal">
+            {' '}
+            {user.playCount}
+            <span className="font-thin"> scrobbles </span>
+          </span>
+          <br />
+          <span className="font-thin">Registered on </span>
+          <span className="font-normal">
             {' '}
             {user.registered.toLocaleString(undefined, {
               month: 'long',
               day: 'numeric',
               year: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
             })}
-            <br />
-            <b>Play Count:</b>
-            {' '}
-            {user.playCount}
-            {/* eslint-disable-next-line max-len */}
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-            <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
-          </div>
+          </span>
+          <br />
+          {/* eslint-disable-next-line max-len */}
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+          <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
         </div>
       </div>
       {state.showModal ? <ProfileModal /> : ''}

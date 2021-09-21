@@ -81,7 +81,7 @@ const Visuals: React.FC<Record<string, void>> = (() => {
   }
 
   return (
-    <div style={{ backgroundColor: 'grey' }}>
+    <div>
       <section className="mainContent">
         <h1 className="title myTitle has-text-centered">Graphs</h1>
       </section>
@@ -93,7 +93,7 @@ const Visuals: React.FC<Record<string, void>> = (() => {
         </Link>
         <Link to="/visuals/line">
           <li className="fas fa-3x fa-chart-line">
-            <span>Link Graphs</span>
+            <span>Line Graphs</span>
           </li>
         </Link>
         <Link to="/visuals/sunburst">
@@ -127,10 +127,10 @@ const Visuals: React.FC<Record<string, void>> = (() => {
               <TreeMaps />
             </Route>
             <Route path="/visuals/line">
-              <LineGraph recentTracks={recentTracks} />
+              <LineGraph />
             </Route>
             <Route path="/visuals/sunburst">
-              <Sunburst recentTracks={recentTracks} />
+              <Sunburst />
             </Route>
             <Route path="/visuals/bump">
               <BumpChart />

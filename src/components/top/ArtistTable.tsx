@@ -13,7 +13,9 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
     isLoading, error, data,
   } = useTopArtists(topItemsTimeFrame, topItemsPage);
 
-  if (isLoading) { return <Loader small={false} />; }
+  if (isLoading) {
+    return <Loader small={false} />;
+  }
   if (error) {
     return <ErrorMessage error={error} />;
   }
@@ -22,45 +24,55 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
   const artist = data;
   const artists = artist.artist;
 
-  const content = artists.map((val) => {
-    const artistName = val.name;
-    const { rank } = val['@attr'];
+  function renderTable() {
     return (
-      <tr key={artistName}>
-        <td className="alignRight">{rank}</td>
-        <td>
-          <div className="imageCell">
-            <a target="_blank" href={val.url} rel="noreferrer">
-              <ArtistImage mbid={val.mbid} artistName={val.name} />
-            </a>
-          </div>
-        </td>
-        <td><a target="_blank" href={val.url} rel="noreferrer"><b>{val.name}</b></a></td>
-        <td>{val.playcount}</td>
-      </tr>
-    );
-  });
-
-  return (
-    <div>
-      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
-      <table className="table is-fullwidth mainContent">
+      <>
         <thead>
           <tr>
             <th aria-label="Rank Header" />
             <th aria-label="Image Header" />
-            <th>Name</th>
-            <th>Plays</th>
+            <th className="text-left">Artist</th>
+            <th className="text-right">Plays</th>
           </tr>
         </thead>
-
         <tbody>
-          {content}
+          {artists.map((val) => {
+            const { rank } = val['@attr'];
+
+            return (
+              <tr className="hover:bg-gray-400" key={val.name}>
+                <td className="font-semibold text-right">
+                  <span>
+                    {rank}
+                  </span>
+                </td>
+                <td className="p-2">
+                  <a target="_blank" href={val.url} rel="noreferrer">
+                    <ArtistImage mbid={val.mbid} artistName={val.name} />
+                  </a>
+                </td>
+                <td className="font-semibold">
+                  <a target="_blank" href={val.url} rel="noreferrer">{val.name}</a>
+                </td>
+                <td className="text-right">
+                  {val.playcount}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
+      <table className="table-auto">
+        {renderTable()}
       </table>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
     </div>
   );
 });
-
 export default ArtistTable;

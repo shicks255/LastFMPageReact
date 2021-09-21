@@ -21,17 +21,17 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
   const [timeFrame, setTimeFrame] = useState('7day');
   const [trackzz, setTrackzz] = useState(undefined);
   const [resourceType, setResourceType] = useState<string>('artist');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const setTimeFrame2 = (e) => {
     setTrackzz(undefined);
     setTimeFrame(e);
   };
 
-  if (loading) return <></>;
+  // if (loading) return <></>;
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const [start, end] = getDateRangeFromTimeFrame(timeFrame);
     const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
@@ -40,7 +40,7 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
       .then((res) => res.json())
       .then((res) => {
         setTrackzz(res);
-        setLoading(false);
+        // setLoading(false);
       });
   }, [timeFrame, resourceType]);
 

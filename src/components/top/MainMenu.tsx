@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { strategies, timeFrames } from '../utils';
-import { useApiState } from '../contexts/ApiContext';
+import { strategies, timeFrames } from '../../utils';
+import { useApiState } from '../../contexts/ApiContext';
 
 const MainMenu: React.FC<Record<string, void>> = (() => {
   const history = useHistory();
@@ -30,18 +30,15 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
 
   if (selected !== 'top') return <></>;
 
+  console.log(strategySelects);
+
   return (
     <>
-      <section className="mainContent marginBottom">
-        <h1 className="title myTitle has-text-centered">Charts</h1>
-      </section>
       <div className="is-mobile">
         <div className="box column is-half is-offset-one-quarter has-text-centered">
           <div className="columns has-text-black">
             <div className="column">
               <span>
-                <b>View:</b>
-                <br />
                 <div className="select is-danger">
                   <select
                     value={transformedStrategy}
@@ -67,8 +64,6 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
               </span>
             </div>
             <div className="column">
-              <b>Time Frame:</b>
-              <br />
               <div className="select is-danger">
                 <select
                   value={topItemsTimeFrame}

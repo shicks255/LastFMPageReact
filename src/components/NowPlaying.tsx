@@ -19,33 +19,20 @@ const NowPlaying: React.FC<Record<string, void>> = (() => {
   return (
     <div className="nowPlaying">
       <br />
-      <div className="level">
-        <div className="level-item">
-          <table>
-            <tbody>
-              <tr>
-                <td rowSpan={2}>
-                  <img alt="" className="image" src={nowPlaying.image[1]['#text']} />
-                </td>
-                <td>&nbsp;</td>
-                <td style={{ textAlign: 'center' }}>
-                  <span className="nowPlaying">
-                    {nowPlaying.artist['#text']}
-                    {' '}
-                    -
-                    {nowPlaying.name}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td>&nbsp;</td>
-                <td>
-                  <img alt="" className="gif" src={`${process.env.PUBLIC_URL}/YdBO.gif`} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="inline-flex">
+        <div className="">
+          <img alt="" className="image" src={nowPlaying.image[1]['#text']} />
         </div>
+        <div>
+          <span className="nowPlaying">
+            <span>{nowPlaying.name}</span>
+            <br />
+            <span className="font-semibold">{nowPlaying.artist['#text']}</span>
+          </span>
+        </div>
+      </div>
+      <div className=" w-auto">
+        <img alt="" className="h-10 w-screen" src={`${process.env.PUBLIC_URL}/YdBO.gif`} />
       </div>
     </div>
   );

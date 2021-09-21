@@ -8,7 +8,7 @@ const TreeMaps: () => JSX.Element = () => {
   const { setTimeFrame } = useApiDispatch();
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => (
-      <option value={value} key={value} selected={timeFrame === value}>
+      <option value={value} key={value}>
         {timeFrames[value]}
       </option>
     ));
@@ -28,7 +28,7 @@ const TreeMaps: () => JSX.Element = () => {
             </div>
             <div className="column has-text-left-tablet">
               <div className="select is-danger">
-                <select onChange={(event) => setTimeFrame(event.target.value)}>
+                <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
                   {timeFrameSelects}
                 </select>
               </div>

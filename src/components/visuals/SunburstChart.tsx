@@ -8,19 +8,19 @@ const SunburstChart: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { state } = useContext(LocalStateContext);
   const [trackz, setTrackz] = useState(undefined);
   const [timeFrame, setTimeFrame] = useState('7day');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
-  if (loading) return <></>;
+  // if (loading) return <></>;
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const [start, end] = getDateRangeFromTimeFrame(timeFrame);
 
-    fetch(`http://localhost:8686/api/v1/scrobbles/albumsGrouped?userName=${state.userName}&from=${start}&to=${end}&limit=50`)
+    fetch(`https://musicapi.shicks255.com/api/v1/scrobbles/albumsGrouped?userName=${state.userName}&from=${start}&to=${end}&timeGroup=DAY&limit=50`)
       .then((res) => res.json())
       .then((res) => {
         setTrackz(res);
-        setLoading(false);
+        // setLoading(false);
       });
   }, [timeFrame]);
 

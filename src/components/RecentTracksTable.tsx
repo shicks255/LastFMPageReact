@@ -3,7 +3,6 @@ import Pagination from './Pagination';
 import Loader from './Loader';
 import HoverImage from './HoverImage';
 import ErrorMessage from './ErrorMessage';
-import useIsMobile from '../hooks/useIsMobile';
 import { useApiState } from '../contexts/ApiContext';
 import { useRecentTracks } from '../hooks/useLasftFmApi';
 import useRecentTracksNavPageSync from '../hooks/useRecentTracksNavPageSync';
@@ -14,7 +13,6 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   const {
     isLoading, error, data,
   } = useRecentTracks(recentTracksPage);
-  const isMobile = useIsMobile();
 
   if (isLoading) return <Loader small={false} />;
   if (error) return <ErrorMessage error={error} />;
@@ -22,71 +20,26 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
 
   const recentTracks = data;
 
-  function renderTable() {
-    if (isMobile) {
-      return (
-        <tbody>
-          {recentTracks.track.filter((x) => x.date).map((track, i) => {
-            const url = track.image[2]['#text'].length > 0 ? track.image[2]['#text'] : 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-            const date = track.date.uts;
-            const unixDate = new Date(date * 1000);
-            return (
-            // eslint-disable-next-line react/no-array-index-key
-              <tr key={i}>
-                <td>
-                  <a href={track.url} target="_blank" rel="noreferrer">
-                    <div className="imageCell">
-                      <img alt="" className="image" height="64" width="64" src={url} />
-                    </div>
-                  </a>
-                </td>
-                <td>
-                  {unixDate.toLocaleString()}
-                  <br />
-                  <i>{track.name}</i>
-                  <br />
-                  <b>{track.artist['#text']}</b>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      );
-    }
+  function doDateThing(date: Date): JSX.Element {
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hour = date.toLocaleString('en-us', {
+      hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true,
+    });
+
     return (
-      <>
-        <thead className="tableHead">
-          <tr>
-            <th aria-label="Rank Header" />
-            <th>Date</th>
-            <th>Name</th>
-            <th>Artist</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recentTracks.track.filter((x) => x.date).map((track, i) => {
-            const smallImgSrc = track?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-            const bigImgSrc = track?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-            const date = track.date.uts;
-            const unixDate = new Date(date * 1000);
-            return (
-            // eslint-disable-next-line react/no-array-index-key
-              <tr key={i}>
-                <td>
-                  <div className="imageCell">
-                    <a href={track.url} target="_blank" rel="noreferrer">
-                      <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={track.album['#text']} />
-                    </a>
-                  </div>
-                </td>
-                <td>{unixDate.toLocaleString()}</td>
-                <td><i>{track.name}</i></td>
-                <td><b>{track.artist['#text']}</b></td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </>
+      <span>
+        <span className="font-semibold">
+          {month}
+          /
+          {day}
+          /
+          {year}
+        </span>
+        <br />
+        {hour}
+      </span>
     );
   }
 
@@ -97,9 +50,30 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
       </section>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
       <div>
-        <table className="table is-striped is-hoverable is-fullwidth">
-          {renderTable()}
-        </table>
+        {recentTracks.track.filter((x) => x.date).map((track) => {
+          const smallImgSrc = track?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+          const bigImgSrc = track?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+          const date = track.date.uts;
+          const unixDate = new Date(date * 1000);
+          return (
+            <div className="flex hover:bg-gray-400" key={track.date.uts}>
+              <div className="p-2">
+                <a href={track.url} target="_blank" rel="noreferrer">
+                  <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={track.album['#text']} />
+                </a>
+              </div>
+              <div className="p-2 w-8 flex-1 m-auto">
+                {track.name}
+              </div>
+              <div className="p-2 w-8 flex-1 m-auto">
+                <span className="font-semibold">{track.artist['#text']}</span>
+              </div>
+              <div className="p-2 w-8 flex-1 m-auto">
+                {doDateThing(unixDate)}
+              </div>
+            </div>
+          );
+        })}
       </div>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
     </div>

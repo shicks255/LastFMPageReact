@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import Loader from '../Loader';
 import useTopNavSync from '../../hooks/useTopNavSync';
-import MainMenu from '../MainMenu';
+import MainMenu from './MainMenu';
 
 const LazyAlbumTable = lazy(() => import('./AlbumTable'));
 const LazyArtistTable = lazy(() => import('./ArtistTable'));

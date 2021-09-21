@@ -10,9 +10,9 @@ export const timeFrames = {
 };
 
 export const strategies = {
-  getTopArtists: 'Top Artists',
-  getTopAlbums: 'Top Albums',
-  getTopTracks: 'Top Songs',
+  getTopArtists: 'Artists',
+  getTopAlbums: 'Albums',
+  getTopTracks: 'Songs',
 };
 
 export const chartColors = [

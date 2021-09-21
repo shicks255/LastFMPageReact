@@ -21,79 +21,54 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
   const topAlbums = data;
 
   function renderTable() {
-    if (isMobile) {
-      return (
-        topAlbums.album.map((val) => {
-          const url = val.image[1]['#text'].length > 0 ? val.image[1]['#text'] : 'https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png';
-          const { rank } = val['@attr'];
-          return (
-            <tr key={val.name}>
-              <td className="alignRight">
-                {rank}
-                .
-              </td>
-              <td>
-                <div className="imageCell">
-                  <a href={val.url} target="_blank" rel="noreferrer">
-                    <img alt="" height={64} width={64} src={url} />
-                  </a>
-                </div>
-              </td>
-              <td>
-                <a href={val.url} target="_blank" rel="noreferrer"><b>{val.artist.name}</b></a>
-                <br />
-                <i>{val.name}</i>
-              </td>
-              <td className="alignRight">{val.playcount}</td>
-            </tr>
-          );
-        })
-      );
-    }
     return (
       <>
         <thead>
           <tr>
             <th aria-label="Rank Header" />
             <th aria-label="Image Header" />
-            <th aria-label="Info Header" />
-            <th>Album</th>
-            <th>Plays</th>
+            <th className="text-left">Album</th>
+            <th className="text-left">Artist</th>
+            <th className="text-right">Plays</th>
           </tr>
         </thead>
-
         <tbody>
-          {topAlbums.album.map((val) => {
+          {topAlbums.album.map((val, i) => {
             const smallImgSrc = val?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             const bigImgSrc = val?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             const { rank } = val['@attr'];
+
             return (
-              <tr key={val.name}>
-                <td className="alignRight">
-                  {rank}
+              <tr className="hover:bg-gray-400" key={val.url}>
+                <td className="font-semibold text-right">
+                  <span>{rank}</span>
                 </td>
-                <td>
-                  <div className="imageCell">
-                    <a href={val.url} target="_blank" rel="noreferrer">
-                      <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
-                    </a>
-                  </div>
+                <td className="p-2">
+                  <a target="_blank" href={val.url} rel="noreferrer">
+                    <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
+                  </a>
                 </td>
-                <td><a href={val.url} target="_blank" rel="noreferrer"><b>{val.artist.name}</b></a></td>
-                <td><i>{val.name}</i></td>
-                <td className="alignRight">{val.playcount}</td>
+                <td className="">
+                  <i>{val.name}</i>
+                </td>
+                <td className="font-semibold">
+                  <a href={val.url} target="_blank" rel="noreferrer">{val.artist.name}</a>
+                </td>
+                <td className="text-right">
+                  {val.playcount}
+                </td>
               </tr>
             );
           })}
         </tbody>
-      </ >
+      </>
     );
   }
 
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
-      <table className="table is-striped is-hoverable is-fullwidth mainContent">
+      <table className="auto-table">
         {renderTable()}
       </table>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
