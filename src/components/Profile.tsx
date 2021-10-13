@@ -23,13 +23,13 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
 
   return (
     <div className="">
-      <div className="columns is-centered">
-        <div className="column is-two-fifths is-narrow has-text-right">
+      <div className="">
+        <div className="">
           <figure className="h-24 w-24">
             <img height={300} width={300} alt="" className="rounded-full" src={user.avatar} />
           </figure>
         </div>
-        <div className="card-stacked column is-three-fifths is-narrow">
+        <div className="">
           <h3 className="title" style={{ marginBottom: '0' }}>
             {state.userName}
           </h3>

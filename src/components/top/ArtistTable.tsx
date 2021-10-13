@@ -6,6 +6,7 @@ import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
+import { trimString } from '../../utils';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();
@@ -41,7 +42,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
 
             return (
               <tr className="hover:bg-gray-400" key={val.name}>
-                <td className="font-semibold text-right">
+                <td className="font-semibold text-right pr-4">
                   <span>
                     {rank}
                   </span>
@@ -52,7 +53,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
                   </a>
                 </td>
                 <td className="font-semibold">
-                  <a target="_blank" href={val.url} rel="noreferrer">{val.name}</a>
+                  <a target="_blank" href={val.url} rel="noreferrer">{trimString(val.name, 45)}</a>
                 </td>
                 <td className="text-right">
                   {val.playcount}

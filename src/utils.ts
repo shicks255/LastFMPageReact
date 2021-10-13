@@ -207,3 +207,11 @@ export function convertDurationToTimestamp(duration: number): string {
   const secString = sec < 10 ? `0${sec.toString()}` : sec.toString();
   return `${min}:${secString.substr(0, 2)}`;
 }
+
+export function trimString(word: string, max = 25): string {
+  if (word.length < max) {
+    return word;
+  }
+
+  return `${word.slice(0, max)}...`;
+}

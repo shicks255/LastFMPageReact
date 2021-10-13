@@ -82,9 +82,6 @@ const Visuals: React.FC<Record<string, void>> = (() => {
 
   return (
     <div>
-      <section className="mainContent">
-        <h1 className="title myTitle has-text-centered">Graphs</h1>
-      </section>
       <div>
         <Link to={`${url}/tree`}>
           <li className="fas fa-3x fa-calculator">

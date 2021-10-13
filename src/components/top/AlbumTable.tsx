@@ -5,6 +5,7 @@ import HoverImage from '../HoverImage';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
 import { useTopAlbums } from '../../hooks/useLasftFmApi';
+import { trimString } from '../../utils';
 
 const AlbumTable: React.FC<Record<string, void>> = (() => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();
@@ -38,7 +39,7 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
 
             return (
               <tr className="hover:bg-gray-400" key={val.url}>
-                <td className="font-semibold text-right">
+                <td className="font-semibold text-right pr-4">
                   <span>{rank}</span>
                 </td>
                 <td className="p-2">
@@ -46,11 +47,11 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
                     <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
                   </a>
                 </td>
-                <td className="">
-                  <i>{val.name}</i>
+                <td className="p-2">
+                  <i>{trimString(val.name, 35)}</i>
                 </td>
                 <td className="font-semibold">
-                  <a href={val.url} target="_blank" rel="noreferrer">{val.artist.name}</a>
+                  <a href={val.url} target="_blank" rel="noreferrer">{trimString(val.artist.name, 35)}</a>
                 </td>
                 <td className="text-right">
                   {val.playcount}

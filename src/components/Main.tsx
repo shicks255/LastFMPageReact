@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import RecentTracksTable from './RecentTracksTable';
+import RecentTracksTable from './recent/RecentTracksTable';
 import Loader from './Loader';
 import TopContainer from './top/TopContainer';
 

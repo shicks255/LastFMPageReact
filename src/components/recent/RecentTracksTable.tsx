@@ -1,11 +1,12 @@
 import React from 'react';
-import Pagination from './Pagination';
-import Loader from './Loader';
-import HoverImage from './HoverImage';
-import ErrorMessage from './ErrorMessage';
-import { useApiState } from '../contexts/ApiContext';
-import { useRecentTracks } from '../hooks/useLasftFmApi';
-import useRecentTracksNavPageSync from '../hooks/useRecentTracksNavPageSync';
+import Pagination from '../Pagination';
+import Loader from '../Loader';
+import HoverImage from '../HoverImage';
+import ErrorMessage from '../ErrorMessage';
+import { useApiState } from '../../contexts/ApiContext';
+import { useRecentTracks } from '../../hooks/useLasftFmApi';
+import useRecentTracksNavPageSync from '../../hooks/useRecentTracksNavPageSync';
+import { trimString } from '../../utils';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   useRecentTracksNavPageSync();
@@ -45,9 +46,6 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
 
   return (
     <div className="mainContent">
-      <section className="mainContent">
-        <h1 className="title myTitle has-text-centered">Tracks</h1>
-      </section>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
       <div>
         {recentTracks.track.filter((x) => x.date).map((track) => {
@@ -63,10 +61,10 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
                 </a>
               </div>
               <div className="p-2 w-8 flex-1 m-auto">
-                {track.name}
+                <i>{trimString(track.name, 35)}</i>
               </div>
               <div className="p-2 w-8 flex-1 m-auto">
-                <span className="font-semibold">{track.artist['#text']}</span>
+                <span className="font-semibold">{trimString(track.artist['#text'], 35)}</span>
               </div>
               <div className="p-2 w-8 flex-1 m-auto">
                 {doDateThing(unixDate)}
