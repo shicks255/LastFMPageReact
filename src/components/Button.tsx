@@ -1,12 +1,13 @@
 import React from 'react';
-import { useApiDispatch, useApiState } from '../contexts/ApiContext';
 
-type Props = {
-  id: string,
-  dataLabel: string,
+import { useApiDispatch, useApiState } from '@/contexts/ApiContext';
+
+interface IProps {
+  id: string;
+  dataLabel: string;
 }
 
-const Button: React.FC<Props> = ((props: Props) => {
+const Button: React.FC<IProps> = (props: IProps) => {
   const { selected } = useApiState();
   const { setSelected } = useApiDispatch();
 
@@ -27,7 +28,9 @@ const Button: React.FC<Props> = ((props: Props) => {
       classs += '';
   }
 
-  if (selected === dataLabel) { classs += ' selected'; }
+  if (selected === dataLabel) {
+    classs += ' selected';
+  }
 
   return (
     <div style={{ display: 'inline-block' }}>
@@ -41,6 +44,6 @@ const Button: React.FC<Props> = ((props: Props) => {
       Test
     </div>
   );
-});
+};
 
 export default Button;

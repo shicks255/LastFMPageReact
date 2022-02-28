@@ -1,8 +1,9 @@
 import React from 'react';
-import ErrorMessage from './ErrorMessage';
-import useRecentTracks from '../hooks/api/lastFm/useRecentTracks';
 
-const NowPlaying: React.FC<Record<string, void>> = (() => {
+import useRecentTracks from '../hooks/api/lastFm/useRecentTracks';
+import ErrorMessage from './ErrorMessage';
+
+const NowPlaying: React.FC<Record<string, void>> = () => {
   const { error, data } = useRecentTracks(1);
 
   if (error) {
@@ -12,7 +13,9 @@ const NowPlaying: React.FC<Record<string, void>> = (() => {
   if (!data) return <div />;
 
   const isNowPlaying = data.track[0]?.['@attr']?.nowplaying;
-  if (!isNowPlaying) { return <div />; }
+  if (!isNowPlaying) {
+    return <div />;
+  }
 
   const nowPlaying = data.track[0];
 
@@ -36,6 +39,6 @@ const NowPlaying: React.FC<Record<string, void>> = (() => {
       </div>
     </div>
   );
-});
+};
 
 export default NowPlaying;

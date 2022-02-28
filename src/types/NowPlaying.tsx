@@ -1,7 +1,7 @@
-import { Image } from './Image';
+import { IImage } from './Image';
 
-export type NowPlaying = {
-    name: string,
-    artist: string,
-    image: Image[],
+export interface INowPlaying {
+  name: string;
+  artist: string;
+  image: IImage[];
 }

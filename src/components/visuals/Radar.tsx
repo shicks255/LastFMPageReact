@@ -1,16 +1,17 @@
-/* eslint-disable quote-props */
-import React, { useContext, useEffect, useState } from 'react';
-import { ResponsiveRadar } from '@nivo/radar';
-import { years, months } from '../../utils';
-import { LocalStateContext } from '../../contexts/LocalStateContext';
-import useScrobblesGrouped from '../../hooks/api/musicApi/useScrobblesGrouped';
+import React, { useContext, useState } from 'react';
 
-interface calData {
-  plays: number,
-  timeGroup: string,
+import { ResponsiveRadar } from '@nivo/radar';
+
+import { years, months } from '../../utils';
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
+
+interface ICalData {
+  plays: number;
+  timeGroup: string;
 }
 
-const Radar: React.FC<Record<string, void>> = (() => {
+const Radar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
 
   const [year, setYear] = useState(2021);
@@ -19,11 +20,8 @@ const Radar: React.FC<Record<string, void>> = (() => {
   const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
   const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
 
-  let from;
   const monthOrdinal = months[month] - 1;
-  // eslint-disable-next-line prefer-destructuring
-  from = years[year][0].split('-')[0];
-  from = new Date(year, monthOrdinal, 1);
+  const from = new Date(year, monthOrdinal, 1);
   const to = new Date(from);
   to.setMonth(monthOrdinal + 1);
   to.setDate(to.getDate() - 1);
@@ -44,32 +42,31 @@ const Radar: React.FC<Record<string, void>> = (() => {
     return <></>;
   }
 
-  const chart = chart1Data.data.map((item: calData) => ({
+  const chart = chart1Data.data.map((item: ICalData) => ({
     year: item.timeGroup,
-    plays: item.plays,
+    plays: item.plays
   }));
 
-  const chart2: {[key: string]: number }[] = [];
+  const chart2: { [key: string]: number }[] = [];
   const yearKeys = new Set<string>();
   const monthKeys = new Set();
 
-  chart2Data.data
-    .forEach((item: calData) => {
-      const [yearr, monthh] = item.timeGroup.split('-');
-      const m = parseInt(monthh, 10);
-      yearKeys.add(yearr);
-      monthKeys.add(m);
-      let o = chart2.find((x) => x.month === m);
-      if (o) {
-        o[yearr] = item.plays;
-      } else {
-        o = { 'month': m };
-        o[yearr] = item.plays;
-        chart2.push(o);
-      }
-    });
+  chart2Data.data.forEach((item: ICalData) => {
+    const [yearr, monthh] = item.timeGroup.split('-');
+    const m = parseInt(monthh, 10);
+    yearKeys.add(yearr);
+    monthKeys.add(m);
+    let o = chart2.find((x) => x.month === m);
+    if (o) {
+      o[yearr] = item.plays;
+    } else {
+      o = { month: m };
+      o[yearr] = item.plays;
+      chart2.push(o);
+    }
+  });
 
-  chart2.sort((i1: {[key: string]: number }, i2: {[key: string]: number }) => {
+  chart2.sort((i1: { [key: string]: number }, i2: { [key: string]: number }) => {
     if (i1.month > i2.month) {
       return 1;
     }
@@ -85,23 +82,25 @@ const Radar: React.FC<Record<string, void>> = (() => {
   });
   const yearKe: string[] = Array.from(yearKeys) as string[];
 
-  const chart3 = chart3Data.data.sort((i1: calData, i2: calData) => {
-    if (i1.timeGroup > i2.timeGroup) {
-      return 1;
-    }
-    return -1;
-  }).map((item: calData) => ({
-    day: item.timeGroup.split('-')[2],
-    plays: item.plays,
-  }));
+  const chart3 = chart3Data.data
+    .sort((i1: ICalData, i2: ICalData) => {
+      if (i1.timeGroup > i2.timeGroup) {
+        return 1;
+      }
+      return -1;
+    })
+    .map((item: ICalData) => ({
+      day: item.timeGroup.split('-')[2],
+      plays: item.plays
+    }));
 
   const yearStrings = Object.keys(years).map((item) => (
-    <option key={item} value={item} selected={year === +item}>
+    <option key={item} value={item}>
       {item}
     </option>
   ));
   const monthStrings = Object.keys(months).map((item) => (
-    <option key={item} value={item} selected={month === item}>
+    <option key={item} value={item}>
       {item}
     </option>
   ));
@@ -113,11 +112,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
           <section className="mainContent">
             <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Radar</h1>
           </section>
-          <ResponsiveRadar
-            indexBy="year"
-            keys={['plays']}
-            data={chart}
-          />
+          <ResponsiveRadar indexBy="year" keys={['plays']} data={chart} />
         </div>
       </div>
       <br />
@@ -125,11 +120,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
       <br />
       <div className="column is-full has-text-centered">
         <div style={{ height: '350px', fontWeight: 'bold' }}>
-          <ResponsiveRadar
-            indexBy="month"
-            keys={yearKe}
-            data={chart2}
-          />
+          <ResponsiveRadar indexBy="month" keys={yearKe} data={chart2} />
         </div>
       </div>
       <br />
@@ -137,10 +128,10 @@ const Radar: React.FC<Record<string, void>> = (() => {
       <br />
       <div className="column is-full has-text-centered">
         <div className="select is-danger">
-          <select onChange={(event) => setYear(+event.target.value)}>
+          <select value={year} onChange={(event) => setYear(+event.target.value)}>
             {yearStrings}
           </select>
-          <select onChange={(event) => setMonth(event.target.value)}>
+          <select value={month} onChange={(event) => setMonth(event.target.value)}>
             {monthStrings}
           </select>
         </div>
@@ -167,17 +158,17 @@ const Radar: React.FC<Record<string, void>> = (() => {
                   {
                     on: 'hover',
                     style: {
-                      itemTextColor: '#000',
-                    },
-                  },
-                ],
-              },
+                      itemTextColor: '#000'
+                    }
+                  }
+                ]
+              }
             ]}
           />
         </div>
       </div>
     </>
   );
-});
+};
 
 export default Radar;

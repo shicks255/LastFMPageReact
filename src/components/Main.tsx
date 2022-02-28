@@ -1,12 +1,14 @@
 import React, { lazy, Suspense } from 'react';
+
 import { Switch, Route, Redirect } from 'react-router-dom';
-import RecentTracksTable from './recent/RecentTracksTable';
+
 import Loader from './Loader';
+import RecentTracksTable from './recent/RecentTracksTable';
 import TopContainer from './top/TopContainer';
 
 const Visuals = lazy(() => import('./visuals/Visuals'));
 
-const Main: React.FC<Record<string, void>> = ((): JSX.Element => (
+const Main: React.FC<Record<string, void>> = (): JSX.Element => (
   <div>
     <Suspense fallback={<Loader small={false} />}>
       <Switch>
@@ -23,6 +25,6 @@ const Main: React.FC<Record<string, void>> = ((): JSX.Element => (
       </Switch>
     </Suspense>
   </div>
-));
+);
 
 export default Main;

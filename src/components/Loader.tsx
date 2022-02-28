@@ -1,10 +1,10 @@
 import React from 'react';
 
-type Props = {
-    small: boolean
+interface IProps {
+  small: boolean;
 }
 
-const Loader: React.FC<Props> = ((props: Props): JSX.Element => {
+const Loader: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { small } = props;
   const clazz = small ? 'fa-5x' : 'fa-7x';
 
@@ -15,6 +15,6 @@ const Loader: React.FC<Props> = ((props: Props): JSX.Element => {
       </div>
     </div>
   );
-});
+};
 
 export default Loader;

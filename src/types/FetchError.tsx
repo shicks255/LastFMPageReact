@@ -1,4 +1,4 @@
-export type FetchError = {
-    technical: string,
-    business: string,
+export interface IFetchError {
+  technical: string;
+  business: string;
 }

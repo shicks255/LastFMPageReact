@@ -1,3 +1,3 @@
-export type Image = {
-    '#text': string
+export interface IImage {
+  '#text': string;
 }

@@ -1,54 +1,50 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Switch, Link, Route, useRouteMatch,
-} from 'react-router-dom';
-import LineGraph from './LineGraph';
-import Sunburst from './SunburstChart';
-import BumpChart from './BumpChart';
+
+import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
+
 import ErrorMessage from '../ErrorMessage';
 import Loader from '../Loader';
-import TreeMaps from './TreeMaps';
-import CalendarChart from './Calendar';
-import Radar from './Radar';
-import UserStats from './UserStats';
 import DataLoadingModal from '../modals/DataLoadingModal';
-import { LocalStateContext } from '../../contexts/LocalStateContext';
-import useRecentTracksBig from '../../hooks/api/lastFm/useRecentTracksBig';
+import BumpChart from './BumpChart';
+import CalendarChart from './Calendar';
+import LineGraph from './LineGraph';
+import Radar from './Radar';
+import Sunburst from './SunburstChart';
+import TreeMaps from './TreeMaps';
+import UserStats from './UserStats';
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+import useRecentTracksBig from '@/hooks/api/lastFm/useRecentTracksBig';
 
 interface ILoadStatus {
-    currentPage: number,
-    totalPages: number,
-    message: string
+  currentPage: number;
+  totalPages: number;
+  message: string;
 }
 
-const Visuals: React.FC<Record<string, void>> = (() => {
+const Visuals: React.FC<Record<string, void>> = () => {
   const { url, path } = useRouteMatch();
   const { state } = useContext(LocalStateContext);
   const [loadStatus, setLoadStatus] = useState<ILoadStatus>({
     currentPage: 0,
     totalPages: 100,
-    message: '',
+    message: ''
   });
-  const {
-    isLoading, error, data,
-  } = useRecentTracksBig();
+  const { isLoading, error, data } = useRecentTracksBig();
 
   useEffect(() => {
-    fetch(`https://musicapi.shicks255.com/api/v1/user/load?userName=${state.userName}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    fetch(`https://musicapi.shicks255.com/api/v1/user/load?userName=${state.userName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
     const timeoutid = window.setInterval(() => {
-      fetch(`https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+      fetch(`https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
         .then((res) => res.json())
         .then((res) => {
           setLoadStatus(res);
@@ -59,7 +55,7 @@ const Visuals: React.FC<Record<string, void>> = (() => {
     }, 3500);
 
     return () => clearInterval(timeoutid);
-  }, []);
+  }, [state.userName]);
 
   if (isLoading) return <Loader small />;
   if (error) {
@@ -138,6 +134,6 @@ const Visuals: React.FC<Record<string, void>> = (() => {
       </div>
     </div>
   );
-});
+};
 
 export default Visuals;

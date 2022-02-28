@@ -1,15 +1,15 @@
-import { Artist } from './Artist';
-import { Image } from './Image';
+import { IArtist } from './Artist';
+import { IImage } from './Image';
 
-export type Track = {
-    date: {
-        uts: number
-    },
-    artist: Artist,
-    image: Image[],
-    name: string,
-    url: string,
-    duration: number,
-    playcount: number,
-    album: Record<string, never>
+export interface ITrack {
+  date: {
+    uts: number;
+  };
+  artist: IArtist;
+  image: IImage[];
+  name: string;
+  url: string;
+  duration: number;
+  playcount: number;
+  album: Record<string, never>;
 }

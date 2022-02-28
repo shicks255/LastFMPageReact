@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { ResponsiveCalendar } from '@nivo/calendar';
-import { years } from '../../utils';
-import { LocalStateContext } from '../../contexts/LocalStateContext';
-import useScrobblesGrouped from '../../hooks/api/musicApi/useScrobblesGrouped';
-import Loader from '../Loader';
 
-interface calData {
-  plays: number,
-  timeGroup: string,
+import { ResponsiveCalendar } from '@nivo/calendar';
+
+import { years } from '../../utils';
+import Loader from '../Loader';
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
+
+interface ICalData {
+  plays: number;
+  timeGroup: string;
 }
 
-const Calendar: React.FC<Record<string, void>> = (() => {
+const Calendar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('2021');
   const year = years[timeFrame];
@@ -24,9 +26,9 @@ const Calendar: React.FC<Record<string, void>> = (() => {
     return <Loader small={false} />;
   }
 
-  const chart = chartData.data.map((item: calData) => ({
+  const chart = chartData.data.map((item: ICalData) => ({
     day: item.timeGroup,
-    value: item.plays,
+    value: item.plays
   }));
 
   const timeFrameSelects = Object.keys(years).map((key) => (
@@ -53,7 +55,10 @@ const Calendar: React.FC<Record<string, void>> = (() => {
           from={year[2]}
           to={year[1]}
           margin={{
-            top: 0, right: 0, bottom: 0, left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
           }}
           emptyColor="#eeeeee"
           yearSpacing={40}
@@ -73,13 +78,13 @@ const Calendar: React.FC<Record<string, void>> = (() => {
               itemWidth: 42,
               itemHeight: 36,
               itemsSpacing: 14,
-              itemDirection: 'right-to-left',
-            },
+              itemDirection: 'right-to-left'
+            }
           ]}
         />
       </div>
     </div>
   );
-});
+};
 
 export default Calendar;

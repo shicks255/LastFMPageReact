@@ -1,14 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ResponsiveLine } from '@nivo/line';
-import {
-  chartColors, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, trimString,
-} from '../../utils';
-import TimeFrameSelect from '../TimeFrameSelect';
-import { LocalStateContext } from '../../contexts/LocalStateContext';
-import useScrobblesArtistOrAlbumGrouped from '../../hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
-import Loader from '../Loader';
 
-const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
+import { ResponsiveLine } from '@nivo/line';
+
+import {
+  chartColors,
+  getDateRangeFromTimeFrame,
+  getTimeGroupFromTimeFrame,
+  trimString
+} from '../../utils';
+import Loader from '../Loader';
+import TimeFrameSelect from '../TimeFrameSelect';
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+
+const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
   const { state } = useContext(LocalStateContext);
   const [resourceType, setResourceType] = useState<string>('album');
   const [timeFrame, setTimeFrame] = useState('7day');
@@ -21,7 +26,12 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
   const [start, end] = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
   const scrobbles = useScrobblesArtistOrAlbumGrouped(
-    resource, state.userName, timeGroup, start, end, 12,
+    resource,
+    state.userName,
+    timeGroup,
+    start,
+    end,
+    12
   );
 
   useEffect(() => {
@@ -55,7 +65,10 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
   }
 
   const chartNew = scrobbles.data.data.map((item) => {
-    const id = resourceType === 'artist' ? trimString(item.artistName, 35) : trimString(item.albumName || '', 35);
+    const id =
+      resourceType === 'artist'
+        ? trimString(item.artistName, 35)
+        : trimString(item.albumName || '', 35);
     const dataPoints = item.data;
 
     const dd = dataPoints
@@ -65,12 +78,12 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
       })
       .map((dp) => ({
         x: dp.timeGroup,
-        y: dp.plays,
+        y: dp.plays
       }));
 
     return {
       id,
-      data: dd,
+      data: dd
     };
   });
 
@@ -79,29 +92,34 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
     axis: {
       domain: {
         line: {
-          stroke: '#968f8f',
-        },
-      },
-    },
+          stroke: '#968f8f'
+        }
+      }
+    }
   };
 
   return (
     <div className="column is-full has-text-centered">
       <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
         <section>
-          <TimeFrameSelect
-            onChange={(e: string) => setTimeFrame(e)}
-          />
+          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
           <select value={resourceType} onChange={(e) => setResourceType(e.target.value)}>
-            <option value="album" key="album">Albums</option>
-            <option value="artist" key="artist">Artists</option>
+            <option value="album" key="album">
+              Albums
+            </option>
+            <option value="artist" key="artist">
+              Artists
+            </option>
           </select>
           <h1 className="title myTitle has-text-left-tablet noMarginBottom">Plays Line Chart</h1>
         </section>
         <ResponsiveLine
           data={chartNew}
           margin={{
-            top: 25, right: 175, left: 50, bottom: 75,
+            top: 25,
+            right: 175,
+            left: 50,
+            bottom: 75
           }}
           theme={theme}
           enableGridX={false}
@@ -111,23 +129,21 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
             const rows = e.slice.points
               .filter((v) => v.data.y > 0)
               .sort((x, y) => {
-                if (x.data.y > y.data.y) { return -1; }
+                if (x.data.y > y.data.y) {
+                  return -1;
+                }
                 return 1;
               })
               .map((p) => (
                 <tr className="bg-pink-200" key={p.id}>
-                  <td style={{ color: p.serieColor }}>
-                    {trimString(p.serieId.toString(), 45)}
-                  </td>
+                  <td style={{ color: p.serieColor }}>{trimString(p.serieId.toString(), 45)}</td>
                   <td>{p.data.y}</td>
                 </tr>
               ));
 
             return (
               <table>
-                <tbody>
-                  {rows}
-                </tbody>
+                <tbody>{rows}</tbody>
               </table>
             );
           }}
@@ -140,23 +156,23 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
             format: format1,
             useUTC: false,
             precision,
-            stacked: true,
+            stacked: true
           }}
           // xFormat="time:%m/%d/%Y"
           yScale={{
             type: 'linear',
-            min: 0,
+            min: 0
             // max: 30,
           }}
           axisLeft={{
             legend: 'Listens',
             legendOffset: -40,
-            legendPosition: 'middle',
+            legendPosition: 'middle'
           }}
           axisBottom={{
             format: bottomXFormat,
             tickValues,
-            tickRotation: -75,
+            tickRotation: -75
           }}
           legends={[
             {
@@ -170,13 +186,13 @@ const LineGraph: React.FC<Record<string, void>> = ((): JSX.Element => {
               itemsSpacing: 4,
               itemTextColor: '#999',
               symbolSize: 10,
-              symbolShape: 'circle',
-            },
+              symbolShape: 'circle'
+            }
           ]}
         />
       </div>
     </div>
   );
-});
+};
 
 export default LineGraph;

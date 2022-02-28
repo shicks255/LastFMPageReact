@@ -1,7 +1,8 @@
 import { QueryObserverResult } from 'react-query';
-import { FetchError } from './FetchError';
 
-export type ApiResult = {
-    error: FetchError,
-    result: QueryObserverResult
+import { IFetchError } from './FetchError';
+
+export interface IApiResult {
+  error: IFetchError;
+  result: QueryObserverResult;
 }

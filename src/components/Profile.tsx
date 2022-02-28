@@ -1,24 +1,25 @@
 import React, { useContext } from 'react';
-import { LocalStateContext } from '../contexts/LocalStateContext';
-import Loader from './Loader';
-import ErrorMessage from './ErrorMessage';
-import ProfileModal from './modals/ProfileModal';
-import useUserQuery from '../hooks/api/lastFm/useUser';
 
-const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
+import useUserQuery from '../hooks/api/lastFm/useUser';
+import ErrorMessage from './ErrorMessage';
+import Loader from './Loader';
+import ProfileModal from './modals/ProfileModal';
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+
+const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);
-  const {
-    isLoading, error, data,
-  } = useUserQuery(state.userName);
+  const { isLoading, error, data } = useUserQuery(state.userName);
 
   if (error) return <ErrorMessage error={error} />;
-  if (isLoading) { return <Loader small={false} />; }
+  if (isLoading) {
+    return <Loader small={false} />;
+  }
   if (!data) return <div />;
 
   const user = {
     playCount: data.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
     avatar: data.image[1]['#text'],
-    registered: new Date(data.registered.unixtime * 1000),
+    registered: new Date(data.registered.unixtime * 1000)
   };
 
   return (
@@ -46,18 +47,16 @@ const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
             {user.registered.toLocaleString(undefined, {
               month: 'long',
               day: 'numeric',
-              year: 'numeric',
+              year: 'numeric'
             })}
           </span>
           <br />
-          {/* eslint-disable-next-line max-len */}
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
           <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
         </div>
       </div>
       {state.showModal ? <ProfileModal /> : ''}
     </div>
   );
-});
+};
 
 export default Profile;

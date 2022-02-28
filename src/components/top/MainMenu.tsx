@@ -1,9 +1,11 @@
 import React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { strategies, timeFrames } from '../../utils';
-import { useApiState } from '../../contexts/ApiContext';
 
-const MainMenu: React.FC<Record<string, void>> = (() => {
+import { useHistory, useLocation } from 'react-router-dom';
+
+import { strategies, timeFrames } from '../../utils';
+import { useApiState } from '@/contexts/ApiContext';
+
+const MainMenu: React.FC<Record<string, void>> = () => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   const { selected, topItemsStrategy, topItemsTimeFrame } = useApiState();
@@ -23,10 +25,16 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
       transformedStrategy = 'getTopArtists';
   }
 
-  const strategySelects = Object.keys(strategies)
-    .map((value) => <option key={value} value={value}>{strategies[value]}</option>);
-  const timeFrameSelects = Object.keys(timeFrames)
-    .map((value) => <option key={value} value={value}>{timeFrames[value]}</option>);
+  const strategySelects = Object.keys(strategies).map((value) => (
+    <option key={value} value={value}>
+      {strategies[value]}
+    </option>
+  ));
+  const timeFrameSelects = Object.keys(timeFrames).map((value) => (
+    <option key={value} value={value}>
+      {timeFrames[value]}
+    </option>
+  ));
 
   if (selected !== 'top') return <></>;
 
@@ -99,6 +107,6 @@ const MainMenu: React.FC<Record<string, void>> = (() => {
       </div>
     </>
   );
-});
+};
 
 export default MainMenu;

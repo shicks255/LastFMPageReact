@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
 
-type State = {
-  selected: string,
-  recentTracksPage: number,
-  topItemsPage: number,
-  topItemsStrategy: string,
-  topItemsTimeFrame: string,
-  timeFrame: string,
-  page: number,
-}
-type Actions = {
-  setSelected: (x: string) => void,
-  setRecentTracksPage: (x: number) => void,
-  setTopItemsPage: (x: number) => void,
-  setTopItemsStrategy: (x: string) => void,
-  setTopItemsTimeFrame: (x: string) => void,
-  setTimeFrame: (x: string) => void,
-  setPage: (x: number) => void,
+interface IState {
+  selected: string;
+  recentTracksPage: number;
+  topItemsPage: number;
+  topItemsStrategy: string;
+  topItemsTimeFrame: string;
+  timeFrame: string;
+  page: number;
 }
 
-const ApiContextState = React.createContext<State | undefined>(undefined);
-const ApiContextDispatch = React.createContext<Actions | undefined>(undefined);
-
-type Props = {
-  children: JSX.Element
+interface IActions {
+  setSelected: (x: string) => void;
+  setRecentTracksPage: (x: number) => void;
+  setTopItemsPage: (x: number) => void;
+  setTopItemsStrategy: (x: string) => void;
+  setTopItemsTimeFrame: (x: string) => void;
+  setTimeFrame: (x: string) => void;
+  setPage: (x: number) => void;
 }
-function ApiContextProvider(props: Props): JSX.Element {
+
+const ApiContextState = React.createContext<IState | undefined>(undefined);
+const ApiContextDispatch = React.createContext<IActions | undefined>(undefined);
+
+interface IProps {
+  children: JSX.Element;
+}
+
+function ApiContextProvider(props: IProps): JSX.Element {
   const { children } = props;
   const [selected, setSelected] = useState<string>('recent');
   const [recentTracksPage, setRecentTracksPage] = useState<number>(1);
@@ -36,7 +38,13 @@ function ApiContextProvider(props: Props): JSX.Element {
   const [page, setPage] = useState<number>(1);
 
   const state = {
-    recentTracksPage, topItemsPage, page, timeFrame, topItemsTimeFrame, selected, topItemsStrategy,
+    recentTracksPage,
+    topItemsPage,
+    page,
+    timeFrame,
+    topItemsTimeFrame,
+    selected,
+    topItemsStrategy
   };
 
   const actions = {
@@ -46,19 +54,17 @@ function ApiContextProvider(props: Props): JSX.Element {
     setTimeFrame,
     setTopItemsTimeFrame,
     setSelected,
-    setTopItemsStrategy,
+    setTopItemsStrategy
   };
 
   return (
     <ApiContextState.Provider value={state}>
-      <ApiContextDispatch.Provider value={actions}>
-        {children}
-      </ApiContextDispatch.Provider>
+      <ApiContextDispatch.Provider value={actions}>{children}</ApiContextDispatch.Provider>
     </ApiContextState.Provider>
   );
 }
 
-function useApiState(): State {
+function useApiState(): IState {
   const context = React.useContext(ApiContextState);
   if (context === undefined) {
     throw Error('');
@@ -66,7 +72,7 @@ function useApiState(): State {
   return context;
 }
 
-function useApiDispatch(): Actions {
+function useApiDispatch(): IActions {
   const context = React.useContext(ApiContextDispatch);
   if (context === undefined) {
     throw Error('');
@@ -74,6 +80,4 @@ function useApiDispatch(): Actions {
   return context;
 }
 
-export {
-  ApiContextDispatch, ApiContextState, ApiContextProvider, useApiState, useApiDispatch,
-};
+export { ApiContextDispatch, ApiContextState, ApiContextProvider, useApiState, useApiDispatch };

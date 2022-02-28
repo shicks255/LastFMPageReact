@@ -1,8 +1,8 @@
 import React from 'react';
 
-const LoadingModal: React.FC<Record<string, void>> = (() => (
+const LoadingModal: React.FC<Record<string, void>> = () => (
   <div className="modal is-active">
-    <div className="modal-background">  </div>
+    <div className="modal-background"> </div>
     <div className="modal-content" style={{ color: '#C3073F' }}>
       <div>
         <i className="fas fa-compact-disc fa-7x fa-spin" />
@@ -12,6 +12,6 @@ const LoadingModal: React.FC<Record<string, void>> = (() => (
       </div>
     </div>
   </div>
-));
+);
 
 export default LoadingModal;

@@ -1,36 +1,76 @@
 {
   "extends": [
-    "airbnb",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "prettier",
+    "plugin:prettier/recommended"
   ],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "jest", "import"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true
-    }
+      "jsx": true,
+      "useJSXTextNode": true
+    },
+    "project": "./tsconfig.json",
+    "sourceType": "module",
+    "ecmaVersion": 2018
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true,
+    "jest": true
   },
-  "rules": {
-    "no-use-before-define": "off",
-    "no-param-reassign": "off",
-    "import/extensions": "off",
-    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    "@typescript-eslint/no-use-before-define": ["error"]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+  "rules":{
+    "linebreak-style":"off",
+    "jest/no-disabled-tests":"off",
+    "react-hooks/rules-of-hooks":"error",
+    "react-hooks/exhaustive-deps":"warn",
+    "no-shadow":"off",
+    "import/no-extraneous-dependencies":["error",
+      {
+        "devDependencies":["**/*.test.tsx","./src/mocks/**","./src/setupTests.ts"]
       }
-    }
+    ],
+    "@typescript-eslint/no-shadow":"off",
+    "@typescript-eslint/naming-convention":["error",
+      {
+        "selector":"interface",
+        "format":["PascalCase"],
+        "custom":{
+          "regex":"^I[A-Z]",
+          "match":true
+        }
+      }
+    ],
+    "prettier/prettier":[
+      "error",
+      {
+        "endOfLine":"auto"
+      }
+    ],
+    "import/extensions":"off",
+    "import/order":[
+      "error",
+      {
+        "groups":["builtin","external","internal"],
+        "pathGroups":[
+          {
+            "pattern":"react",
+            "group":"external",
+            "position":"before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes":["react"],
+        "newlines-between":"always",
+        "alphabetize":{
+          "order":"asc",
+          "caseInsensitive":true
+        }
+      }
+    ]
   },
   "globals": {
     "JSX": true

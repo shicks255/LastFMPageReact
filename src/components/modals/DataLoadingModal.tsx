@@ -1,17 +1,13 @@
 import React from 'react';
 
-interface Props {
-    done: number,
-    total: number,
-    message: string,
+interface IProps {
+  done: number;
+  total: number;
+  message: string;
 }
 
-const DataLoadingModal: React.FC<Props> = ((props: Props) => {
-  const {
-    done,
-    total,
-    message,
-  } = props;
+const DataLoadingModal: React.FC<IProps> = (props: IProps) => {
+  const { done, total, message } = props;
   return (
     <div className="modal is-active">
       <div className="modal-background" />
@@ -19,11 +15,7 @@ const DataLoadingModal: React.FC<Props> = ((props: Props) => {
         <div className="card">
           <div className="card-content">
             <i className="fas fa-compact-disc fa-7x fa-spin" />
-            <progress
-              className="progress"
-              value={done}
-              max={total}
-            >
+            <progress className="progress" value={done} max={total}>
               0
             </progress>
             Loading your last.fm scrobbles
@@ -34,6 +26,6 @@ const DataLoadingModal: React.FC<Props> = ((props: Props) => {
       </div>
     </div>
   );
-});
+};
 
 export default DataLoadingModal;

@@ -1,9 +1,9 @@
-import { Image } from './Image';
+import { IImage } from './Image';
 
-export type User = {
-    playcount: number,
-    image: Image[],
-    registered: {
-        unixtime: number,
-    }
+export interface IUser {
+  playcount: number;
+  image: IImage[];
+  registered: {
+    unixtime: number;
+  };
 }

@@ -1,12 +1,12 @@
-import { Artist } from './Artist';
+import { IArtist } from './Artist';
 
-export type TopArtists = {
-    '@attr': {
-        'page': number,
-        'perPage': number,
-        'user': string,
-        'total': number,
-        'totalPages': number,
-    },
-    artist: Artist[]
+export interface ITopArtists {
+  '@attr': {
+    page: number;
+    perPage: number;
+    user: string;
+    total: number;
+    totalPages: number;
+  };
+  artist: IArtist[];
 }

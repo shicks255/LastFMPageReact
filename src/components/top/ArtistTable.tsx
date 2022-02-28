@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import Pagination from '../Pagination';
-import Loader from '../Loader';
+
+import { trimString } from '../../utils';
 import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
-import { useApiState } from '../../contexts/ApiContext';
-import { trimString } from '../../utils';
-import useTopArtists from '../../hooks/api/lastFm/useTopArtists';
+import Loader from '../Loader';
+import Pagination from '../Pagination';
+import { useApiState } from '@/contexts/ApiContext';
+import useTopArtists from '@/hooks/api/lastFm/useTopArtists';
 
-const ArtistTable: React.FC<Record<string, void>> = (() => {
+const ArtistTable: React.FC<Record<string, void>> = () => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();
-  const {
-    isLoading, error, data,
-  } = useTopArtists(topItemsTimeFrame, topItemsPage);
+  const { isLoading, error, data } = useTopArtists(topItemsTimeFrame, topItemsPage);
 
   if (isLoading) {
     return <Loader small={false} />;
@@ -43,9 +41,7 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
             return (
               <tr className="hover:bg-gray-400" key={val.name}>
                 <td className="font-semibold text-right pr-4">
-                  <span>
-                    {rank}
-                  </span>
+                  <span>{rank}</span>
                 </td>
                 <td className="p-2">
                   <a target="_blank" href={val.url} rel="noreferrer">
@@ -53,11 +49,11 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
                   </a>
                 </td>
                 <td className="font-semibold">
-                  <a target="_blank" href={val.url} rel="noreferrer">{trimString(val.name, 45)}</a>
+                  <a target="_blank" href={val.url} rel="noreferrer">
+                    {trimString(val.name, 45)}
+                  </a>
                 </td>
-                <td className="text-right">
-                  {val.playcount}
-                </td>
+                <td className="text-right">{val.playcount}</td>
               </tr>
             );
           })}
@@ -69,11 +65,9 @@ const ArtistTable: React.FC<Record<string, void>> = (() => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
-      <table className="table-auto">
-        {renderTable()}
-      </table>
+      <table className="table-auto">{renderTable()}</table>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
     </div>
   );
-});
+};
 export default ArtistTable;

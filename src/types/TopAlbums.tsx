@@ -1,12 +1,12 @@
-import { Album } from './Album';
+import { IAlbum } from './Album';
 
-export type TopAlbums = {
-    '@attr': {
-        'page': number,
-        'perPage': number,
-        'user': string,
-        'total': number,
-        'totalPages': number,
-    },
-    album: Album[],
+export interface ITopAlbums {
+  '@attr': {
+    page: number;
+    perPage: number;
+    user: string;
+    total: number;
+    totalPages: number;
+  };
+  album: IAlbum[];
 }

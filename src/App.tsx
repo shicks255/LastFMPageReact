@@ -1,19 +1,21 @@
 import React from 'react';
+
 // import './App.css';
 // import 'bulma/css/bulma.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
+
 import Body from './components/Body';
-import { Provider } from './contexts/LocalStateContext';
+import Footer from './components/Footer';
+import Header from './components/Header';
 import { ApiContextProvider } from './contexts/ApiContext';
+import { Provider } from './contexts/LocalStateContext';
 import { ModalContextProvider } from './contexts/ModalContext';
 
 const queryClient = new QueryClient();
 
-export default function App(): JSX.Element {
+const App: React.FC<null> = () => {
   return (
     <BrowserRouter>
       <Provider>
@@ -30,4 +32,6 @@ export default function App(): JSX.Element {
       </Provider>
     </BrowserRouter>
   );
-}
+};
+
+export default App;

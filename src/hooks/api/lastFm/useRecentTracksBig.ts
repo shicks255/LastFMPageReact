@@ -1,11 +1,17 @@
-import { QueryObserverResult, useQuery } from 'react-query';
 import { useContext } from 'react';
-import { RecentTracks } from '../../../types/RecentTracks';
-import { LocalStateContext } from '../../../contexts/LocalStateContext';
-import { recentTracksBigQuery } from '../../../service/api';
-import queryOptions from '../../../service/queryOptions';
 
-export default function useRecentTracksBig(): QueryObserverResult<RecentTracks, Error> {
+import { QueryObserverResult, useQuery } from 'react-query';
+
+import { LocalStateContext } from '@/contexts/LocalStateContext';
+import { recentTracksBigQuery } from '@/service/api';
+import queryOptions from '@/service/queryOptions';
+import { IRecentTracks } from '@/types/RecentTracks';
+
+export default function useRecentTracksBig(): QueryObserverResult<IRecentTracks, Error> {
   const { state } = useContext(LocalStateContext);
-  return useQuery(['recentTracks', 'big', state.userName], async () => recentTracksBigQuery(state.userName), queryOptions);
+  return useQuery(
+    ['recentTracks', 'big', state.userName],
+    async () => recentTracksBigQuery(state.userName),
+    queryOptions
+  );
 }

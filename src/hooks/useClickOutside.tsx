@@ -1,7 +1,8 @@
 import { RefObject, SyntheticEvent, useEffect } from 'react';
 
 function useClickOutside(
-  ref: RefObject<HTMLDivElement | null>, callback: (e: SyntheticEvent) => void,
+  ref: RefObject<HTMLDivElement | null>,
+  callback: (e: SyntheticEvent) => void
 ): void {
   useEffect(() => {
     function handle(e) {
@@ -11,7 +12,9 @@ function useClickOutside(
     }
 
     document.addEventListener('click', handle);
-    return () => { document.removeEventListener('click', handle); };
+    return () => {
+      document.removeEventListener('click', handle);
+    };
   }, [ref, callback]);
 }
 

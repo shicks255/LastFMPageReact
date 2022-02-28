@@ -1,4 +1,4 @@
-import * as queryString from 'querystring';
+import { parse } from 'query-string';
 
 export const timeFrames = {
   '7day': '7 Days',
@@ -6,13 +6,13 @@ export const timeFrames = {
   '3month': '3 Months',
   '6month': '6 Months',
   '12month': '1 Year',
-  overall: 'All Time',
+  overall: 'All Time'
 };
 
 export const strategies = {
   getTopArtists: 'Artists',
   getTopAlbums: 'Albums',
-  getTopTracks: 'Songs',
+  getTopTracks: 'Songs'
 };
 
 export const chartColors = [
@@ -58,7 +58,7 @@ export const chartColors = [
   'rgb(221,124,60)',
   'rgb(221,124,60)',
   'rgb(221,124,60)',
-  'rgb(221,124,60)',
+  'rgb(221,124,60)'
 ];
 
 export const years = {
@@ -81,7 +81,7 @@ export const years = {
   2018: ['2018-01-01', '2018-12-31', '2018-01-02'],
   2019: ['2019-01-01', '2019-12-31', '2019-01-02'],
   2020: ['2020-01-01', '2020-12-31', '2020-01-02'],
-  2021: ['2021-01-01', '2021-12-31', '2021-01-02'],
+  2021: ['2021-01-01', '2021-12-31', '2021-01-02']
 };
 
 export const months = {
@@ -96,7 +96,7 @@ export const months = {
   Sep: 9,
   Oct: 10,
   Nov: 11,
-  Dec: 12,
+  Dec: 12
 };
 
 export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
@@ -124,7 +124,7 @@ export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
 
   let fromDay: number | string = from.getDate() + 1;
   if (fromDay < 10) fromDay = `0${fromDay}`;
-  let toDay: number | string = to.getDate() + 1;
+  let toDay: number | string = to.getDate();
   if (toDay < 10) toDay = `0${toDay}`;
 
   let fromMonth: number | string = from.getMonth() + 1;
@@ -164,16 +164,16 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
 }
 
 const fanartKey = process.env.REACT_APP_FANART_KEY;
-const noImageUrl = 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png';
+const noImageUrl =
+  'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png';
 
 function getMusicBrainzId(artistName) {
   const fullName = encodeURI(artistName);
-  return fetch(`https://musicbrainz.org/ws/2/artist/?query=${fullName}&fmt=json`,
-    {
-      headers: {
-        'User-Agent': 'SteveFM/1.0 https:\\/\\/music.stevenmhicks.com shicks255@yahoo.com',
-      },
-    })
+  return fetch(`https://musicbrainz.org/ws/2/artist/?query=${fullName}&fmt=json`, {
+    headers: {
+      'User-Agent': 'SteveFM/1.0 https:\\/\\/music.stevenmhicks.com shicks255@yahoo.com'
+    }
+  })
     .then((res) => res.json())
     .then((res) => {
       if (res.artists) {
@@ -212,13 +212,13 @@ function getFanArtImage(mbid, artistName, secondTry) {
 }
 
 export function stripPageQueryParam(search: string): number {
-  const parsed = queryString.parse(search.slice(1));
+  const parsed = parse(search.slice(1));
   const maybePageNumber = parsed.page;
   return Number(maybePageNumber) || 1;
 }
 
 export function stripTimeFrameQueryParam(search: string): string {
-  const parsed = queryString.parse(search.slice(1));
+  const parsed = parse(search.slice(1));
   const maybeTimeFrame = parsed.timeFrame as string;
   if (!Object.keys(timeFrames).includes(maybeTimeFrame)) {
     return '7day';
@@ -227,14 +227,14 @@ export function stripTimeFrameQueryParam(search: string): string {
 }
 
 export function getActualArtistUrl(mbid: string, artistName: string): string {
-  return (mbid && mbid.length > 0)
+  return mbid && mbid.length > 0
     ? getFanArtImage(mbid, artistName, false)
     : getMusicBrainzId(artistName);
 }
 
 export function convertDurationToTimestamp(duration: number): string {
   const min = Math.floor(duration / 60);
-  const sec = duration - (min * 60);
+  const sec = duration - min * 60;
   const secString = sec < 10 ? `0${sec.toString()}` : sec.toString();
   return `${min}:${secString.substr(0, 2)}`;
 }

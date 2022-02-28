@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useApiDispatch } from '../contexts/ApiContext';
 
-const useRecentTracksNavPageSync: (() => void) = (() => {
+import { useLocation, useHistory } from 'react-router-dom';
+
+import { useApiDispatch } from '@/contexts/ApiContext';
+
+const useRecentTracksNavPageSync: () => void = () => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   const { setRecentTracksPage } = useApiDispatch();
@@ -19,7 +21,7 @@ const useRecentTracksNavPageSync: (() => void) = (() => {
     if (!pageNumber || pageNumber < 1) {
       history.push(`${pathname}?page=1`);
     }
-  }, [pathname, search]);
-});
+  }, [pathname, search, history, setRecentTracksPage]);
+};
 
 export default useRecentTracksNavPageSync;

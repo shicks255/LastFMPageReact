@@ -1,42 +1,40 @@
 import React, { useState } from 'react';
 
-type Type = {
+interface IType {
   state: {
-      modalImageSrc: string,
-      modalImageCaption: string,
-  },
+    modalImageSrc: string;
+    modalImageCaption: string;
+  };
   actions: {
-      setModalImageSrc: (x: string) => void,
-      setModalImageCaption: (x: string) => void,
-  },
-};
-
-const ModalContext = React.createContext<Type | undefined>(undefined);
-
-type Props = {
-    children: JSX.Element[]
+    setModalImageSrc: (x: string) => void;
+    setModalImageCaption: (x: string) => void;
+  };
 }
-function ModalContextProvider(props: Props): JSX.Element {
+
+const ModalContext = React.createContext<IType | undefined>(undefined);
+
+interface IProps {
+  children: JSX.Element[];
+}
+function ModalContextProvider(props: IProps): JSX.Element {
   const [modalImageSrc, setModalImageSrc] = useState<string>('');
   const [modalImageCaption, setModalImageCaption] = useState<string>('');
 
   const { children } = props;
 
   const state = {
-    modalImageSrc, modalImageCaption,
+    modalImageSrc,
+    modalImageCaption
   };
   const actions = {
-    setModalImageSrc, setModalImageCaption,
+    setModalImageSrc,
+    setModalImageCaption
   };
 
-  return (
-    <ModalContext.Provider value={{ state, actions }}>
-      { children }
-    </ModalContext.Provider>
-  );
+  return <ModalContext.Provider value={{ state, actions }}>{children}</ModalContext.Provider>;
 }
 
-function useModalState(): Type {
+function useModalState(): IType {
   const context = React.useContext(ModalContext);
   if (context === undefined) {
     throw Error('');
@@ -45,6 +43,4 @@ function useModalState(): Type {
   return context;
 }
 
-export {
-  ModalContextProvider, useModalState,
-};
+export { ModalContextProvider, useModalState };

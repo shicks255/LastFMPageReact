@@ -1,20 +1,23 @@
 import React from 'react';
-import Pagination from '../Pagination';
-import Loader from '../Loader';
-import HoverImage from '../HoverImage';
-import ErrorMessage from '../ErrorMessage';
-import { useApiState } from '../../contexts/ApiContext';
-import { trimString } from '../../utils';
+
 import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
+import { trimString } from '../../utils';
+import ErrorMessage from '../ErrorMessage';
+import HoverImage from '../HoverImage';
+import Loader from '../Loader';
+import Pagination from '../Pagination';
+import { useApiState } from '@/contexts/ApiContext';
 
-const AlbumTable: React.FC<Record<string, void>> = (() => {
+const AlbumTable: React.FC<Record<string, void>> = () => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();
-  const {
-    isLoading, error, data,
-  } = useTopAlbums(topItemsTimeFrame, topItemsPage);
+  const { isLoading, error, data } = useTopAlbums(topItemsTimeFrame, topItemsPage);
 
-  if (isLoading) { return <Loader small={false} />; }
-  if (error) { return <ErrorMessage error={error} />; }
+  if (isLoading) {
+    return <Loader small={false} />;
+  }
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
   if (!data) return <ErrorMessage error={new Error('')} />;
 
   const topAlbums = data;
@@ -32,9 +35,13 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
           </tr>
         </thead>
         <tbody>
-          {topAlbums.album.map((val, i) => {
-            const smallImgSrc = val?.image?.[1]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-            const bigImgSrc = val?.image?.[3]?.['#text'] ?? 'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+          {topAlbums.album.map((val) => {
+            const smallImgSrc =
+              val?.image?.[1]?.['#text'] ??
+              'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+            const bigImgSrc =
+              val?.image?.[3]?.['#text'] ??
+              'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             const { rank } = val['@attr'];
 
             return (
@@ -51,11 +58,11 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
                   <i>{trimString(val.name, 35)}</i>
                 </td>
                 <td className="font-semibold">
-                  <a href={val.url} target="_blank" rel="noreferrer">{trimString(val.artist.name, 35)}</a>
+                  <a href={val.url} target="_blank" rel="noreferrer">
+                    {trimString(val.artist.name, 35)}
+                  </a>
                 </td>
-                <td className="text-right">
-                  {val.playcount}
-                </td>
+                <td className="text-right">{val.playcount}</td>
               </tr>
             );
           })}
@@ -67,12 +74,10 @@ const AlbumTable: React.FC<Record<string, void>> = (() => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
-      <table className="auto-table">
-        {renderTable()}
-      </table>
+      <table className="auto-table">{renderTable()}</table>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
     </div>
   );
-});
+};
 
 export default AlbumTable;

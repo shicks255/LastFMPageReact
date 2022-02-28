@@ -1,13 +1,14 @@
 import React from 'react';
-import { useModalState } from '../contexts/ModalContext';
 
-type Props = {
-    src: string,
-    popupSrc: string,
-    caption: string,
+import { useModalState } from '@/contexts/ModalContext';
+
+interface IProps {
+  src: string;
+  popupSrc: string;
+  caption: string;
 }
 
-const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
+const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { actions } = useModalState();
   const { src, popupSrc, caption } = props;
 
@@ -31,6 +32,6 @@ const HoverImage: React.FC<Props> = ((props: Props): JSX.Element => {
       src={src}
     />
   );
-});
+};
 
 export default HoverImage;

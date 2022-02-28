@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useApiDispatch } from '../contexts/ApiContext';
-import { stripPageQueryParam, stripTimeFrameQueryParam } from '../utils';
 
-interface QueryParams {
-  page: number,
-  timeFrame: string
+import { useLocation, useHistory } from 'react-router-dom';
+
+import { stripPageQueryParam, stripTimeFrameQueryParam } from '../utils';
+import { useApiDispatch } from '@/contexts/ApiContext';
+
+interface IQueryParams {
+  page: number;
+  timeFrame: string;
 }
 
-const useTopNavSync: (() => void) = (() => {
+const useTopNavSync: () => void = () => {
   const { pathname, search } = useLocation();
   const history = useHistory();
   const { setTopItemsPage, setTopItemsTimeFrame, setTopItemsStrategy } = useApiDispatch();
@@ -16,9 +18,9 @@ const useTopNavSync: (() => void) = (() => {
   useEffect(() => {
     const page = stripPageQueryParam(search);
     const timeFrame = stripTimeFrameQueryParam(search);
-    const queryParams: QueryParams = {
+    const queryParams: IQueryParams = {
       page,
-      timeFrame,
+      timeFrame
     };
 
     let newPath = '';
@@ -39,13 +41,11 @@ const useTopNavSync: (() => void) = (() => {
     }
     setTopItemsTimeFrame(queryParams.timeFrame);
 
-    if (newPath !== pathname
-        || page !== queryParams.page
-        || timeFrame !== queryParams.timeFrame) {
+    if (newPath !== pathname || page !== queryParams.page || timeFrame !== queryParams.timeFrame) {
       const redirectPath = `${newPath}?page=${queryParams.page}&timeFrame=${queryParams.timeFrame}`;
       history.push(redirectPath);
     }
-  }, [pathname, search]);
-});
+  }, [pathname, search, history, setTopItemsPage, setTopItemsStrategy, setTopItemsTimeFrame]);
+};
 
 export default useTopNavSync;

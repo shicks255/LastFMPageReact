@@ -1,10 +1,10 @@
-import { Image } from './Image';
-import { Artist } from './Artist';
+import { IArtist } from './Artist';
+import { IImage } from './Image';
 
-export type Album = {
-    image: Image[],
-    name: string,
-    url: string,
-    artist: Artist,
-    playcount: number,
+export interface IAlbum {
+  image: IImage[];
+  name: string;
+  url: string;
+  artist: IArtist;
+  playcount: number;
 }

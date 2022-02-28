@@ -1,23 +1,23 @@
-export interface Scrobble {
-    id: 0,
-    userName: 'string',
-    name: 'string',
-    artistMbid: 'string',
-    artistName: 'string',
-    albumMbid: 'string',
-    albumName: 'string',
-    time: 0
+export interface IScrobble {
+  id: 0;
+  userName: 'string';
+  name: 'string';
+  artistMbid: 'string';
+  artistName: 'string';
+  albumMbid: 'string';
+  albumName: 'string';
+  time: 0;
 }
 
-interface ScrobblesGrouped {
-    data: ArtistScrobbleData[]
+interface IScrobblesGrouped {
+  data: IArtistScrobbleData[];
 }
 
-interface ArtistScrobbleData {
-    artistName: string;
-    albumName?: string;
-    data: ScrobbleData[];
-    total: number;
+interface IArtistScrobbleData {
+  artistName: string;
+  albumName?: string;
+  data: IScrobbleData[];
+  total: number;
 }
 
 // interface AlbumScrobbleData {
@@ -26,11 +26,9 @@ interface ArtistScrobbleData {
 //     total: number;
 // }
 
-interface ScrobbleData {
-    plays: number;
-    timeGroup: string;
+interface IScrobbleData {
+  plays: number;
+  timeGroup: string;
 }
 
-export type {
-  ScrobblesGrouped, ArtistScrobbleData, ScrobbleData,
-};
+export type { IScrobblesGrouped, IArtistScrobbleData, IScrobbleData };

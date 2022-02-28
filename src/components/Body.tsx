@@ -1,13 +1,13 @@
 import React from 'react';
-import NowPlaying from './NowPlaying';
-import Profile from './Profile';
+
 import ButtonGroup from './ButtonGroup';
 import Main from './Main';
 import ImageModal from './modals/ImageModal';
+import NowPlaying from './NowPlaying';
+import Profile from './Profile';
+import useNavPathToStrategySync from '@/hooks/useParamToStrategySync';
 
-import useNavPathToStrategySync from '../hooks/useParamToStrategySync';
-
-const Body: React.FC<Record<string, void>> = (() => {
+const Body: React.FC<Record<string, void>> = () => {
   useNavPathToStrategySync();
 
   return (
@@ -29,6 +29,6 @@ const Body: React.FC<Record<string, void>> = (() => {
       </div>
     </div>
   );
-});
+};
 
 export default Body;
