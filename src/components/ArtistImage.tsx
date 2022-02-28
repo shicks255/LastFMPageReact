@@ -1,7 +1,7 @@
 import React from 'react';
-import { useArtistImage } from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 import HoverImage from './HoverImage';
+import useArtistImage from '../hooks/api/useArtistImage';
 
 type Props = {
   mbid: string,

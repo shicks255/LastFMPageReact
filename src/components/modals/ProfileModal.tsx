@@ -5,9 +5,9 @@ import React, {
   useState,
 } from 'react';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
-import { checkUserName } from '../../hooks/useLasftFmApi';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import useClickOutside from '../../hooks/useClickOutside';
+import { checkUserName } from '../../service/api';
 
 function ProfileModal(): JSX.Element {
   const { state, actions } = useContext(LocalStateContext);

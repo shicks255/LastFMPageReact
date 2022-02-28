@@ -8,12 +8,12 @@ import BumpChart from './BumpChart';
 import ErrorMessage from '../ErrorMessage';
 import Loader from '../Loader';
 import TreeMaps from './TreeMaps';
-import { useRecentTracksBig } from '../../hooks/useLasftFmApi';
 import CalendarChart from './Calendar';
 import Radar from './Radar';
 import UserStats from './UserStats';
 import DataLoadingModal from '../modals/DataLoadingModal';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
+import useRecentTracksBig from '../../hooks/api/lastFm/useRecentTracksBig';
 
 interface ILoadStatus {
     currentPage: number,
@@ -67,9 +67,6 @@ const Visuals: React.FC<Record<string, void>> = (() => {
   }
   if (!data) return <ErrorMessage error={new Error('')} />;
 
-  // const recentTracks = data.track
-  //   .filter((x) => Object.prototype.hasOwnProperty.call(x, 'date'));
-
   if (loadStatus.currentPage !== loadStatus.totalPages) {
     return (
       <DataLoadingModal
@@ -83,42 +80,37 @@ const Visuals: React.FC<Record<string, void>> = (() => {
   return (
     <div>
       <div>
-        <Link to={`${url}/tree`}>
-          <li className="fas fa-3x fa-calculator">
+        <ul>
+          <Link to={`${url}/tree`}>
+            <i className="fas fa-3x fa-calculator" />
             <span>Tree Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/line">
-          <li className="fas fa-3x fa-chart-line">
+          </Link>
+          <Link to="/visuals/line">
+            <i className="fas fa-3x fa-chart-line" />
             <span>Line Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/sunburst">
-          <li className="fas fa-3x fa-chart-pie">
+          </Link>
+          <Link to="/visuals/sunburst">
+            <i className="fas fa-3x fa-chart-pie" />
             <span>Sunburst Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/bump">
-          <li className="fas fa-3x fa-random">
+          </Link>
+          <Link to="/visuals/bump">
+            <i className="fas fa-3x fa-random" />
             <span>Bump Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/calendar">
-          <li className="far fa-3x fa-calendar-alt">
+          </Link>
+          <Link to="/visuals/calendar">
+            <i className="far fa-3x fa-calendar-alt" />
             <span>Calendar Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/radar">
-          <li className="fas fa-3x fa-wifi">
+          </Link>
+          <Link to="/visuals/radar">
+            <i className="fas fa-3x fa-wifi" />
             <span>Radar Graphs</span>
-          </li>
-        </Link>
-        <Link to="/visuals/stats">
-          <li className="fas fa-3x fa-server">
+          </Link>
+          <Link to="/visuals/stats">
+            <i className="fas fa-3x fa-server" />
             <span>User Stats</span>
-          </li>
-        </Link>
-        <div>
+          </Link>
+        </ul>
+        <div className="bg-gray-200 pb-20 -mr-4 -ml-4">
           <Switch>
             <Route path={`${path}/tree`}>
               <TreeMaps />

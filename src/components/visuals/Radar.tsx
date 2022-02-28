@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ResponsiveRadar } from '@nivo/radar';
 import { years, months } from '../../utils';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
+import useScrobblesGrouped from '../../hooks/api/musicApi/useScrobblesGrouped';
 
 interface calData {
   plays: number,
@@ -11,87 +12,39 @@ interface calData {
 
 const Radar: React.FC<Record<string, void>> = (() => {
   const { state } = useContext(LocalStateContext);
-  const [chartData, setChartData] = useState([]);
-  const [chartData2, setChartData2] = useState([]);
-  const [chartData3, setChartData3] = useState([]);
 
   const [year, setYear] = useState(2021);
   const [month, setMonth] = useState('Jan');
 
-  async function myFetch() {
-    await fetch(
-      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=2005-01-01&to=2021-12-31&timeGroup=YEAR`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([, body]) => {
-        setChartData(body);
-        return body;
-      });
+  const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
+  const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
+
+  let from;
+  const monthOrdinal = months[month] - 1;
+  // eslint-disable-next-line prefer-destructuring
+  from = years[year][0].split('-')[0];
+  from = new Date(year, monthOrdinal, 1);
+  const to = new Date(from);
+  to.setMonth(monthOrdinal + 1);
+  to.setDate(to.getDate() - 1);
+
+  const monthArg = from.getMonth() < 9 ? `0${from.getMonth() + 1}` : from.getMonth() + 1;
+
+  const fromArg = `${from.getFullYear()}-${monthArg}-0${from.getDate()}`;
+  const toArg = `${to.getFullYear()}-${monthArg}-${to.getDate()}`;
+  const chart3Data = useScrobblesGrouped(state.userName, 'DAY', fromArg, toArg);
+
+  if (!chart1Data || !chart1Data.data) {
+    return <></>;
   }
-
-  async function myFetch2() {
-    fetch(
-      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=2005-01-01&to=2021-12-31&timeGroup=MONTH`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([, body]) => {
-        setChartData2(body);
-        return body;
-      });
+  if (!chart2Data || !chart2Data.data) {
+    return <></>;
   }
-
-  async function myFetch3() {
-    let from;
-    const monthOrdinal = months[month] - 1;
-
-    // eslint-disable-next-line prefer-destructuring
-    from = years[year][0].split('-')[0];
-    from = new Date(year, monthOrdinal, 1);
-    const to = new Date(from);
-    to.setMonth(monthOrdinal + 1);
-    to.setDate(to.getDate() - 1);
-
-    const monthArg = from.getMonth() < 9 ? `0${from.getMonth() + 1}` : from.getMonth() + 1;
-
-    const fromArg = `${from.getFullYear()}-${monthArg}-0${from.getDate()}`;
-    const toArg = `${to.getFullYear()}-${monthArg}-${to.getDate()}`;
-
-    fetch(
-      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=${fromArg}&to=${toArg}&timeGroup=DAY`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([, body]) => {
-        setChartData3(body);
-        return body;
-      });
-  }
-
-  useEffect(() => {
-    myFetch();
-    myFetch2();
-    myFetch3();
-  }, [year, month]);
-
-  if (!chartData || !chartData2 || !chartData3) {
+  if (!chart3Data || !chart3Data.data) {
     return <></>;
   }
 
-  const chart = chartData.map((item: calData) => ({
+  const chart = chart1Data.data.map((item: calData) => ({
     year: item.timeGroup,
     plays: item.plays,
   }));
@@ -100,7 +53,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
   const yearKeys = new Set<string>();
   const monthKeys = new Set();
 
-  chartData2
+  chart2Data.data
     .forEach((item: calData) => {
       const [yearr, monthh] = item.timeGroup.split('-');
       const m = parseInt(monthh, 10);
@@ -132,7 +85,7 @@ const Radar: React.FC<Record<string, void>> = (() => {
   });
   const yearKe: string[] = Array.from(yearKeys) as string[];
 
-  const chart3 = chartData3.sort((i1: calData, i2: calData) => {
+  const chart3 = chart3Data.data.sort((i1: calData, i2: calData) => {
     if (i1.timeGroup > i2.timeGroup) {
       return 1;
     }

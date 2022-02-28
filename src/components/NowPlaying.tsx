@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorMessage from './ErrorMessage';
-import { useRecentTracks } from '../hooks/useLasftFmApi';
+import useRecentTracks from '../hooks/api/lastFm/useRecentTracks';
 
 const NowPlaying: React.FC<Record<string, void>> = (() => {
   const { error, data } = useRecentTracks(1);

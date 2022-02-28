@@ -6,7 +6,7 @@ import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useApiState } from '../../contexts/ApiContext';
-import { useTopTracks } from '../../hooks/useLasftFmApi';
+import useTopTracks from '../../hooks/api/lastFm/useTopTracks';
 
 const TracksTable: React.FC<Record<string, void>> = ((): JSX.Element => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();

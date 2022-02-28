@@ -4,9 +4,9 @@ import Loader from '../Loader';
 import HoverImage from '../HoverImage';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
-import { useRecentTracks } from '../../hooks/useLasftFmApi';
 import useRecentTracksNavPageSync from '../../hooks/useRecentTracksNavPageSync';
 import { trimString } from '../../utils';
+import useRecentTracks from '../../hooks/api/lastFm/useRecentTracks';
 
 const RecentTracksTable: React.FC<Record<string, void>> = (() => {
   useRecentTracksNavPageSync();
@@ -66,7 +66,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = (() => {
               <div className="p-2 w-8 flex-1 m-auto">
                 <span className="font-semibold">{trimString(track.artist['#text'], 35)}</span>
               </div>
-              <div className="p-2 w-8 flex-1 m-auto">
+              <div className="p-2 w-8 flex-1 m-auto text-right">
                 {doDateThing(unixDate)}
               </div>
             </div>

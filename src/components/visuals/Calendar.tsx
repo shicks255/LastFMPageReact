@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { years } from '../../utils';
 import { LocalStateContext } from '../../contexts/LocalStateContext';
+import useScrobblesGrouped from '../../hooks/api/musicApi/useScrobblesGrouped';
+import Loader from '../Loader';
 
 interface calData {
   plays: number,
@@ -11,40 +13,24 @@ interface calData {
 const Calendar: React.FC<Record<string, void>> = (() => {
   const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('2021');
-  const [chartData, setChartData] = useState([]);
   const year = years[timeFrame];
-  async function myFetch(): Promise<calData[]> {
-    const x = await fetch(
-      `https://musicapi.shicks255.com/api/v1/scrobbles/grouped?userName=${state.userName}&from=${year[0]}&to=${year[1]}&timeGroup=DAY`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([, body]) => {
-        setChartData(body);
-        return body;
-      });
-    return x;
-  }
+  const chartData = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
 
-  useEffect(() => {
-    myFetch();
-  }, [timeFrame]);
-
-  if (!chartData) {
+  if (!chartData || !chartData.data) {
     return <>HIOHOH</>;
   }
 
-  const chart = chartData.map((item: calData) => ({
+  if (chartData.isLoading) {
+    return <Loader small={false} />;
+  }
+
+  const chart = chartData.data.map((item: calData) => ({
     day: item.timeGroup,
     value: item.plays,
   }));
 
   const timeFrameSelects = Object.keys(years).map((key) => (
-    <option value={key} key={key} selected={key === timeFrame}>
+    <option value={key} key={key}>
       {key}
     </option>
   ));
@@ -56,7 +42,7 @@ const Calendar: React.FC<Record<string, void>> = (() => {
           <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Calendar</h1>
           <div className="column has-text-left-tablet">
             <div className="select is-danger">
-              <select onChange={(event) => setTimeFrame(event.target.value)}>
+              <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
                 {timeFrameSelects}
               </select>
             </div>

@@ -1,69 +1,102 @@
-import React, { useEffect, useState } from 'react';
-
-interface timeStat {
-  oldest: string,
-  newest: string,
-  difference: string
-}
-
-interface stat {
-  name: string,
-  extra: string,
-  timeStat: timeStat
-}
-
-interface userStats {
-  longestDormancyAlbum: stat,
-  longestDormancyArtist: stat,
-  oldestAndNewestAlbum: stat,
-  oldestAndNewestArtist: stat,
-}
+import React, { useContext } from 'react';
+import useUserStats from '../../hooks/api/musicApi/useUserStats';
+import { LocalStateContext } from '../../contexts/LocalStateContext';
+import Loader from '../Loader';
 
 const UserStats: React.FC<Record<string, void>> = (() => {
-  const [stats, setStats] = useState<userStats | undefined>();
+  const { state } = useContext(LocalStateContext);
+  const userStats = useUserStats(state.userName);
 
-  async function fetchStats() {
-    fetch(
-      'https://musicapi.shicks255.com/api/v1/user/stats?userName=shicks255',
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then((res) => Promise.all([res.ok, res.json()]))
-      .then(([, body]) => {
-        setStats(body);
-      });
+  if (!userStats || !userStats.data) {
+    return <></>;
   }
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  if (!stats) {
-    return <></>;
+  if (userStats.isLoading) {
+    return <Loader small={false} />;
   }
 
   return (
     <div>
-      Artist with earliest and latest play:
-      {stats.oldestAndNewestArtist.name}
-      First play:
-      {' '}
-      {stats.oldestAndNewestArtist.timeStat.oldest}
-      Last play:
-      {stats.oldestAndNewestArtist.timeStat.newest}
-      <br />
-      Album with earliest and latest play:
-      {stats.oldestAndNewestAlbum.name}
-      <br />
-      Longest dormant period artist:
-      {stats.longestDormancyArtist.name}
-      <br />
-      Longest dormant period album:
-      {stats.longestDormancyAlbum.name}
-      <br />
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              Largest Artist Play Span
+            </td>
+            <td>
+              <span className="font-semibold">{userStats.data.oldestAndNewestArtist.name}</span>
+            </td>
+            <td>
+              First play:
+              {' '}
+              {userStats.data.oldestAndNewestArtist.timeStat.oldest}
+            </td>
+            <td>
+              Last play:
+              {userStats.data.oldestAndNewestArtist.timeStat.newest}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Largest Album Play Span
+              {' '}
+            </td>
+            <td>
+              <span className="font-semibold">{userStats.data.oldestAndNewestAlbum.name}</span>
+            </td>
+            <td>
+              First play:
+              {' '}
+              {userStats.data.oldestAndNewestAlbum.timeStat.oldest}
+            </td>
+            <td>
+              Last play:
+              {userStats.data.oldestAndNewestAlbum.timeStat.newest}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Longest Dormant Artist:
+              {' '}
+            </td>
+            <td>
+              <span className="font-semibold">{userStats.data.longestDormancyArtist.name}</span>
+            </td>
+            <td>
+              No plays from
+              {' '}
+              {userStats.data.longestDormancyArtist.timeStat.oldest}
+            </td>
+            <td>
+              {' '}
+              to
+              {userStats.data.longestDormancyArtist.timeStat.newest}
+            </td>
+          </tr>
+          <tr>
+            <td />
+          </tr>
+          <tr>
+            <td>
+              Longest Dormant Album:
+              {' '}
+            </td>
+            <td>
+              <span className="font-semibold">{userStats.data.longestDormancyAlbum.name}</span>
+            </td>
+            <td>
+              No plays from
+              {' '}
+              {userStats.data.longestDormancyAlbum.timeStat.oldest}
+            </td>
+            <td>
+              {' '}
+              to
+              {userStats.data.longestDormancyAlbum.timeStat.newest}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 });

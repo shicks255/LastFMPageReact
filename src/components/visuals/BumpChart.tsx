@@ -1,57 +1,36 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, {
-  useContext, useEffect, useState,
-} from 'react';
+import React, { useContext, useState } from 'react';
 import { ResponsiveBump } from '@nivo/bump';
 import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
-import { LocalStateContext } from '../../contexts/LocalStateContext';
 import TimeFrameSelect from '../TimeFrameSelect';
-
-// type ChartData = {
-//   id: string,
-//   data: DataPoint[]
-// }
-// type DataPoint = {
-//   x: string,
-//   y: number,
-// }
+import useScrobblesArtistOrAlbumGrouped from '../../hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+import Loader from '../Loader';
+import { LocalStateContext } from '../../contexts/LocalStateContext';
 
 const BumpChart: React.FC<Record<string, void>> = (() => {
-  const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('7day');
-  const [trackzz, setTrackzz] = useState(undefined);
   const [resourceType, setResourceType] = useState<string>('artist');
-  // const [loading, setLoading] = useState(false);
+  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+  const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
-  const setTimeFrame2 = (e) => {
-    setTrackzz(undefined);
-    setTimeFrame(e);
-  };
+  const { state } = useContext(LocalStateContext);
 
-  // if (loading) return <></>;
+  const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
+  const scrobbles = useScrobblesArtistOrAlbumGrouped(
+    resource, state.userName, timeGroup, start, end, 12,
+  );
 
-  useEffect(() => {
-    // setLoading(true);
-    const [start, end] = getDateRangeFromTimeFrame(timeFrame);
-    const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
-
-    const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
-    fetch(`https://musicapi.shicks255.com/api/v1/scrobbles/${resource}?userName=${state.userName}&from=${start}&to=${end}&timeGroup=${timeGroup}&limit=12&empties=true`)
-      .then((res) => res.json())
-      .then((res) => {
-        setTrackzz(res);
-        // setLoading(false);
-      });
-  }, [timeFrame, resourceType]);
-
-  if (!trackzz) {
+  if (!scrobbles || !scrobbles.data) {
     return <></>;
   }
 
-  // @ts-ignore
-  const aa = trackzz.data.map((result) => {
-    const items = result.data;
+  if (scrobbles.isLoading) {
+    return <Loader small={false} />;
+  }
+
+  const countPerTimeGroup = scrobbles.data.data.map((result) => {
     let runningTotal = 0;
+    const items = result.data;
     const nestedPlays = items.map((item) => {
       runningTotal += item.plays;
       return {
@@ -73,19 +52,19 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
   });
 
   const darRanks = {};
-  const timeGroups = aa[0].data.map((x) => x.timeGroup);
+  const timeGroups = countPerTimeGroup[0].data.map((x) => x.timeGroup);
   timeGroups.forEach((tg) => {
     const dayRank: string[] = [];
-    const itemsForDay = aa.map((item) => {
+    const itemsForDay = countPerTimeGroup.map((item) => {
       const dayPlay = item.data.filter((x) => x.timeGroup === tg);
       if (resourceType === 'artist') {
         return {
-          name: item.artistName,
+          name: item.artistName || '',
           plays: dayPlay[0].plays,
         };
       }
       return {
-        name: item.albumName,
+        name: item.albumName || '',
         plays: dayPlay[0].plays,
       };
     })
@@ -107,10 +86,8 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
   });
 
   const artists = resourceType === 'artist'
-  // @ts-ignore
-    ? trackzz.data.map((x) => x.artistName)
-  // @ts-ignore
-    : trackzz.data.map((x) => x.albumName);
+    ? scrobbles.data.data.map((x) => x.artistName)
+    : scrobbles.data.data.map((x) => x.albumName);
   const finalNewChart = artists.map((artist) => {
     const myRanks = Object.entries(darRanks).map(([k, v]) => ({
       x: k,
@@ -129,12 +106,11 @@ const BumpChart: React.FC<Record<string, void>> = (() => {
       <div style={{ height: '350px', fontWeight: 'bold' }}>
         <section className="mainContent">
           <TimeFrameSelect
-            timeFrameSelected={timeFrame}
-            onChange={(e: string) => setTimeFrame2(e)}
+            onChange={(e: string) => setTimeFrame(e)}
           />
-          <select onChange={(e) => setResourceType(e.target.value)}>
-            <option value="album" key="album" selected={resourceType === 'album'}>Albums</option>
-            <option value="artist" key="artist" selected={resourceType === 'artist'}>Artists</option>
+          <select value={resourceType} onChange={(e) => setResourceType(e.target.value)}>
+            <option value="album" key="album">Albums</option>
+            <option value="artist" key="artist">Artists</option>
           </select>
           <h1 className="title myTitle has-text-left-tablet noMarginBottom">Artist Rank By Day</h1>
         </section>

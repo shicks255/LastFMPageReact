@@ -15,9 +15,6 @@ const TreeMaps: () => JSX.Element = () => {
   return (
     <>
       <hr />
-      <section className="mainContent">
-        <h1 className="title myTitle has-text-left-tablet">Heat Maps</h1>
-      </section>
       <div className="is-mobile">
         <div className="box column is-half is-offset-one-quarter has-text-centered">
           <div className="columns has-text-black" style={{ padding: '10px' }}>

@@ -7,7 +7,7 @@ import TopContainer from './top/TopContainer';
 const Visuals = lazy(() => import('./visuals/Visuals'));
 
 const Main: React.FC<Record<string, void>> = ((): JSX.Element => (
-  <div className="">
+  <div>
     <Suspense fallback={<Loader small={false} />}>
       <Switch>
         <Route path="/recent">

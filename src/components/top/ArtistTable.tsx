@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import { useTopArtists } from '../../hooks/useLasftFmApi';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
 import ArtistImage from '../ArtistImage';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
 import { trimString } from '../../utils';
+import useTopArtists from '../../hooks/api/lastFm/useTopArtists';
 
 const ArtistTable: React.FC<Record<string, void>> = (() => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();

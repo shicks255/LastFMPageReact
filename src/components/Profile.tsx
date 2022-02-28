@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { LocalStateContext } from '../contexts/LocalStateContext';
-import { useUserQuery } from '../hooks/useLasftFmApi';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import ProfileModal from './modals/ProfileModal';
+import useUserQuery from '../hooks/api/lastFm/useUser';
 
 const Profile: React.FC<Record<string, null>> = ((): JSX.Element => {
   const { state, actions } = useContext(LocalStateContext);

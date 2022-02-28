@@ -4,8 +4,8 @@ import Loader from '../Loader';
 import HoverImage from '../HoverImage';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
-import { useTopAlbums } from '../../hooks/useLasftFmApi';
 import { trimString } from '../../utils';
+import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
 
 const AlbumTable: React.FC<Record<string, void>> = (() => {
   const { topItemsTimeFrame, topItemsPage } = useApiState();

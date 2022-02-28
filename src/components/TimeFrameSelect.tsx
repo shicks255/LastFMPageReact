@@ -2,16 +2,15 @@ import React from 'react';
 import { timeFrames } from '../utils';
 
 interface Props {
-    timeFrameSelected: string,
     onChange: (e: string) => void
 }
 
 const TimeFrameSelect: React.FC<Props> = ((props: Props) => {
-  const { timeFrameSelected, onChange } = props;
+  const { onChange } = props;
 
   const timeFrameSelects = Object.keys(timeFrames)
     .map((value) => (
-      <option value={value} key={value} selected={timeFrameSelected === value}>
+      <option value={value} key={value}>
         {timeFrames[value]}
       </option>
     ));

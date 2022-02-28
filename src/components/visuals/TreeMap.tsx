@@ -4,7 +4,8 @@ import { ResponsiveTreeMap } from '@nivo/treemap';
 import Loader from '../Loader';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '../../contexts/ApiContext';
-import { useTopAlbums, useTopArtists } from '../../hooks/useLasftFmApi';
+import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
+import useTopArtists from '../../hooks/api/lastFm/useTopArtists';
 
 type Props = {
   name: string,
