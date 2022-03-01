@@ -1,11 +1,12 @@
 import { onlineManager } from 'react-query';
 
+import { ITopAlbumsResponse } from '@/types/TopAlbums';
 import { IUser } from '@/types/User';
 import UserStats from '@/types/UserStats';
 
 const apiKey = process.env.REACT_APP_LAST_FM_KEY;
 const musicApi = 'https://musicapi.shicks255.com/api/v1';
-const audioscrobblerApi = 'https://www.audioscrobbler.com/2.0';
+const audioscrobblerApi = 'https://ws.audioscrobbler.com/2.0';
 
 function generateUrl(type, page, period, key, userName) {
   return `https://ws.audioscrobbler.com/2.0/?method=${type}
@@ -103,7 +104,11 @@ function recentTracksBigQuery(userName: string): Promise<Response> {
     });
 }
 
-function topAlbumsQuery(timeFrame: string, page: number, userName: string): Promise<Response> {
+function topAlbumsQuery(
+  timeFrame: string,
+  page: number,
+  userName: string
+): Promise<ITopAlbumsResponse> {
   const url = generateUrl('user.getTopAlbums', page, timeFrame, apiKey, userName);
   throwErrorIfOffline('Problem loading top albums');
   return fetch(url)
@@ -117,7 +122,7 @@ function topAlbumsQuery(timeFrame: string, page: number, userName: string): Prom
           })
         );
       }
-      return body.topalbums;
+      return body;
     });
 }
 
@@ -232,5 +237,7 @@ export {
   topArtistsQuery,
   scrobblesQuery,
   scrobblesAlbumOrArtistGroupedQuery,
-  userStatsQuery
+  userStatsQuery,
+  audioscrobblerApi,
+  musicApi
 };

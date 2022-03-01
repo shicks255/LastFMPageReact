@@ -20,7 +20,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
   }
   if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const topAlbums = data;
+  const topAlbums = data.topalbums;
 
   function renderTable() {
     return (

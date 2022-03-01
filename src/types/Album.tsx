@@ -2,9 +2,12 @@ import { IArtist } from './Artist';
 import { IImage } from './Image';
 
 export interface IAlbum {
+  '@attr': {
+    rank: number;
+  };
+  artist: IArtist;
   image: IImage[];
   name: string;
-  url: string;
-  artist: IArtist;
   playcount: number;
+  url: string;
 }

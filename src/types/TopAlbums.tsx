@@ -1,6 +1,6 @@
 import { IAlbum } from './Album';
 
-export interface ITopAlbums {
+interface ITopAlbums {
   '@attr': {
     page: number;
     perPage: number;
@@ -10,3 +10,9 @@ export interface ITopAlbums {
   };
   album: IAlbum[];
 }
+
+interface ITopAlbumsResponse {
+  topalbums: ITopAlbums;
+}
+
+export type { ITopAlbums, ITopAlbumsResponse };

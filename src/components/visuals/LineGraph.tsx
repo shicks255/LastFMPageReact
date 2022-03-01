@@ -155,8 +155,8 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
             type: 'time',
             format: format1,
             useUTC: false,
-            precision,
-            stacked: true
+            precision
+            // stacked: true
           }}
           // xFormat="time:%m/%d/%Y"
           yScale={{

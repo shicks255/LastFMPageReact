@@ -41,7 +41,7 @@ interface IProps {
   children: React.ReactNode;
 }
 
-const Provider: React.FC<IProps> = (props: IProps) => {
+const LocalStateProvider: React.FC<IProps> = (props: IProps) => {
   const { children } = props;
 
   const [userName, setUserName] = useState<string>(localStorage.getItem('userName') || 'shicks255');
@@ -71,4 +71,4 @@ const Provider: React.FC<IProps> = (props: IProps) => {
   return <LocalStateContext.Provider value={context}>{children}</LocalStateContext.Provider>;
 };
 
-export { LocalStateContext, Provider };
+export { LocalStateContext, LocalStateProvider };

@@ -14,9 +14,9 @@ interface IType {
 const ModalContext = React.createContext<IType | undefined>(undefined);
 
 interface IProps {
-  children: JSX.Element[];
+  children: React.ReactNode;
 }
-function ModalContextProvider(props: IProps): JSX.Element {
+function ModalContextProvider(props: IProps) {
   const [modalImageSrc, setModalImageSrc] = useState<string>('');
   const [modalImageCaption, setModalImageCaption] = useState<string>('');
 
