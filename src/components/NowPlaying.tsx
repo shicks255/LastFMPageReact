@@ -12,12 +12,12 @@ const NowPlaying: React.FC<Record<string, void>> = () => {
   }
   if (!data) return <div />;
 
-  const isNowPlaying = data.track[0]?.['@attr']?.nowplaying;
+  const isNowPlaying = data.recenttracks.track[0]?.['@attr']?.nowplaying;
   if (!isNowPlaying) {
     return <div />;
   }
 
-  const nowPlaying = data.track[0];
+  const nowPlaying = data.recenttracks.track[0];
 
   return (
     <div className="nowPlaying">

@@ -1,7 +1,11 @@
 import { onlineManager } from 'react-query';
 
+import { IRecentTracksResponse } from '@/types/RecentTracks';
+import { IScrobblesGrouped } from '@/types/Scrobble';
 import { ITopAlbumsResponse } from '@/types/TopAlbums';
-import { IUser } from '@/types/User';
+import { ITopArtistsResponse } from '@/types/TopArtists';
+import { ITopTracksResponse } from '@/types/TopTracks';
+import { IUserResponse } from '@/types/User';
 import UserStats from '@/types/UserStats';
 
 const apiKey = process.env.REACT_APP_LAST_FM_KEY;
@@ -29,7 +33,7 @@ function throwErrorIfOffline(businessError) {
   }
 }
 
-function userQuery(userName: string): Promise<IUser> {
+function userQuery(userName: string): Promise<IUserResponse> {
   const url = `${audioscrobblerApi}?method=user.getinfo
         &user=${userName}
         &api_key=${apiKey}
@@ -48,7 +52,7 @@ function userQuery(userName: string): Promise<IUser> {
         );
       }
       localStorage.setItem('userName', userName);
-      return body.user;
+      return body;
     });
 }
 
@@ -63,7 +67,7 @@ function checkUserName(userName: string): Promise<boolean> {
 }
 
 // eslint-disable-next-line max-len
-function recentTracksQuery(page: number, userName: string): Promise<Response> {
+function recentTracksQuery(page: number, userName: string): Promise<IRecentTracksResponse> {
   const url = generateUrl('user.getrecenttracks', page, '', apiKey, userName);
   throwErrorIfOffline('Problem loading recent tracks');
   return fetch(url)
@@ -77,11 +81,11 @@ function recentTracksQuery(page: number, userName: string): Promise<Response> {
           })
         );
       }
-      return body.recenttracks;
+      return body;
     });
 }
 
-function recentTracksBigQuery(userName: string): Promise<Response> {
+function recentTracksBigQuery(userName: string): Promise<IRecentTracksResponse> {
   const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
         &user=${userName}
         &api_key=${apiKey}
@@ -100,7 +104,7 @@ function recentTracksBigQuery(userName: string): Promise<Response> {
           })
         );
       }
-      return body.recenttracks;
+      return body;
     });
 }
 
@@ -126,7 +130,11 @@ function topAlbumsQuery(
     });
 }
 
-function topTracksQuery(timeFrame: string, page: number, userName: string): Promise<Response> {
+function topTracksQuery(
+  timeFrame: string,
+  page: number,
+  userName: string
+): Promise<ITopTracksResponse> {
   const url = generateUrl('user.getTopTracks', page, timeFrame, apiKey, userName);
   throwErrorIfOffline('Problem loading top tracks');
   return fetch(url)
@@ -140,11 +148,15 @@ function topTracksQuery(timeFrame: string, page: number, userName: string): Prom
           })
         );
       }
-      return body.toptracks;
+      return body;
     });
 }
 
-function topArtistsQuery(timeFrame: string, page: number, userName: string): Promise<Response> {
+function topArtistsQuery(
+  timeFrame: string,
+  page: number,
+  userName: string
+): Promise<ITopArtistsResponse> {
   const url = generateUrl('user.getTopArtists', page, timeFrame, apiKey, userName);
   throwErrorIfOffline('Problem loading top artists');
   return fetch(url)
@@ -158,7 +170,7 @@ function topArtistsQuery(timeFrame: string, page: number, userName: string): Pro
           })
         );
       }
-      return body.topartists;
+      return body;
     });
 }
 
@@ -200,7 +212,7 @@ function scrobblesAlbumOrArtistGroupedQuery(
   end?: string,
   limit?: number,
   empties?: boolean
-): Promise<Response> {
+): Promise<IScrobblesGrouped> {
   let url = `${musicApi}/scrobbles/${resource}?userName=${userName}&timeGroup=${timeGroup}`;
   if (start) {
     url += `&from=${start}`;
@@ -216,8 +228,18 @@ function scrobblesAlbumOrArtistGroupedQuery(
   }
 
   return fetch(url)
-    .then((res) => res.json())
-    .then((res) => res);
+    .then((res) => Promise.all([res.ok, res.json()]))
+    .then(([ok, body]) => {
+      if (!ok) {
+        throw Error(
+          JSON.stringify({
+            technical: body.message,
+            business: 'Problem loading top artists'
+          })
+        );
+      }
+      return body;
+    });
 }
 
 function userStatsQuery(userName: string): Promise<UserStats> {

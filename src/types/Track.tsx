@@ -1,5 +1,6 @@
 import { IArtist } from './Artist';
 import { IImage } from './Image';
+import { IAlbum } from '@/types/Album';
 
 export interface ITrack {
   date: {
@@ -11,5 +12,9 @@ export interface ITrack {
   url: string;
   duration: number;
   playcount: number;
-  album: Record<string, never>;
+  album: IAlbum;
+  '@attr'?: {
+    nowplaying?: boolean;
+    rank?: number;
+  };
 }

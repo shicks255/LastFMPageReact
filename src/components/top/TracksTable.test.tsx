@@ -1,33 +1,33 @@
 import { within } from '@testing-library/react';
 import { screen } from '@testing-library/react';
 
-import AlbumTable from '@/components/top/AlbumTable';
+import TracksTable from '@/components/top/TracksTable';
 import customRender from '@/mocks/utils';
 
 test('should render album table', async () => {
-  customRender(<AlbumTable />);
+  customRender(<TracksTable />);
 
-  expect(await screen.findByRole('columnheader', { name: 'Album' })).toBeInTheDocument();
+  expect(await screen.findByRole('columnheader', { name: 'Name' })).toBeInTheDocument();
   expect(await screen.findByRole('columnheader', { name: 'Artist' })).toBeInTheDocument();
   expect(await screen.findByRole('columnheader', { name: 'Plays' })).toBeInTheDocument();
+  expect(await screen.findByRole('columnheader', { name: 'Length' })).toBeInTheDocument();
 });
 
-test('should render correct amount of album rows', async () => {
-  customRender(<AlbumTable />);
+test('should render correct amount of track rows', async () => {
+  customRender(<TracksTable />);
 
   const rows = await screen.findAllByRole('row');
 
   expect(rows.length).toBe(2);
 });
 
-test('should render the first album row correclty', async () => {
-  customRender(<AlbumTable />);
+test('should render the first album row correctly', async () => {
+  customRender(<TracksTable />);
 
   const firstRow = await screen.findAllByRole('row');
 
   expect(await within(firstRow[1]).findByRole('cell', { name: 'Pink Floyd' })).toBeInTheDocument();
-  expect(
-    await within(firstRow[1]).findByRole('cell', { name: 'Dark Side of the Moon' })
-  ).toBeInTheDocument();
+  expect(await within(firstRow[1]).findByRole('cell', { name: 'Money' })).toBeInTheDocument();
+  expect(await within(firstRow[1]).findByRole('cell', { name: '5:00' })).toBeInTheDocument();
   expect(await within(firstRow[1]).findByRole('cell', { name: '100' })).toBeInTheDocument();
 });

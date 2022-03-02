@@ -1,4 +1,4 @@
-export interface IScrobble {
+interface IScrobble {
   id: 0;
   userName: 'string';
   name: 'string';
@@ -31,4 +31,4 @@ interface IScrobbleData {
   timeGroup: string;
 }
 
-export type { IScrobblesGrouped, IArtistScrobbleData, IScrobbleData };
+export type { IScrobblesGrouped, IArtistScrobbleData, IScrobbleData, IScrobble };

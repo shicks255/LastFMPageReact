@@ -57,3 +57,5 @@ export default interface IUserStats {
   oldestAndNewestAlbum: IOldestAndNewestAlbum;
   longestDormancyAlbum: ILongestDormancyAlbum;
 }
+
+export type { IDifference };

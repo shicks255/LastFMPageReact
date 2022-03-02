@@ -17,9 +17,9 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
   if (!data) return <div />;
 
   const user = {
-    playCount: data.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    avatar: data.image[1]['#text'],
-    registered: new Date(data.registered.unixtime * 1000)
+    playCount: data.user.playcount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    avatar: data.user.image[1]['#text'],
+    registered: new Date(data.user.registered.unixtime * 1000)
   };
 
   return (

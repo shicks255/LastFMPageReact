@@ -18,7 +18,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   if (error) return <ErrorMessage error={error} />;
   if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const recentTracks = data;
+  const recentTracks = data.recenttracks;
 
   function doDateThing(date: Date): JSX.Element {
     const month = date.getMonth() + 1;

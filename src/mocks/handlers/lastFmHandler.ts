@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
-import { audioscrobblerApi, topTracksQuery } from '@/service/api';
+import { DARK_SIDE_MOON, MONEY, PINK_FLOYD } from '@/mocks/constants';
+import { audioscrobblerApi } from '@/service/api';
 import { IRecentTracks } from '@/types/RecentTracks';
 import { ITopAlbums, ITopAlbumsResponse } from '@/types/TopAlbums';
 import { ITopArtists } from '@/types/TopArtists';
@@ -21,7 +22,7 @@ const getUser = (s: URLSearchParams) => {
 
 const getRecentTracks = (s: URLSearchParams) => {
   const recentTracks: IRecentTracks = {
-    track: [],
+    track: [MONEY],
     '@attr': {
       page: 1,
       perPage: 1,
@@ -31,30 +32,12 @@ const getRecentTracks = (s: URLSearchParams) => {
     }
   };
 
-  return recentTracks;
+  return { recenttracks: recentTracks };
 };
 
 function getTopAlbums(s: URLSearchParams): ITopAlbumsResponse {
   const topAlbums: ITopAlbums = {
-    album: [
-      {
-        '@attr': {
-          rank: 1
-        },
-        image: [],
-        artist: {
-          url: '',
-          image: [],
-          playcount: 100,
-          mbid: '123',
-          '#text': 'Glen Campbell',
-          name: 'Glenn Campbell'
-        },
-        name: 'Greatest Hits',
-        url: '',
-        playcount: 100
-      }
-    ],
+    album: [DARK_SIDE_MOON],
     '@attr': {
       page: 1,
       perPage: 1,
@@ -69,7 +52,7 @@ function getTopAlbums(s: URLSearchParams): ITopAlbumsResponse {
 
 const getTopTracks = (s: URLSearchParams) => {
   const topTracks: ITopTracks = {
-    track: [],
+    track: [MONEY],
     '@attr': {
       page: 1,
       perPage: 1,
@@ -79,12 +62,12 @@ const getTopTracks = (s: URLSearchParams) => {
     }
   };
 
-  return topTracks;
+  return { toptracks: topTracks };
 };
 
 const getTopArtists = (s: URLSearchParams) => {
   const topArtists: ITopArtists = {
-    artist: [],
+    artist: [PINK_FLOYD],
     '@attr': {
       page: 1,
       perPage: 1,
@@ -94,17 +77,16 @@ const getTopArtists = (s: URLSearchParams) => {
     }
   };
 
-  return topArtists;
+  return { topartists: topArtists };
 };
 
 const lastFm = rest.get(`${audioscrobblerApi}`, (req, res, ctx) => {
   const s = req.url.searchParams;
 
-  const user = s.get('user');
   const method = s.get('method')?.trim();
-  console.log(method);
 
   if (method === 'user.getuser') return res(ctx.json(getUser(s)));
+  if (method === 'user.getrecenttracks') return res(ctx.json(getRecentTracks(s)));
   if (method === 'user.getTopAlbums') return res(ctx.json(getTopAlbums(s)));
   if (method === 'user.getTopArtists') return res(ctx.json(getTopArtists(s)));
   if (method === 'user.getTopTracks') return res(ctx.json(getTopTracks(s)));

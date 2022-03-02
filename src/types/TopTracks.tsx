@@ -1,6 +1,6 @@
 import { ITrack } from './Track';
 
-export interface ITopTracks {
+interface ITopTracks {
   '@attr': {
     page: number;
     perPage: number;
@@ -10,3 +10,9 @@ export interface ITopTracks {
   };
   track: ITrack[];
 }
+
+interface ITopTracksResponse {
+  toptracks: ITopTracks;
+}
+
+export type { ITopTracks, ITopTracksResponse };

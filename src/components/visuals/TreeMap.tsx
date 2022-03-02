@@ -34,7 +34,7 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
 
   let data;
   if (name === 'Albums') data = topAlbums.data?.topalbums.album;
-  else data = topArtists.data?.artist;
+  else data = topArtists.data?.topartists.artist;
 
   const dataPoints = data.map((item) => {
     if (name === 'Albums') {

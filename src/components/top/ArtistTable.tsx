@@ -20,7 +20,7 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
   }
   if (!data) return <div>ahh</div>;
 
-  const artist = data;
+  const artist = data.topartists;
   const artists = artist.artist;
 
   function renderTable() {
@@ -36,7 +36,7 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
         </thead>
         <tbody>
           {artists.map((val) => {
-            const { rank } = val['@attr'];
+            const rank = val['@attr']?.rank;
 
             return (
               <tr className="hover:bg-gray-400" key={val.name}>

@@ -1,6 +1,6 @@
 import { IArtist } from './Artist';
 
-export interface ITopArtists {
+interface ITopArtists {
   '@attr': {
     page: number;
     perPage: number;
@@ -10,3 +10,9 @@ export interface ITopArtists {
   };
   artist: IArtist[];
 }
+
+interface ITopArtistsResponse {
+  topartists: ITopArtists;
+}
+
+export type { ITopArtists, ITopArtistsResponse };

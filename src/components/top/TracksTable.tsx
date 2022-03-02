@@ -20,7 +20,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   if (error) return <ErrorMessage error={error} />;
   if (!data) return <ErrorMessage error={new Error('')} />;
 
-  const topTracks = data;
+  const topTracks = data.toptracks;
   const tracks = topTracks.track;
 
   if (!tracks) return <Loader small={false} />;
@@ -43,7 +43,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
               const time = convertDurationToTimestamp(val.duration);
 
               const title = val.name;
-              const { rank } = val['@attr'];
+              const rank = val?.['@attr']?.rank;
               return (
                 <tr key={title}>
                   <td className="font-semibold text-right pr-4">{rank}</td>
@@ -85,7 +85,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
             const time = convertDurationToTimestamp(val.duration);
 
             const title = val.name;
-            const { rank } = val['@attr'];
+            const rank = val['@attr']?.rank;
             return (
               <tr key={title} className="hover:bg-gray-400">
                 <td className="font-semibold text-right pr-4">{rank}</td>

@@ -1,6 +1,6 @@
 import { ITrack } from './Track';
 
-export interface IRecentTracks {
+interface IRecentTracks {
   '@attr': {
     page: number;
     perPage: number;
@@ -10,3 +10,9 @@ export interface IRecentTracks {
   };
   track: ITrack[];
 }
+
+interface IRecentTracksResponse {
+  recenttracks: IRecentTracks;
+}
+
+export type { IRecentTracksResponse, IRecentTracks };
