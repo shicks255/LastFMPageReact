@@ -124,7 +124,10 @@ const BumpChart: React.FC<Record<string, void>> = () => {
               Artists
             </option>
           </select>
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Artist Rank By Day</h1>
+          <h1 className="title myTitle has-text-left-tablet noMarginBottom">
+            {resource === 'artistsGrouped' && <>Artist Rank By Day</>}
+            {resource === 'albumsGrouped' && <>Album Rank By Day</>}
+          </h1>
         </section>
         <ResponsiveBump
           // @ts-ignore

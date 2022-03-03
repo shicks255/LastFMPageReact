@@ -1,13 +1,20 @@
-import { within } from '@testing-library/react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import BumpChart from '@/components/visuals/BumpChart';
 import customRender from '@/mocks/utils';
 
-test.skip('should render bump chart', async () => {
+test('should render bump chart for artists', async () => {
   customRender(<BumpChart />);
 
-  await screen.findByText('ahhhh');
+  expect(await screen.findByText('Artist Rank By Day')).toBeInTheDocument();
+});
 
-  screen.debug(undefined, 40000);
+test('should render bump chart for albums', async () => {
+  customRender(<BumpChart />);
+
+  const select = await screen.findAllByRole('combobox');
+  userEvent.selectOptions(select[1], 'Albums');
+
+  expect(await screen.findByText('Album Rank By Day')).toBeInTheDocument();
 });

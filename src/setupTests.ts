@@ -22,6 +22,10 @@ beforeAll(() => {
   server.listen();
 });
 
+beforeEach(() => {
+  jest.setTimeout(15000);
+});
+
 afterAll(() => {
   server.close();
 });
