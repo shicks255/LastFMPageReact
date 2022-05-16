@@ -68,6 +68,8 @@ function checkUserName(userName: string): Promise<boolean> {
         throw new Error('asdf');
       }
 
+      console.log(json);
+
       return true;
     });
 }
