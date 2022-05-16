@@ -16,27 +16,23 @@ function ProfileModal(): JSX.Element {
     setTempUserName('');
   });
 
-  const submitUsername = useCallback(
-    () =>
-      function submitUsername() {
-        if (tempUserName === state.userName) return;
-        if (tempUserName.length === 0) {
-          actions.setModalErrorMessage('Enter a new username');
-          return;
-        }
-        checkUserName(tempUserName).then((exists) => {
-          if (exists) {
-            actions.setShowModal(false);
-            setTempUserName('');
-            actions.setModalErrorMessage('');
-            actions.setUserName(tempUserName);
-          } else {
-            actions.setModalErrorMessage(`Username ${tempUserName} does not exist`);
-          }
-        });
-      },
-    [tempUserName, actions, state.userName]
-  );
+  const submitUsername = useCallback(() => {
+    if (tempUserName === state.userName) return;
+    if (tempUserName.length === 0) {
+      actions.setModalErrorMessage('Enter a new username');
+      return;
+    }
+    checkUserName(tempUserName).then((exists) => {
+      if (exists) {
+        actions.setShowModal(false);
+        setTempUserName('');
+        actions.setModalErrorMessage('');
+        actions.setUserName(tempUserName);
+      } else {
+        actions.setModalErrorMessage(`Username ${tempUserName} does not exist`);
+      }
+    });
+  }, [tempUserName, state.userName, actions]);
 
   useEffect(() => {
     const handleKeys = (event) => {

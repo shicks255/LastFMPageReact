@@ -62,8 +62,14 @@ function checkUserName(userName: string): Promise<boolean> {
         &api_key=${apiKey}
         &format=json`;
   return fetch(url)
-    .then((res) => res.ok)
-    .then((ok) => ok);
+    .then((res) => Promise.all([res.ok, res.json()]))
+    .then(([ok, json]) => {
+      if (!ok) {
+        throw new Error('asdf');
+      }
+
+      return true;
+    });
 }
 
 // eslint-disable-next-line max-len
