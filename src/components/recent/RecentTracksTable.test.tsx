@@ -14,7 +14,7 @@ test('should render recent tracks table', async () => {
 test('should render the correct track rows', async () => {
   const { container } = customRender(<RecentTracksTable />);
 
-  const albumRow = await container.getElementsByClassName('flex hover:bg-gray-400');
+  const albumRow = await container.getElementsByClassName('flex odd:bg-blue-400 even:bg-gray-300');
   await screen.findByText('Money');
 
   expect(albumRow[0].childNodes[1]).toHaveTextContent('Money');
