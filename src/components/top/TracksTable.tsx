@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { convertDurationToTimestamp, trimString } from '../../utils';
-import ArtistImage from '../ArtistImage';
+import ArtistImage from '../common/ArtistImage';
+import Loader from '../common/Loader';
+import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
-import Loader from '../Loader';
-import Pagination from '../Pagination';
 import { useApiState } from '@/contexts/ApiContext';
 import useTopTracks from '@/hooks/api/lastFm/useTopTracks';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -87,7 +87,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
             const title = val.name;
             const rank = val['@attr']?.rank;
             return (
-              <tr key={title} className="hover:bg-gray-400">
+              <tr key={title} className="hover:bg-gray-400 odd:bg-gray-100">
                 <td className="font-semibold text-right pr-4">{rank}</td>
                 <td className="p-2">
                   <div className="imageCell pr-2">
@@ -113,7 +113,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
-      <table className="table-auto">{renderTable()}</table>
+      <table className="min-w-full">{renderTable()}</table>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
     </div>
   );

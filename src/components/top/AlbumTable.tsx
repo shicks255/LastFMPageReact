@@ -2,10 +2,10 @@ import React from 'react';
 
 import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
 import { trimString } from '../../utils';
+import HoverImage from '../common/HoverImage';
+import Loader from '../common/Loader';
+import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
-import HoverImage from '../HoverImage';
-import Loader from '../Loader';
-import Pagination from '../Pagination';
 import { useApiState } from '@/contexts/ApiContext';
 
 const AlbumTable: React.FC<Record<string, void>> = () => {
@@ -74,7 +74,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
-      <table className="auto-table">{renderTable()}</table>
+      <table className="min-w-full">{renderTable()}</table>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
     </div>
   );

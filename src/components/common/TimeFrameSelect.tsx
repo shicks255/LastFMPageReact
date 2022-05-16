@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { timeFrames } from '../utils';
+import { timeFrames } from '../../utils';
 
 interface IProps {
   onChange: (e: string) => void;

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
 import useUserQuery from '../hooks/api/lastFm/useUser';
+import Loader from './common/Loader';
 import ErrorMessage from './ErrorMessage';
-import Loader from './Loader';
 import ProfileModal from './modals/ProfileModal';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 

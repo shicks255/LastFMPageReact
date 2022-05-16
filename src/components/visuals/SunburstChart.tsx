@@ -3,8 +3,8 @@ import React, { useContext, useState } from 'react';
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
 import { chartColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
-import Loader from '../Loader';
-import TimeFrameSelect from '../TimeFrameSelect';
+import Loader from '../common/Loader';
+import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 

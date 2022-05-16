@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ButtonGroup from './ButtonGroup';
+import ButtonGroup from './common/ButtonGroup';
 import Main from './Main';
 import ImageModal from './modals/ImageModal';
 import NowPlaying from './NowPlaying';
@@ -21,7 +21,7 @@ const Body: React.FC<Record<string, void>> = () => {
         </div>
         <div className="col-span-2">
           <ButtonGroup />
-          <div className="bg-gradient-to-b from-gray-300 p-4">
+          <div className="bg-gray-300 max-w-5xl">
             <Main />
             <ImageModal />
           </div>

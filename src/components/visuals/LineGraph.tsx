@@ -8,8 +8,8 @@ import {
   getTimeGroupFromTimeFrame,
   trimString
 } from '../../utils';
-import Loader from '../Loader';
-import TimeFrameSelect from '../TimeFrameSelect';
+import Loader from '../common/Loader';
+import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 

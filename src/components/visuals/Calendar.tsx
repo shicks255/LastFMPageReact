@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { years } from '../../utils';
-import Loader from '../Loader';
+import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { trimString } from '../../utils';
+import HoverImage from '../common/HoverImage';
+import Loader from '../common/Loader';
+import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
-import HoverImage from '../HoverImage';
-import Loader from '../Loader';
-import Pagination from '../Pagination';
 import { useApiState } from '@/contexts/ApiContext';
 import useRecentTracks from '@/hooks/api/lastFm/useRecentTracks';
 import useRecentTracksNavPageSync from '@/hooks/useRecentTracksNavPageSync';
@@ -16,7 +16,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
 
   if (isLoading) return <Loader small={false} />;
   if (error) return <ErrorMessage error={error} />;
-  if (!data) return <ErrorMessage error={new Error('')} />;
+  if (!data) return <ErrorMessage error={new Error('o no')} />;
 
   const recentTracks = data.recenttracks;
 
@@ -45,6 +45,9 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   return (
     <div className="mainContent">
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
+      <div className="py-1">
+        <div className="w-full border-t border-gray-700"></div>
+      </div>
       <div>
         {recentTracks.track
           .filter((x) => x.date)
@@ -58,7 +61,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
             const date = track.date.uts;
             const unixDate = new Date(date * 1000);
             return (
-              <div className="flex hover:bg-gray-400" key={track.date.uts}>
+              <div className="flex odd:bg-blue-400 even:bg-gray-300" key={track.date.uts}>
                 <div className="p-2">
                   <a href={track.url} target="_blank" rel="noreferrer">
                     <HoverImage

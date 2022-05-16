@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
 
+import Loader from '../common/Loader';
 import ErrorMessage from '../ErrorMessage';
-import Loader from '../Loader';
 import DataLoadingModal from '../modals/DataLoadingModal';
 import BumpChart from './BumpChart';
 import CalendarChart from './Calendar';

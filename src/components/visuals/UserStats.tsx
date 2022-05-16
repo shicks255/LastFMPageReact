@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import Loader from '../Loader';
+import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useUserStats from '@/hooks/api/musicApi/useUserStats';
 

@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 
-import Loader from '../Loader';
+import Loader from '../common/Loader';
 import MainMenu from './MainMenu';
 import useTopNavSync from '@/hooks/useTopNavSync';
 
