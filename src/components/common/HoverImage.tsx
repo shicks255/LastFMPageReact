@@ -10,9 +10,11 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { src, popupSrc, caption } = props;
   const [showBig, setShowBig] = useState(false);
 
+  console.log(caption);
+
   let image = (
     <img
-      alt={caption}
+      alt=""
       onMouseEnter={() => setShowBig(true)}
       className="image w-16"
       height="64"
@@ -23,7 +25,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   if (showBig) {
     image = (
       <img
-        alt={caption}
+        alt=""
         onMouseLeave={() => setShowBig(false)}
         className="image w-full"
         height="64"
