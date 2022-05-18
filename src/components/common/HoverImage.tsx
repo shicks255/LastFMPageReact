@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { useModalState } from '@/contexts/ModalContext';
-
 interface IProps {
   src: string;
   popupSrc: string;
@@ -14,7 +12,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
 
   let image = (
     <img
-      alt=""
+      alt={caption}
       onMouseEnter={() => setShowBig(true)}
       className="image w-16"
       height="64"
@@ -25,7 +23,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   if (showBig) {
     image = (
       <img
-        alt=""
+        alt={caption}
         onMouseLeave={() => setShowBig(false)}
         className="image w-full"
         height="64"
