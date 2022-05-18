@@ -8,7 +8,7 @@ const ImageModal: React.FC<Record<string, void>> = () => {
   if (!state.modalImageSrc) return <div />;
 
   return (
-    <div className="active imagePopup box">
+    <div className="fixed top-10">
       <img alt="" src={state.modalImageSrc} />
       <span style={{ color: 'black' }}>
         <b>{state.modalImageCaption}</b>

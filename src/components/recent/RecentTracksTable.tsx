@@ -43,7 +43,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   }
 
   return (
-    <div className="mainContent">
+    <div>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
@@ -61,8 +61,8 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
             const date = track.date.uts;
             const unixDate = new Date(date * 1000);
             return (
-              <div className="flex odd:bg-blue-400 even:bg-gray-300" key={track.date.uts}>
-                <div className="p-2">
+              <div className="flex even:bg-slate-300 odd:bg-gray-200" key={track.date.uts}>
+                <div className="p-2 pl-4">
                   <a href={track.url} target="_blank" rel="noreferrer">
                     <HoverImage
                       src={smallImgSrc}
@@ -77,7 +77,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
                 <div className="p-2 w-8 flex-1 m-auto">
                   <span className="font-semibold">{trimString(track.artist['#text'], 35)}</span>
                 </div>
-                <div className="p-2 w-8 flex-1 m-auto text-right">{doDateThing(unixDate)}</div>
+                <div className="p-2 pr-4 w-8 flex-1 m-auto text-right">{doDateThing(unixDate)}</div>
               </div>
             );
           })}

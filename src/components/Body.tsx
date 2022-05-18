@@ -21,9 +21,9 @@ const Body: React.FC<Record<string, void>> = () => {
         </div>
         <div className="col-span-2">
           <ButtonGroup />
-          <div className="bg-gray-300 max-w-5xl">
-            <Main />
+          <div className="bg-gray-200 max-w-5xl">
             <ImageModal />
+            <Main />
           </div>
         </div>
       </div>

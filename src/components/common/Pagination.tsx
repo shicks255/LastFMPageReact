@@ -83,7 +83,7 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
           )}
           {isFirstPage || isSecondPage ? '' : preLink}
           <button type="button" className="p-3">
-            <div className="w-6 h-6 bg-blue-300 rounded-full flex justify-center items-center">
+            <div className="w-6 h-6 bg-slate-300 rounded-full flex justify-center items-center">
               {page}
             </div>
           </button>

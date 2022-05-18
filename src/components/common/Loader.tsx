@@ -9,7 +9,7 @@ const Loader: React.FC<IProps> = (props: IProps): JSX.Element => {
   const clazz = small ? 'fa-5x' : 'fa-7x';
 
   return (
-    <div style={{ color: '#C3073F' }}>
+    <div className="text-cyan-700">
       <div className="has-text-centered">
         <i className={`fas fa-compact-disc ${clazz} fa-spin`} />
       </div>
