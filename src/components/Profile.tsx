@@ -23,39 +23,35 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
   };
 
   return (
-    <div className="">
+    <>
+      <div className="flex items-center w-full justify-center mt-4">
+        <figure className="flex-initial basis-1/4">
+          <img height={200} width={200} alt="" className="rounded-full" src={user.avatar} />
+        </figure>
+        <h3 className="title flex-initial ml-4 font-bold">{state.userName}</h3>
+      </div>
       <div className="">
-        <div className="">
-          <figure className="h-24 w-24">
-            <img height={300} width={300} alt="" className="rounded-full" src={user.avatar} />
-          </figure>
-        </div>
-        <div className="">
-          <h3 className="title" style={{ marginBottom: '0' }}>
-            {state.userName}
-          </h3>
-          <br />
-          <span className="font-normal">
-            {' '}
-            {user.playCount}
-            <span className="font-thin"> scrobbles </span>
-          </span>
-          <br />
-          <span className="font-thin">Registered on </span>
-          <span className="font-normal">
-            {' '}
-            {user.registered.toLocaleString(undefined, {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric'
-            })}
-          </span>
-          <br />
-          <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
-        </div>
+        <br />
+        <span className="font-normal">
+          {' '}
+          {user.playCount}
+          <span className="font-thin"> scrobbles </span>
+        </span>
+        <br />
+        <span className="font-thin">Registered on </span>
+        <span className="font-normal">
+          {' '}
+          {user.registered.toLocaleString(undefined, {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          })}
+        </span>
+        <br />
+        <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
       </div>
       {state.showModal ? <ProfileModal /> : ''}
-    </div>
+    </>
   );
 };
 

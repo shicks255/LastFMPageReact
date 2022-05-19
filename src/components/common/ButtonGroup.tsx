@@ -7,14 +7,14 @@ import { useApiState } from '@/contexts/ApiContext';
 const ButtonGroup: React.FC<Record<string, void>> = () => {
   const { selected } = useApiState();
 
-  const selectedTabClass = 'text-gray-800 bg-gray-300';
+  const selectedTabClass = 'text-gray-200 bg-sky-900';
   const selectButtonClass = 'font-semibold';
 
   return (
     <div className="1-1/2 mx-auto rounded">
       <ul className="inline-flex w-full px-a">
         <li
-          className={`px-4 py-2 bg-gray-100 rounded-t ${
+          className={`px-4 py-2 border-r-2 bg-slate-300 rounded-t ${
             selected === 'recent' ? selectedTabClass : ''
           }`}
         >
@@ -29,7 +29,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           </Link>
         </li>
         <li
-          className={`px-4 py-2 bg-gray-100 rounded-t ${
+          className={`px-4 py-2 border-r-2 bg-slate-300 rounded-t ${
             selected === 'top' ? selectedTabClass : ''
           }`}
         >
@@ -44,7 +44,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           </Link>
         </li>
         <li
-          className={`px-4 py-2 bg-gray-100 rounded-t ${
+          className={`px-4 py-2 bg-slate-300 rounded-t ${
             selected === 'vis' ? selectedTabClass : ''
           }`}
         >
