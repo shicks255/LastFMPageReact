@@ -14,8 +14,8 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
     <div className="1-1/2 mx-auto rounded">
       <ul className="inline-flex w-full px-a">
         <li
-          className={`px-4 py-2 border-r-2 bg-slate-300 rounded-t ${
-            selected === 'recent' ? selectedTabClass : ''
+          className={`px-4 py-2 border-r-2 rounded-t ${
+            selected === 'recent' ? selectedTabClass : 'bg-slate-300'
           }`}
         >
           <Link to="/">
@@ -29,8 +29,8 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           </Link>
         </li>
         <li
-          className={`px-4 py-2 border-r-2 bg-slate-300 rounded-t ${
-            selected === 'top' ? selectedTabClass : ''
+          className={`px-4 py-2 border-r-2 rounded-t ${
+            selected === 'top' ? selectedTabClass : 'bg-slate-300'
           }`}
         >
           <Link to="/top">
@@ -44,8 +44,8 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           </Link>
         </li>
         <li
-          className={`px-4 py-2 bg-slate-300 rounded-t ${
-            selected === 'vis' ? selectedTabClass : ''
+          className={`px-4 py-2 rounded-t ${
+            selected === 'vis' ? selectedTabClass : ' bg-slate-300'
           }`}
         >
           <Link to="/visuals/tree">
