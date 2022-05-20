@@ -29,12 +29,12 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
           <tr>
             <th aria-label="Rank Header" />
             <th aria-label="Image Header" />
-            <th className="text-left">Album</th>
-            <th className="text-left">Artist</th>
-            <th className="text-right">Plays</th>
+            <th className="p-2 text-left">Album</th>
+            <th className="p-2 text-left">Artist</th>
+            <th className="p-2 text-right pr-12">Plays</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="border-t border-gray-700">
           {topAlbums.album.map((val) => {
             const smallImgSrc =
               val?.image?.[1]?.['#text'] ??
@@ -45,8 +45,8 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
             const { rank } = val['@attr'];
 
             return (
-              <tr className="hover:bg-gray-400" key={val.url}>
-                <td className="font-semibold text-right pr-4">
+              <tr className="even:bg-slate-300 odd:bg-gray-200" key={val.url}>
+                <td className="font-semibold text-center w-12">
                   <span>{rank}</span>
                 </td>
                 <td className="p-2">
@@ -57,12 +57,12 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
                 <td className="p-2">
                   <i>{trimString(val.name, 35)}</i>
                 </td>
-                <td className="font-semibold">
+                <td className="p-2 font-semibold">
                   <a href={val.url} target="_blank" rel="noreferrer">
                     {trimString(val.artist.name, 35)}
                   </a>
                 </td>
-                <td className="text-right">{val.playcount}</td>
+                <td className="text-right pr-12">{val.playcount}</td>
               </tr>
             );
           })}
@@ -74,7 +74,51 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
+
       <table className="min-w-full">{renderTable()}</table>
+
+      {/* <div className="py-1">
+        <div className="w-full border-t border-gray-700"></div>
+      </div>
+      <div className="flex bg-slate-300">
+        <div>Album</div>
+        <div>Artist</div>
+        <div>Plays</div>
+      </div>
+      <div>
+        {topAlbums.album.map((val) => {
+          const smallImgSrc =
+            val?.image?.[1]?.['#text'] ??
+            'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+          const bigImgSrc =
+            val?.image?.[3]?.['#text'] ??
+            'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+          const { rank } = val['@attr'];
+
+          return (
+            <div className="flex even:bg-slate-300 odd:bg-gray-200" key={val.url}>
+              <div className="font-semibold text-right pr-4">
+                <span>{rank}</span>
+              </div>
+              <div className="p-2">
+                <a target="_blank" href={val.url} rel="noreferrer">
+                  <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
+                </a>
+              </div>
+              <div className="p-2">
+                <i>{trimString(val.name, 35)}</i>
+              </div>
+              <div className="font-semibold">
+                <a href={val.url} target="_blank" rel="noreferrer">
+                  {trimString(val.artist.name, 35)}
+                </a>
+              </div>
+              <div className="text-right">{val.playcount}</div>
+            </div>
+          );
+        })}
+      </div> */}
+
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
     </div>
   );
