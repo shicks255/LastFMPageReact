@@ -10,6 +10,8 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { src, popupSrc, caption } = props;
   const [showBig, setShowBig] = useState(false);
 
+  console.log(caption);
+
   let image = (
     <img
       alt=""
