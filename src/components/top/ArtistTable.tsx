@@ -65,7 +65,36 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
-      <table className="min-w-full">{renderTable()}</table>
+      {/* <table className="min-w-full">{renderTable()}</table> */}
+      <div className="py-1">
+        <div className="w-full border-t border-gray-700"></div>
+      </div>
+      <div className="text-left text-2xl font-semibold p-4">Top Artists</div>
+      <div>
+        {artists.map((val) => {
+          const rank = val['@attr']?.rank;
+
+          return (
+            <div className="flex even:bg-slate-300 odd:bg-gray-200" key={val.name}>
+              <div className="font-semibold flex-none w-2 mx-4 my-auto">
+                <span>{rank}</span>
+              </div>
+              <div className="p-2">
+                <a target="_blank" href={val.url} rel="noreferrer">
+                  <ArtistImage mbid={val.mbid} artistName={val.name} />
+                </a>
+              </div>
+              <div className="p-2 w-8 flex-1 m-auto font-semibold">
+                <a target="_blank" href={val.url} rel="noreferrer">
+                  {trimString(val.name, 45)}
+                </a>
+              </div>
+              <div className="p-2 pr-4 flex-1 m-auto text-right">{val.playcount}</div>
+            </div>
+          );
+        })}
+      </div>
+
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
     </div>
   );

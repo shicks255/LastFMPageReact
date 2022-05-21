@@ -26,84 +26,90 @@ const MainMenu: React.FC<Record<string, void>> = () => {
   }
 
   const strategySelects = Object.keys(strategies).map((value) => (
-    <option key={value} value={value}>
+    <option
+      key={value}
+      value={value}
+      className={transformedStrategy === value ? 'font-semibold' : ''}
+    >
       {strategies[value]}
     </option>
   ));
   const timeFrameSelects = Object.keys(timeFrames).map((value) => (
-    <option key={value} value={value}>
+    <option
+      key={value}
+      value={value}
+      className={topItemsTimeFrame === value ? 'font-semibold' : ''}
+    >
       {timeFrames[value]}
     </option>
   ));
+
+  const handleStrategySelect = (selection: string) => {
+    switch (selection) {
+      case 'getTopArtists':
+        history.push(`/top/artists${search}`);
+        break;
+      case 'getTopAlbums':
+        history.push(`/top/albums${search}`);
+        break;
+      case 'getTopTracks':
+        history.push(`/top/tracks${search}`);
+        break;
+      default:
+        history.push(`/top/artists${search}`);
+    }
+  };
+
+  const handleTimeFrameSelect = (selection: string) => {
+    switch (selection) {
+      case '7day':
+        history.push(`${pathname}?timeFrame=7day`);
+        break;
+      case '1month':
+        history.push(`${pathname}?timeFrame=1month`);
+        break;
+      case '3month':
+        history.push(`${pathname}?timeFrame=3month`);
+        break;
+      case '6month':
+        history.push(`${pathname}?timeFrame=6month`);
+        break;
+      case '12month':
+        history.push(`${pathname}?timeFrame=12month`);
+        break;
+      case 'overall':
+        history.push(`${pathname}?timeFrame=overall`);
+        break;
+      default:
+        history.push(`${pathname}?timeFrame=7day`);
+    }
+  };
 
   if (selected !== 'top') return <></>;
 
   return (
     <>
-      <div className="is-mobile">
-        <div className="box column is-half is-offset-one-quarter has-text-centered">
-          <div className="columns has-text-black">
-            <div className="column">
-              <span>
-                <div className="select is-danger">
-                  <select
-                    value={transformedStrategy}
-                    onChange={(event) => {
-                      switch (event.target.value) {
-                        case 'getTopArtists':
-                          history.push(`/top/artists${search}`);
-                          break;
-                        case 'getTopAlbums':
-                          history.push(`/top/albums${search}`);
-                          break;
-                        case 'getTopTracks':
-                          history.push(`/top/tracks${search}`);
-                          break;
-                        default:
-                          history.push(`/top/artists${search}`);
-                      }
-                    }}
-                  >
-                    {strategySelects}
-                  </select>
-                </div>
-              </span>
-            </div>
-            <div className="column">
-              <div className="select is-danger">
-                <select
-                  value={topItemsTimeFrame}
-                  onChange={(event) => {
-                    switch (event.target.value) {
-                      case '7day':
-                        history.push(`${pathname}?timeFrame=7day`);
-                        break;
-                      case '1month':
-                        history.push(`${pathname}?timeFrame=1month`);
-                        break;
-                      case '3month':
-                        history.push(`${pathname}?timeFrame=3month`);
-                        break;
-                      case '6month':
-                        history.push(`${pathname}?timeFrame=6month`);
-                        break;
-                      case '12month':
-                        history.push(`${pathname}?timeFrame=12month`);
-                        break;
-                      case 'overall':
-                        history.push(`${pathname}?timeFrame=overall`);
-                        break;
-                      default:
-                        history.push(`${pathname}?timeFrame=7day`);
-                    }
-                  }}
-                >
-                  {timeFrameSelects}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="p-2">
+        <select
+          className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+          value={transformedStrategy}
+          onChange={(event) => handleStrategySelect(event.target.value)}
+        >
+          {strategySelects}
+        </select>
+      </div>
+      <div className="p-2">
+        <select
+          className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+          value={topItemsTimeFrame}
+          onChange={(event) => handleTimeFrameSelect(event.target.value)}
+        >
+          {timeFrameSelects}
+        </select>
       </div>
     </>
   );

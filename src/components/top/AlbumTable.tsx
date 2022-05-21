@@ -75,16 +75,12 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
     <div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
 
-      <table className="min-w-full">{renderTable()}</table>
+      {/* <table className="min-w-full">{renderTable()}</table> */}
 
-      {/* <div className="py-1">
+      <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
-      <div className="flex bg-slate-300">
-        <div>Album</div>
-        <div>Artist</div>
-        <div>Plays</div>
-      </div>
+      <div className="text-left text-2xl font-semibold p-4">Top Albums</div>
       <div>
         {topAlbums.album.map((val) => {
           const smallImgSrc =
@@ -97,7 +93,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
 
           return (
             <div className="flex even:bg-slate-300 odd:bg-gray-200" key={val.url}>
-              <div className="font-semibold text-right pr-4">
+              <div className="font-semibold flex-none w-2 mx-4 my-auto">
                 <span>{rank}</span>
               </div>
               <div className="p-2">
@@ -105,19 +101,19 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
                   <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
                 </a>
               </div>
-              <div className="p-2">
+              <div className="p-2 w-8 flex-1 m-auto">
                 <i>{trimString(val.name, 35)}</i>
               </div>
-              <div className="font-semibold">
+              <div className="p-2 w-8 flex-1 font-semibold m-auto">
                 <a href={val.url} target="_blank" rel="noreferrer">
                   {trimString(val.artist.name, 35)}
                 </a>
               </div>
-              <div className="text-right">{val.playcount}</div>
+              <div className="p-2 pr-4 w-8 flex-1 text-right m-auto">{val.playcount}</div>
             </div>
           );
         })}
-      </div> */}
+      </div>
 
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
     </div>
