@@ -14,6 +14,8 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   const { isLoading, error, data } = useTopTracks(topItemsTimeFrame, topItemsPage);
   const isMobile = useIsMobile();
 
+  console.log(isMobile);
+
   if (isLoading) {
     return <Loader small={false} />;
   }
