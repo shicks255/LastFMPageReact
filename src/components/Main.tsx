@@ -3,9 +3,9 @@ import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Loader from './common/Loader';
-import RecentTracksTable from './recent/RecentTracksTable';
-import TopContainer from './top/TopContainer';
 
+const RecentTracksTable = lazy(() => import('./recent/RecentTracksTable'));
+const TopContainer = lazy(() => import('./top/TopContainer'));
 const Visuals = lazy(() => import('./visuals/Visuals'));
 
 const Main: React.FC = () => (

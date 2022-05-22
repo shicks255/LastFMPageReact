@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { trimString } from '../../utils';
 import HoverImage from '../common/HoverImage';
 import Loader from '../common/Loader';
@@ -48,6 +50,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
+      <div className="text-left text-2xl font-semibold p-4">Recent Scrobbles</div>
       <div>
         {recentTracks.track
           .filter((x) => x.date)
@@ -60,8 +63,9 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
               'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             const date = track.date.uts;
             const unixDate = new Date(date * 1000);
+            console.log(track);
             return (
-              <div className="flex even:bg-slate-300 odd:bg-gray-200" key={track.date.uts}>
+              <div className="flex even:bg-slate-300 odd:bg-gray-200" key={uuidv4()}>
                 <div className="p-2 pl-4">
                   <a href={track.url} target="_blank" rel="noreferrer">
                     <HoverImage

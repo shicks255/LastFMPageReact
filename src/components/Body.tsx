@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 import ButtonGroup from './common/ButtonGroup';
 import Main from './Main';
 import ImageModal from './modals/ImageModal';
-import NowPlaying from './NowPlaying';
 import Profile from './Profile';
 import useNavPathToStrategySync from '@/hooks/useParamToStrategySync';
+
+const LazyNowPlaying = lazy(() => import('./NowPlaying'));
 
 const Body: React.FC<Record<string, void>> = () => {
   useNavPathToStrategySync();
@@ -16,7 +17,9 @@ const Body: React.FC<Record<string, void>> = () => {
         <div className="col-span-1">
           <div className="h-auto rounded-lg shadow-lg p-4 bg-gray-200 relative">
             <Profile />
-            <NowPlaying />
+            <Suspense fallback={<></>}>
+              <LazyNowPlaying />
+            </Suspense>
           </div>
         </div>
         <div className="col-span-2 mt-6 lg:mt-0">
