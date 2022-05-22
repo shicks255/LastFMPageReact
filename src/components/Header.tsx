@@ -5,7 +5,7 @@ const Header: React.FC<Record<string, null>> = () => (
     <div className="p-4 w-full md:w-9/12">
       <a href="/">
         <img
-          className="max-h-20 inline"
+          className="inline"
           alt="Steve FM Logo"
           src={`${process.env.PUBLIC_URL}/LastFmReactTitle.png`}
         />
