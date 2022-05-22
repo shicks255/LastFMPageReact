@@ -28,7 +28,7 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
         <figure className="flex-initial basis-1/4">
           <img height={200} width={200} alt="" className="rounded-full" src={user.avatar} />
         </figure>
-        <h3 className="title flex-initial ml-4 font-bold">{state.userName}</h3>
+        <h1 className="title flex-initial ml-4 font-bold">{state.userName}</h1>
       </div>
       <div className="">
         <br />
