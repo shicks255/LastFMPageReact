@@ -63,11 +63,15 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
               'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
             const date = track.date.uts;
             const unixDate = new Date(date * 1000);
-            console.log(track);
             return (
               <div className="flex even:bg-slate-300 odd:bg-gray-200" key={uuidv4()}>
                 <div className="p-2 pl-4">
-                  <a href={track.url} target="_blank" rel="noreferrer">
+                  <a
+                    aria-label={track.album['#text']}
+                    href={track.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <HoverImage
                       src={smallImgSrc}
                       popupSrc={bigImgSrc}

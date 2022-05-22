@@ -30,7 +30,6 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
-      {/* <table className="min-w-full">{renderTable()}</table> */}
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
@@ -46,7 +45,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
               <div className="font-semibold flex-none w-2 mx-4 my-auto">{rank}</div>
               <div className="p-2">
                 <div className="imageCell pr-2">
-                  <a href={val.url} target="_blank" rel="noreferrer">
+                  <a aria-label={val.artist.name} href={val.url} target="_blank" rel="noreferrer">
                     <ArtistImage mbid={val.artist.mbid} artistName={val.artist.name} />
                   </a>
                 </div>

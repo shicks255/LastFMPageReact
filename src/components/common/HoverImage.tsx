@@ -14,7 +14,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
 
   let image = (
     <img
-      alt=""
+      alt={caption}
       onMouseEnter={() => setShowBig(true)}
       className="image w-16"
       height="64"

@@ -26,7 +26,6 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
-      {/* <table className="min-w-full">{renderTable()}</table> */}
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
@@ -41,12 +40,12 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
                 <span>{rank}</span>
               </div>
               <div className="p-2">
-                <a target="_blank" href={val.url} rel="noreferrer">
+                <a aria-label={val.name} target="_blank" href={val.url} rel="noreferrer">
                   <ArtistImage mbid={val.mbid} artistName={val.name} />
                 </a>
               </div>
               <div className="p-2 w-8 flex-1 m-auto font-semibold">
-                <a target="_blank" href={val.url} rel="noreferrer">
+                <a aria-label={val.name} target="_blank" href={val.url} rel="noreferrer">
                   {trimString(val.name, 45)}
                 </a>
               </div>

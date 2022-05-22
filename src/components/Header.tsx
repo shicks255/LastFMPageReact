@@ -7,6 +7,7 @@ const Header: React.FC<Record<string, null>> = () => (
         <img
           className="inline"
           alt="Steve FM Logo"
+          aria-label="Steven FM Logo"
           src={`${process.env.PUBLIC_URL}/LastFmReactTitle.png`}
         />
       </a>

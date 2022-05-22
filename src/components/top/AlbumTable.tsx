@@ -48,7 +48,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
                 <span>{rank}</span>
               </div>
               <div className="p-2">
-                <a target="_blank" href={val.url} rel="noreferrer">
+                <a aria-label={val.name} target="_blank" href={val.url} rel="noreferrer">
                   <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
                 </a>
               </div>
@@ -56,7 +56,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
                 <i>{trimString(val.name, 35)}</i>
               </div>
               <div className="p-2 w-8 flex-1 font-semibold m-auto">
-                <a href={val.url} target="_blank" rel="noreferrer">
+                <a aria-label={val.artist.name} href={val.url} target="_blank" rel="noreferrer">
                   {trimString(val.artist.name, 35)}
                 </a>
               </div>
