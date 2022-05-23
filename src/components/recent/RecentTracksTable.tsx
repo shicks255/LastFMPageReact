@@ -44,6 +44,15 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
     );
   }
 
+  //   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-disc" xmlns="http://www.w3.org/2000/svg">
+  //   <defs></defs>
+  //   <circle cx="12" cy="12" r="10"></circle>
+  //   <circle cx="12" cy="12" r="2.839"></circle>
+  //   <circle cx="12" cy="12" r="5.299" transform="matrix(1.160816, -0.354989, 0.343273, 1.122506, -6.109372, 2.890311)" style=""></circle>
+  // </svg>
+
+  // return <Loader small={false} />;
+
   return (
     <div>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />

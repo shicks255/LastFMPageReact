@@ -66,15 +66,19 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
     <div className="flex justify-center">
       <span className="" role="navigation" aria-label="pagination">
         {isFirstPage ? (
-          <i className="fas fa-arrow-left text-gray-500" />
+          <img
+            alt=""
+            className="h-6 inline"
+            src={`${process.env.PUBLIC_URL}/skip-back-disabled.svg`}
+          />
         ) : (
           <Link to={replacePageParam(page - 1)}>
-            <i className="fas fa-arrow-left " />
+            <img alt="" className="h-6 inline" src={`${process.env.PUBLIC_URL}/skip-back.svg`} />
           </Link>
         )}
 
-        <span className="ml-2 mr-2" />
-        <span className="">
+        {/* <span className="ml-2 mr-2" /> */}
+        <span className="align-middle">
           {isFirstPage ? '' : firstLink}
           {isFirstPage || isSecondPage || isThirdPage ? (
             ''
@@ -100,12 +104,19 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
           {isPenultimatePage || isLastPage ? '' : lastLink}
         </span>
         <span>
-          <span className="ml-2 mr-2" />
           {isLastPage ? (
-            <i className="fas fa-arrow-right text-gray-500" />
+            <img
+              alt=""
+              className="h-6 inline"
+              src={`${process.env.PUBLIC_URL}/skip-forward-disabled.svg`}
+            />
           ) : (
             <Link to={replacePageParam(page + 1)}>
-              <i className="fas fa-arrow-right" />
+              <img
+                alt=""
+                className="h-6 inline"
+                src={`${process.env.PUBLIC_URL}/skip-forward.svg`}
+              />
             </Link>
           )}
         </span>
