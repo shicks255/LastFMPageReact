@@ -49,13 +49,12 @@ function ProfileModal(): JSX.Element {
   }, [tempUserName, actions, submitUsername]);
 
   return (
-    <div className="modal is-active">
-      <div className="modal-background extraModal" />
-      <div className="modal-content" ref={ref}>
-        <div className="box has-text-black" id="profileModal">
+    <div>
+      <div ref={ref}>
+        <div id="profileModal">
           <label className="label" htmlFor="newUsername">
             Enter a new Username: &nbsp;&nbsp;
-            <div className="control">
+            <div>
               <input
                 onChange={(e) => setTempUserName(e.target.value)}
                 type="text"
@@ -75,12 +74,7 @@ function ProfileModal(): JSX.Element {
           </span>
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => actions.setShowModal(false)}
-        className="modal-close is-large"
-        aria-label="close"
-      />
+      <button type="button" onClick={() => actions.setShowModal(false)} aria-label="close" />
     </div>
   );
 }

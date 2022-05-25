@@ -20,14 +20,14 @@ const NowPlaying: React.FC<Record<string, void>> = () => {
   const nowPlaying = data.recenttracks.track[0];
 
   return (
-    <div className="nowPlaying">
+    <div>
       <br />
       <div className="inline-flex">
-        <div className="">
-          <img alt="" className="image" src={nowPlaying.image[1]['#text']} />
+        <div>
+          <img alt="" src={nowPlaying.image[1]['#text']} />
         </div>
         <div>
-          <span className="nowPlaying">
+          <span>
             <span>{nowPlaying.name}</span>
             <br />
             <span className="font-semibold">{nowPlaying.artist['#text']}</span>

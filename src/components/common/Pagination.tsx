@@ -36,21 +36,21 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
   const firstLink = (
     <Link to={replacePageParam(1)}>
       <button type="button" className="p-1">
-        <div className="w-6 h-6 rounded-full flex justify-center items-center">1</div>
+        <div className="w-6 h-6 rounded-full flex justify-center">1</div>
       </button>
     </Link>
   );
   const preLink = (
     <Link to={replacePageParam(page - 1)}>
       <button type="button" className="p-1">
-        <div className="w-6 h-6 rounded-full flex justify-center items-center">{pre}</div>
+        <div className="w-6 h-6 rounded-full flex justify-center">{pre}</div>
       </button>
     </Link>
   );
   const postLink = (
     <Link to={replacePageParam(page + 1)}>
       <button type="button" className="p-1">
-        <div className="w-6 h-6 rounded-full flex justify-center items-center">{post}</div>
+        <div className="w-6 h-6 rounded-full flex justify-center">{post}</div>
       </button>
     </Link>
   );
@@ -80,15 +80,11 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
         {/* <span className="ml-2 mr-2" /> */}
         <span className="align-middle">
           {isFirstPage ? '' : firstLink}
-          {isFirstPage || isSecondPage || isThirdPage ? (
-            ''
-          ) : (
-            <span className="pagination-ellipsis">&hellip;</span>
-          )}
+          {isFirstPage || isSecondPage || isThirdPage ? '' : <span>&hellip;</span>}
           {isFirstPage || isSecondPage ? '' : preLink}
           <button type="button" className="p-3">
             <div
-              className={`h-6 bg-sky-900 text-gray-200 rounded-full flex justify-center items-center ${
+              className={`h-6 bg-sky-900 text-gray-200 rounded-full flex justify-center ${
                 page > 9 ? (page > 99 ? 'w-12' : 'w-8') : 'w-6'
               }`}
             >
@@ -96,11 +92,7 @@ const Pagination: React.FC<IProps> = (props: IProps): JSX.Element => {
             </div>
           </button>
           {isLastPage ? '' : postLink}
-          {isLastPage || isPenultimatePage || isPenultimatePage2 ? (
-            ''
-          ) : (
-            <span className="">&hellip;</span>
-          )}
+          {isLastPage || isPenultimatePage || isPenultimatePage2 ? '' : <span>&hellip;</span>}
           {isPenultimatePage || isLastPage ? '' : lastLink}
         </span>
         <span>

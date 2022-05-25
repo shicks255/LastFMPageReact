@@ -11,7 +11,7 @@ const Loader: React.FC<IProps> = (props: IProps): JSX.Element => {
 
   return (
     <div className="text-sky-900">
-      <div className="">
+      <div>
         <img alt="" className="h-32 w-32 spin" src={`${process.env.PUBLIC_URL}/disc_2.svg`} />
       </div>
     </div>

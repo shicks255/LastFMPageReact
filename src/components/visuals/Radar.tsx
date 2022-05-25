@@ -107,10 +107,10 @@ const Radar: React.FC<Record<string, void>> = () => {
 
   return (
     <>
-      <div className="column is-full has-text-centered">
+      <div>
         <div style={{ height: '350px', fontWeight: 'bold' }}>
-          <section className="mainContent">
-            <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Radar</h1>
+          <section>
+            <h1>Scrobbles Radar</h1>
           </section>
           <ResponsiveRadar indexBy="year" keys={['plays']} data={chart} />
         </div>
@@ -118,7 +118,7 @@ const Radar: React.FC<Record<string, void>> = () => {
       <br />
       <br />
       <br />
-      <div className="column is-full has-text-centered">
+      <div>
         <div style={{ height: '350px', fontWeight: 'bold' }}>
           <ResponsiveRadar indexBy="month" keys={yearKe} data={chart2} />
         </div>
@@ -126,8 +126,8 @@ const Radar: React.FC<Record<string, void>> = () => {
       <br />
       <br />
       <br />
-      <div className="column is-full has-text-centered">
-        <div className="select is-danger">
+      <div>
+        <div>
           <select value={year} onChange={(event) => setYear(+event.target.value)}>
             {yearStrings}
           </select>

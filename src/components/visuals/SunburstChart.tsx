@@ -76,10 +76,10 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const artists = data.children.map((k) => k.id);
 
   return (
-    <div className="column is-full has-text-centered">
+    <div>
       <div className="relative" style={{ height: '500px', fontWeight: 'bold' }}>
-        <section className="mainContent">
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Album Pie Chart</h1>
+        <section>
+          <h1>Album Pie Chart</h1>
           <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
         </section>
         <ResponsiveSunburst

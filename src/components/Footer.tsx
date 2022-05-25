@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Footer: React.FC<Record<string, null>> = () => (
-  <footer className="footer">
-    <div className="content has-text-centered">
+  <footer>
+    <div>
       &copy;&nbsp;
       <a
         aria-label="Steven Hicks Home Page"

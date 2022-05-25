@@ -10,13 +10,12 @@ const ErrorMessage: React.FC<IProps> = (props: IProps): JSX.Element => {
 
   if (technical === 'No connection') {
     return (
-      <div className="box mainContent">
-        <div className="column">
-          <table id="errorTable" className="table is-fullwidth">
+      <div>
+        <div>
+          <table id="errorTable" className="table">
             <tr>
               <td>
                 <div
-                  className="column"
                   style={{
                     margin: 'auto',
                     left: '50%',
@@ -36,13 +35,12 @@ const ErrorMessage: React.FC<IProps> = (props: IProps): JSX.Element => {
   }
 
   return (
-    <div className="box mainContent">
-      <div className="has-text-centered column is-full">
-        <h3 className="title is-3 has-text-black">Something went wrong (;_;)</h3>
+    <div>
+      <div>
+        <h3>Something went wrong (;_;)</h3>
       </div>
-      <div className="has-text-centered columns">
+      <div>
         <div
-          className="column"
           style={{
             margin: 'auto',
             left: '50%',
@@ -52,8 +50,8 @@ const ErrorMessage: React.FC<IProps> = (props: IProps): JSX.Element => {
         >
           <i className="fas fa-bug fa-5x" />
         </div>
-        <div className="column">
-          <table id="errorTable" className="table is-fullwidth">
+        <div>
+          <table id="errorTable" className="table">
             <tr>
               <td>
                 <b>Error:</b>

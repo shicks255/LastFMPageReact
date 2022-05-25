@@ -15,17 +15,14 @@ const TreeMaps: () => JSX.Element = () => {
   return (
     <>
       <hr />
-      <div className="is-mobile">
-        <div className="box column is-half is-offset-one-quarter has-text-centered">
-          <div className="columns has-text-black p-4">
-            <div
-              className="column has-text-right-tablet"
-              style={{ marginTop: 'auto', marginBottom: 'auto' }}
-            >
+      <div>
+        <div>
+          <div className="p-4">
+            <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
               <b>Time Frame:</b>
             </div>
-            <div className="column has-text-left-tablet">
-              <div className="select is-danger">
+            <div>
+              <div>
                 <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
                   {timeFrameSelects}
                 </select>

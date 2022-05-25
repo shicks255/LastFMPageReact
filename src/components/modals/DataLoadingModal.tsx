@@ -11,13 +11,12 @@ interface IProps {
 const DataLoadingModal: React.FC<IProps> = (props: IProps) => {
   const { done, total, message } = props;
   return (
-    <div className="modal is-active">
-      <div className="modal-background" />
-      <div className="modal-content" style={{ color: '#C3073F' }}>
-        <div className="card">
-          <div className="card-content">
+    <div>
+      <div style={{ color: '#C3073F' }}>
+        <div>
+          <div>
             <Loader small={false} />
-            <progress className="progress" value={done} max={total}>
+            <progress value={done} max={total}>
               0
             </progress>
             Loading your last.fm scrobbles

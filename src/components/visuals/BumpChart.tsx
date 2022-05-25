@@ -112,9 +112,9 @@ const BumpChart: React.FC<Record<string, void>> = () => {
   });
 
   return (
-    <div className="column is-full has-text-centered">
+    <div>
       <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <section className="mainContent">
+        <section>
           <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
           <select value={resourceType} onChange={(e) => setResourceType(e.target.value)}>
             <option value="album" key="album">
@@ -124,7 +124,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
               Artists
             </option>
           </select>
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">
+          <h1>
             {resource === 'artistsGrouped' && <>Artist Rank By Day</>}
             {resource === 'albumsGrouped' && <>Album Rank By Day</>}
           </h1>

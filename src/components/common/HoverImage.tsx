@@ -15,7 +15,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
       loading="lazy"
       alt={caption}
       onMouseEnter={() => setShowBig(true)}
-      className="image w-16"
+      className="w-16"
       height="64"
       src={src}
     />
@@ -27,7 +27,7 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
         loading="lazy"
         alt={caption}
         onMouseLeave={() => setShowBig(false)}
-        className="image w-80"
+        className="w-80"
         height="64"
         src={popupSrc}
       />

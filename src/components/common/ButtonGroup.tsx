@@ -11,7 +11,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
   const selectButtonClass = 'font-semibold';
 
   return (
-    <div className="1-1/2 mx-auto rounded">
+    <div className="mx-auto rounded">
       <ul className="inline-flex w-full px-a">
         <li
           className={`px-4 py-2 border-r-2 rounded-t ${

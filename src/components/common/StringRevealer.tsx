@@ -1,9 +1,4 @@
-import React, { MutableRefObject, RefObject, useLayoutEffect, useState } from 'react';
-
-// interface IProps {
-//   s: string;
-//   ref: RefObject<HTMLDivElement> | null;
-// }
+import React, { MutableRefObject, useLayoutEffect, useState } from 'react';
 
 interface IProps {
   children: React.ReactChild;

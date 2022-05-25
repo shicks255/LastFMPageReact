@@ -38,12 +38,12 @@ const Calendar: React.FC<Record<string, void>> = () => {
   ));
 
   return (
-    <div className="column is-full has-text-centered">
+    <div>
       <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <section className="mainContent">
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Calendar</h1>
-          <div className="column has-text-left-tablet">
-            <div className="select is-danger">
+        <section>
+          <h1>Scrobbles Calendar</h1>
+          <div>
+            <div>
               <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
                 {timeFrameSelects}
               </select>

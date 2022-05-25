@@ -99,7 +99,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
   };
 
   return (
-    <div className="column is-full has-text-centered">
+    <div>
       <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
         <section>
           <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
