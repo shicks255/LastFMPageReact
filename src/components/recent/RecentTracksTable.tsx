@@ -6,7 +6,6 @@ import { trimString } from '../../utils';
 import HoverImage from '../common/HoverImage';
 import Loader from '../common/Loader';
 import Pagination from '../common/Pagination';
-import StringRevealer from '../common/StringRevealer';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useRecentTracks from '@/hooks/api/lastFm/useRecentTracks';

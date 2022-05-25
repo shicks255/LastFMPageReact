@@ -4,7 +4,6 @@ import { convertDurationToTimestamp, trimString } from '../../utils';
 import ArtistImage from '../common/ArtistImage';
 import Loader from '../common/Loader';
 import Pagination from '../common/Pagination';
-import StringRevealer from '../common/StringRevealer';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useTopTracks from '@/hooks/api/lastFm/useTopTracks';
