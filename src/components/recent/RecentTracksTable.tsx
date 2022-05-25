@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,6 +6,7 @@ import { trimString } from '../../utils';
 import HoverImage from '../common/HoverImage';
 import Loader from '../common/Loader';
 import Pagination from '../common/Pagination';
+import StringRevealer from '../common/StringRevealer';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useRecentTracks from '@/hooks/api/lastFm/useRecentTracks';
@@ -15,6 +16,9 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   useRecentTracksNavPageSync();
   const { recentTracksPage } = useApiState();
   const { isLoading, error, data } = useRecentTracks(recentTracksPage);
+
+  const trackNameRef = useRef<HTMLDivElement | null>(null);
+  const artistNameRef = useRef<HTMLDivElement | null>(null);
 
   if (isLoading) return <Loader small={false} />;
   if (error) return <ErrorMessage error={error} />;
@@ -44,15 +48,6 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
     );
   }
 
-  //   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-disc" xmlns="http://www.w3.org/2000/svg">
-  //   <defs></defs>
-  //   <circle cx="12" cy="12" r="10"></circle>
-  //   <circle cx="12" cy="12" r="2.839"></circle>
-  //   <circle cx="12" cy="12" r="5.299" transform="matrix(1.160816, -0.354989, 0.343273, 1.122506, -6.109372, 2.890311)" style=""></circle>
-  // </svg>
-
-  // return <Loader small={false} />;
-
   return (
     <div>
       <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
@@ -60,21 +55,25 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
         <div className="w-full border-t border-gray-700"></div>
       </div>
       <div className="text-left text-2xl font-semibold p-4">Recent Scrobbles</div>
+
       <div>
         {recentTracks.track
           .filter((x) => x.date)
           .map((track) => {
-            const smallImgSrc =
-              track?.image?.[1]?.['#text'] ??
-              'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
-            const bigImgSrc =
-              track?.image?.[3]?.['#text'] ??
-              'https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f';
+            let smallImgSrc = track?.image?.[1]?.['#text'] ?? `${process.env.PUBLIC_URL}/music.svg`;
+            let bigImgSrc = track?.image?.[3]?.['#text'] ?? `${process.env.PUBLIC_URL}/music.svg`;
+
+            if (smallImgSrc.includes('/2a96cbd8b46e442fc41c2b86b821562f.png')) {
+              smallImgSrc = `${process.env.PUBLIC_URL}/music.svg`;
+            }
+            if (bigImgSrc.includes('/2a96cbd8b46e442fc41c2b86b821562f.png')) {
+              bigImgSrc = `${process.env.PUBLIC_URL}/music.svg`;
+            }
             const date = track.date.uts;
             const unixDate = new Date(date * 1000);
             return (
               <div className="flex even:bg-slate-300 odd:bg-gray-200" key={uuidv4()}>
-                <div className="p-2 pl-4">
+                <div className="p-2 pl-4 m-auto">
                   <a
                     aria-label={track.album['#text']}
                     href={track.url}
@@ -88,10 +87,11 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
                     />
                   </a>
                 </div>
-                <div className="p-2 w-8 flex-1 m-auto">
+                <div className="p-2 w-8 flex-1 m-auto" ref={trackNameRef}>
                   <i>{trimString(track.name, 35)}</i>
+                  {/* <StringRevealer ref={trackNameRef}>{track.name}</StringRevealer> */}
                 </div>
-                <div className="p-2 w-8 flex-1 m-auto">
+                <div className="p-2 w-8 flex-1 m-auto" ref={artistNameRef}>
                   <span className="font-semibold">{trimString(track.artist['#text'], 35)}</span>
                 </div>
                 <div className="p-2 pr-4 w-8 flex-1 m-auto text-right">{doDateThing(unixDate)}</div>

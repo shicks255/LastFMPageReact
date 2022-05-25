@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Loader from '../common/Loader';
+
 interface IProps {
   done: number;
   total: number;
@@ -14,7 +16,7 @@ const DataLoadingModal: React.FC<IProps> = (props: IProps) => {
       <div className="modal-content" style={{ color: '#C3073F' }}>
         <div className="card">
           <div className="card-content">
-            <i className="fas fa-compact-disc fa-7x fa-spin" />
+            <Loader small={false} />
             <progress className="progress" value={done} max={total}>
               0
             </progress>

@@ -47,7 +47,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
               <div className="font-semibold flex-none w-2 mx-4 my-auto">
                 <span>{rank}</span>
               </div>
-              <div className="p-2">
+              <div className="p-2 m-auto">
                 <a aria-label={val.name} target="_blank" href={val.url} rel="noreferrer">
                   <HoverImage src={smallImgSrc} popupSrc={bigImgSrc} caption={val.name} />
                 </a>

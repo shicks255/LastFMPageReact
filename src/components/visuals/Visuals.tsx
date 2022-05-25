@@ -75,62 +75,60 @@ const Visuals: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <div>
-        <ul>
-          <Link to={`${url}/tree`}>
-            <i className="fas fa-3x fa-calculator" />
-            <span>Tree Graphs</span>
-          </Link>
-          <Link to="/visuals/line">
-            <i className="fas fa-3x fa-chart-line" />
-            <span>Line Graphs</span>
-          </Link>
-          <Link to="/visuals/sunburst">
-            <i className="fas fa-3x fa-chart-pie" />
-            <span>Sunburst Graphs</span>
-          </Link>
-          <Link to="/visuals/bump">
-            <i className="fas fa-3x fa-random" />
-            <span>Bump Graphs</span>
-          </Link>
-          <Link to="/visuals/calendar">
-            <i className="far fa-3x fa-calendar-alt" />
-            <span>Calendar Graphs</span>
-          </Link>
-          <Link to="/visuals/radar">
-            <i className="fas fa-3x fa-wifi" />
-            <span>Radar Graphs</span>
-          </Link>
-          <Link to="/visuals/stats">
-            <i className="fas fa-3x fa-server" />
-            <span>User Stats</span>
-          </Link>
-        </ul>
-        <div className="bg-gray-200 pb-20 -mr-4 -ml-4">
-          <Switch>
-            <Route path={`${path}/tree`}>
-              <TreeMaps />
-            </Route>
-            <Route path="/visuals/line">
-              <LineGraph />
-            </Route>
-            <Route path="/visuals/sunburst">
-              <Sunburst />
-            </Route>
-            <Route path="/visuals/bump">
-              <BumpChart />
-            </Route>
-            <Route path="/visuals/calendar">
-              <CalendarChart />
-            </Route>
-            <Route path="/visuals/radar">
-              <Radar />
-            </Route>
-            <Route path="/visuals/stats">
-              <UserStats />
-            </Route>
-          </Switch>
-        </div>
+      <ul>
+        <Link to={`${url}/tree`}>
+          <i className="fas fa-3x fa-calculator" />
+          <span>Tree Graphs</span>
+        </Link>
+        <Link to="/visuals/line">
+          <i className="fas fa-3x fa-chart-line" />
+          <span>Line Graphs</span>
+        </Link>
+        <Link to="/visuals/sunburst">
+          <i className="fas fa-3x fa-chart-pie" />
+          <span>Sunburst Graphs</span>
+        </Link>
+        <Link to="/visuals/bump">
+          <i className="fas fa-3x fa-random" />
+          <span>Bump Graphs</span>
+        </Link>
+        <Link to="/visuals/calendar">
+          <i className="far fa-3x fa-calendar-alt" />
+          <span>Calendar Graphs</span>
+        </Link>
+        <Link to="/visuals/radar">
+          <i className="fas fa-3x fa-wifi" />
+          <span>Radar Graphs</span>
+        </Link>
+        <Link to="/visuals/stats">
+          <i className="fas fa-3x fa-server" />
+          <span>User Stats</span>
+        </Link>
+      </ul>
+      <div className="bg-gray-200 pb-20">
+        <Switch>
+          <Route path={`${path}/tree`}>
+            <TreeMaps />
+          </Route>
+          <Route path="/visuals/line">
+            <LineGraph />
+          </Route>
+          <Route path="/visuals/sunburst">
+            <Sunburst />
+          </Route>
+          <Route path="/visuals/bump">
+            <BumpChart />
+          </Route>
+          <Route path="/visuals/calendar">
+            <CalendarChart />
+          </Route>
+          <Route path="/visuals/radar">
+            <Radar />
+          </Route>
+          <Route path="/visuals/stats">
+            <UserStats />
+          </Route>
+        </Switch>
       </div>
     </div>
   );

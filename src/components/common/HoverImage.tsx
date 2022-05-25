@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface IProps {
   src: string;
@@ -10,10 +10,9 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { src, popupSrc, caption } = props;
   const [showBig, setShowBig] = useState(false);
 
-  console.log(caption);
-
   let image = (
     <img
+      loading="lazy"
       alt={caption}
       onMouseEnter={() => setShowBig(true)}
       className="image w-16"
@@ -25,7 +24,8 @@ const HoverImage: React.FC<IProps> = (props: IProps): JSX.Element => {
   if (showBig) {
     image = (
       <img
-        alt=""
+        loading="lazy"
+        alt={caption}
         onMouseLeave={() => setShowBig(false)}
         className="image w-80"
         height="64"

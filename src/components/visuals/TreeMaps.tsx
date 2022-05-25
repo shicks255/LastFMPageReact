@@ -17,7 +17,7 @@ const TreeMaps: () => JSX.Element = () => {
       <hr />
       <div className="is-mobile">
         <div className="box column is-half is-offset-one-quarter has-text-centered">
-          <div className="columns has-text-black" style={{ padding: '10px' }}>
+          <div className="columns has-text-black p-4">
             <div
               className="column has-text-right-tablet"
               style={{ marginTop: 'auto', marginBottom: 'auto' }}
@@ -35,11 +35,10 @@ const TreeMaps: () => JSX.Element = () => {
         </div>
       </div>
       <section>
-        <article className="mainContent">
+        <article>
           <TreeMap name="Artists" keyy="name" value="playcount" />
         </article>
-        <br />
-        <article className="mainContent">
+        <article className="mt-16">
           <TreeMap name="Albums" keyy="name" value="playcount" />
         </article>
         <br />

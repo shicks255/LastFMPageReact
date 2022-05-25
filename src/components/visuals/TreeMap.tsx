@@ -50,7 +50,7 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
   });
 
   const treeData = {
-    name,
+    name: '',
     color: 'hsl(201, 70%, 50%)',
     children: dataPoints
   };
@@ -75,9 +75,8 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
   }
 
   return (
-    // <div className="column is-full has-text-centered">
     <div style={{ height: '350px', fontWeight: 'bold' }}>
-      <span className="myTitle">{name}</span>
+      <div className="text-left text-2xl font-semibold pl-4">{name}</div>
       <ResponsiveTreeMap
         data={treeData}
         identity="name"
@@ -100,7 +99,6 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
         borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
       />
     </div>
-    // </div>
   );
 };
 

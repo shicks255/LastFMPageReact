@@ -25,11 +25,18 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
   return (
     <>
       <div className="flex items-center w-full justify-center mt-4">
-        <figure className="flex-initial basis-1/4">
+        <figure className="flex-initial basis-1/4 relative border-2 border-gray-200">
           <img height={200} width={200} alt="" className="rounded-full" src={user.avatar} />
+          <img
+            alt=""
+            onClick={() => actions.setShowModal(true)}
+            className="h-4 cursor-pointer absolute -bottom-1 -right-1"
+            src={`${process.env.PUBLIC_URL}/edit-2.svg`}
+          />
         </figure>
         <h1 className="title flex-initial ml-4 font-bold">{state.userName}</h1>
       </div>
+      <div className="m-auto">{state.showModal ? <ProfileModal /> : ''}</div>
       <div className="">
         <br />
         <span className="font-normal">
@@ -48,9 +55,7 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
           })}
         </span>
         <br />
-        <i className="fas fa-user-edit userIcon" onClick={() => actions.setShowModal(true)} />
       </div>
-      {state.showModal ? <ProfileModal /> : ''}
     </>
   );
 };

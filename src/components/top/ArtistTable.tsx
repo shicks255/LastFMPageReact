@@ -35,11 +35,11 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
           const rank = val['@attr']?.rank;
 
           return (
-            <div className="flex even:bg-slate-300 odd:bg-gray-200" key={val.name}>
+            <div className="flex even:bg-slate-300 odd:bg-gray-200 min-h-80" key={val.name}>
               <div className="font-semibold flex-none w-2 mx-4 my-auto">
                 <span>{rank}</span>
               </div>
-              <div className="p-2">
+              <div className="p-2 m-auto">
                 <a aria-label={val.name} target="_blank" href={val.url} rel="noreferrer">
                   <ArtistImage mbid={val.mbid} artistName={val.name} />
                 </a>

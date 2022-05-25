@@ -111,7 +111,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
               Artists
             </option>
           </select>
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Plays Line Chart</h1>
+          <div className="text-left text-2xl font-semibold pl-4">Plays Line Chart</div>
         </section>
         <ResponsiveLine
           data={chartNew}
