@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Switch, Link, Route, useRouteMatch, useParams } from 'react-router-dom';
+import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../common/Loader';
 import ErrorMessage from '../ErrorMessage';
