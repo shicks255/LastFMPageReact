@@ -24,14 +24,11 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
-
-      {/* <table className="min-w-full">{renderTable()}</table> */}
-
+      <div className="text-left text-2xl font-semibold p-4">Top Albums</div>
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
-      <div className="text-left text-2xl font-semibold p-4">Top Albums</div>
+      <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
       <div>
         {topAlbums.album.map((val) => {
           const smallImgSrc =

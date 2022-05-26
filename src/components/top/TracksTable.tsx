@@ -32,11 +32,11 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
 
   return (
     <div>
-      <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
+      <div className="text-left text-2xl font-semibold p-4">Top Songs</div>
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
-      <div className="text-left text-2xl font-semibold p-4">Top Songs</div>
+      <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
       <div>
         {tracks.map((val) => {
           const time = convertDurationToTimestamp(val.duration);

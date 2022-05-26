@@ -23,7 +23,13 @@ const TreeMaps: () => JSX.Element = () => {
             </div>
             <div>
               <div>
-                <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
+                <select
+                  className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+                  value={timeFrame}
+                  onChange={(event) => setTimeFrame(event.target.value)}
+                >
                   {timeFrameSelects}
                 </select>
               </div>

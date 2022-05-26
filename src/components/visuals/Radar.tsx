@@ -128,10 +128,22 @@ const Radar: React.FC<Record<string, void>> = () => {
       <br />
       <div>
         <div>
-          <select value={year} onChange={(event) => setYear(+event.target.value)}>
+          <select
+            className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+            value={year}
+            onChange={(event) => setYear(+event.target.value)}
+          >
             {yearStrings}
           </select>
-          <select value={month} onChange={(event) => setMonth(event.target.value)}>
+          <select
+            className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+            value={month}
+            onChange={(event) => setMonth(event.target.value)}
+          >
             {monthStrings}
           </select>
         </div>

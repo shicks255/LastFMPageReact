@@ -49,12 +49,11 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
+      <div className="text-left text-2xl font-semibold p-4">Recent Scrobbles</div>
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
-      <div className="text-left text-2xl font-semibold p-4">Recent Scrobbles</div>
-
+      <Pagination page={recentTracksPage} totalPages={recentTracks['@attr'].totalPages} />
       <div>
         {recentTracks.track
           .filter((x) => x.date)

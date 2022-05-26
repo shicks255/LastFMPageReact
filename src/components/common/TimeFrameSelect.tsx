@@ -15,7 +15,16 @@ const TimeFrameSelect: React.FC<IProps> = (props: IProps) => {
     </option>
   ));
 
-  return <select onChange={(e) => onChange(e.target.value)}>{timeFrameSelects}</select>;
+  return (
+    <select
+      className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+      onChange={(e) => onChange(e.target.value)}
+    >
+      {timeFrameSelects}
+    </select>
+  );
 };
 
 export default TimeFrameSelect;

@@ -25,11 +25,11 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
+      <div className="text-left text-2xl font-semibold p-4">Top Artists</div>
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>
-      <div className="text-left text-2xl font-semibold p-4">Top Artists</div>
+      <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
       <div>
         {artists.map((val) => {
           const rank = val['@attr']?.rank;

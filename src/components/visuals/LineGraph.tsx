@@ -103,7 +103,15 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
       <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
         <section>
           <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
-          <select value={resourceType} onChange={(e) => setResourceType(e.target.value)}>
+          <br />
+          <br />
+          <select
+            className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+            value={resourceType}
+            onChange={(e) => setResourceType(e.target.value)}
+          >
             <option value="album" key="album">
               Albums
             </option>

@@ -12,53 +12,50 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
 
   return (
     <div className="mx-auto rounded">
-      <ul className="inline-flex w-full px-a">
-        <li
+      <div className="inline-flex w-full">
+        <Link
+          to="/"
           className={`px-4 py-2 border-r-2 rounded-t ${
             selected === 'recent' ? selectedTabClass : 'bg-slate-300'
           }`}
         >
-          <Link to="/">
-            <button
-              id="recentButton"
-              type="submit"
-              className={`${selected === 'recent' ? selectButtonClass : ''}`}
-            >
-              Recents
-            </button>
-          </Link>
-        </li>
-        <li
+          <button
+            id="recentButton"
+            type="submit"
+            className={`${selected === 'recent' ? selectButtonClass : ''}`}
+          >
+            Recents
+          </button>
+        </Link>
+        <Link
+          to="/top"
           className={`px-4 py-2 border-r-2 rounded-t ${
             selected === 'top' ? selectedTabClass : 'bg-slate-300'
           }`}
         >
-          <Link to="/top">
-            <button
-              id="topButton"
-              type="submit"
-              className={`${selected === 'top' ? selectButtonClass : ''}`}
-            >
-              Ranks
-            </button>
-          </Link>
-        </li>
-        <li
+          <button
+            id="topButton"
+            type="submit"
+            className={`${selected === 'top' ? selectButtonClass : ''}`}
+          >
+            Ranks
+          </button>
+        </Link>
+        <Link
+          to="/visuals/tree"
           className={`px-4 py-2 rounded-t ${
             selected === 'vis' ? selectedTabClass : ' bg-slate-300'
           }`}
         >
-          <Link to="/visuals/tree">
-            <button
-              id="vis"
-              type="submit"
-              className={`${selected === 'vis' ? selectButtonClass : ''}`}
-            >
-              Visuals
-            </button>
-          </Link>
-        </li>
-      </ul>
+          <button
+            id="vis"
+            type="submit"
+            className={`${selected === 'vis' ? selectButtonClass : ''}`}
+          >
+            Visuals
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
