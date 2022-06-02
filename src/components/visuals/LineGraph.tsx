@@ -100,7 +100,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
 
   return (
     <div>
-      <div style={{ height: '350px', fontWeight: 'bold', minWidth: 0 }}>
+      <div className="p-0 lg:p-2" style={{ height: '500px', fontWeight: 'bold', minWidth: 0 }}>
         <section>
           <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
           <br />
@@ -125,9 +125,9 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
           data={chartNew}
           margin={{
             top: 25,
-            right: 175,
+            right: 105,
             left: 50,
-            bottom: 75
+            bottom: 115
           }}
           theme={theme}
           enableGridX={false}
@@ -142,21 +142,27 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
                 }
                 return 1;
               })
-              .map((p) => (
-                <tr className="bg-pink-200" key={p.id}>
-                  <td style={{ color: p.serieColor }}>{trimString(p.serieId.toString(), 45)}</td>
-                  <td>{p.data.y}</td>
+              .map((p, index) => (
+                <tr
+                  key={p.id}
+                  className={`${index % 2 == 0 ? 'bg-slate-300' : 'bg-gray-200'} pl-2 pr-2`}
+                >
+                  <td style={{ color: p.serieColor }} className="pl-4">
+                    {trimString(p.serieId.toString(), 45)}
+                  </td>
+                  <td className="pr-4 pl-2 text-right">{p.data.y}</td>
                 </tr>
               ));
 
             return (
               <table>
-                <tbody>{rows}</tbody>
+                <tbody className="rounded-lg p-4 even:bg-slate-300 odd:bg-gray-200">{rows}</tbody>
               </table>
             );
           }}
           isInteractive
-          colors={chartColors}
+          // colors={chartColors}
+          colors={{ scheme: 'dark2' }}
           lineWidth={3}
           pointSize={10}
           xScale={{
@@ -173,7 +179,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
             // max: 30,
           }}
           axisLeft={{
-            legend: 'Listens',
+            legend: 'Plays',
             legendOffset: -40,
             legendPosition: 'middle'
           }}
@@ -187,14 +193,28 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
               anchor: 'top-right',
               direction: 'column',
               justify: false,
-              translateX: 105,
+              translateX: 90,
               translateY: -25,
               itemWidth: 100,
               itemHeight: 15,
               itemsSpacing: 4,
-              itemTextColor: '#999',
+              itemTextColor: 'rgb(12 74 110)',
+              itemDirection: 'right-to-left',
               symbolSize: 10,
-              symbolShape: 'circle'
+              symbolShape: 'circle',
+              effects: [
+                {
+                  on: 'hover',
+                  style: {
+                    // itemBackground: 'red',
+                    itemOpacity: 1,
+                    symbolSize: 25
+                  }
+                }
+              ],
+              onMouseEnter: () => {
+                console.log('hi');
+              }
             }
           ]}
         />
