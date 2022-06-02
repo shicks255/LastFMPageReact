@@ -2,12 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { ResponsiveLine } from '@nivo/line';
 
-import {
-  chartColors,
-  getDateRangeFromTimeFrame,
-  getTimeGroupFromTimeFrame,
-  trimString
-} from '../../utils';
+import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, trimString } from '../../utils';
 import Loader from '../common/Loader';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
