@@ -4,10 +4,11 @@ import { timeFrames } from '../../utils';
 
 interface IProps {
   onChange: (e: string) => void;
+  value: string;
 }
 
 const TimeFrameSelect: React.FC<IProps> = (props: IProps) => {
-  const { onChange } = props;
+  const { onChange, value } = props;
 
   const timeFrameSelects = Object.keys(timeFrames).map((value) => (
     <option value={value} key={value}>
@@ -17,6 +18,7 @@ const TimeFrameSelect: React.FC<IProps> = (props: IProps) => {
 
   return (
     <select
+      value={value}
       className="px-3 py-1.5 md:w-32 w-full
                     rounded border border-solid
                     border-gray-300 transition ease-in-out bg-white"

@@ -115,7 +115,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     <div>
       <div style={{ height: '350px', fontWeight: 'bold' }}>
         <section>
-          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
+          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
           <br />
           <br />
           <select

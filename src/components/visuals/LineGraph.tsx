@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import { Theme } from '@nivo/core';
 import { ResponsiveLine } from '@nivo/line';
 
 import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, trimString } from '../../utils';
@@ -10,7 +11,7 @@ import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesA
 
 const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
   const { state } = useContext(LocalStateContext);
-  const [resourceType, setResourceType] = useState<string>('album');
+  const [resourceType, setResourceType] = useState<string>('artist');
   const [timeFrame, setTimeFrame] = useState('7day');
   const [format1, setFormat1] = useState('%Y-%m-%d');
   const [precision, setPrecision] = useState<'day' | 'month' | 'year'>('day');
@@ -59,7 +60,9 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
     return <Loader small={false} />;
   }
 
-  const chartNew = scrobbles.data.data.map((item) => {
+  console.log(scrobbles.data.data);
+
+  const chartNew = scrobbles.data.data.reverse().map((item) => {
     const id =
       resourceType === 'artist'
         ? trimString(item.artistName, 35)
@@ -82,7 +85,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
     };
   });
 
-  const theme = {
+  const theme: Theme = {
     textColor: '#212020',
     axis: {
       domain: {
@@ -97,7 +100,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
     <div>
       <div className="p-0 lg:p-2" style={{ height: '500px', fontWeight: 'bold', minWidth: 0 }}>
         <section>
-          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
+          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
           <br />
           <br />
           <select
@@ -121,12 +124,12 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
           margin={{
             top: 25,
             right: 105,
-            left: 50,
+            left: 25,
             bottom: 115
           }}
           theme={theme}
-          enableGridX={false}
-          enableGridY={false}
+          enableGridX={true}
+          enableGridY={true}
           enableSlices="x"
           sliceTooltip={(e) => {
             const rows = e.slice.points
@@ -173,11 +176,6 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
             min: 0
             // max: 30,
           }}
-          axisLeft={{
-            legend: 'Plays',
-            legendOffset: -40,
-            legendPosition: 'middle'
-          }}
           axisBottom={{
             format: bottomXFormat,
             tickValues,
@@ -189,7 +187,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
               direction: 'column',
               justify: false,
               translateX: 90,
-              translateY: -25,
+              translateY: -20,
               itemWidth: 100,
               itemHeight: 15,
               itemsSpacing: 4,
@@ -206,10 +204,7 @@ const LineGraph: React.FC<Record<string, void>> = (): JSX.Element => {
                     symbolSize: 25
                   }
                 }
-              ],
-              onMouseEnter: () => {
-                console.log('hi');
-              }
+              ]
             }
           ]}
         />

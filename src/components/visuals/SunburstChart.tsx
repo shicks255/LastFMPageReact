@@ -80,7 +80,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
       <div className="relative" style={{ height: '500px', fontWeight: 'bold' }}>
         <section>
           <h1>Album Pie Chart</h1>
-          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
+          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         </section>
         <ResponsiveSunburst
           data={data}
