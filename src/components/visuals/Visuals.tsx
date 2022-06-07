@@ -88,7 +88,7 @@ const Visuals: React.FC = () => {
         <div className="inline-flex w-full flex-wrap">
           <Link
             to={`${path}/tree`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'tree' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -97,7 +97,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/line`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'line' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -106,7 +106,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/sunburst`}
-            className={`px-4 py-2 border-r-2 rounded-top mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-top mt-1 ${
               visual === 'sunburst' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -115,7 +115,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/bump`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'bump' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -124,7 +124,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/calendar`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'calendar' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -133,7 +133,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/radar`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'radar' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
@@ -142,7 +142,7 @@ const Visuals: React.FC = () => {
           </Link>
           <Link
             to={`${path}/stats`}
-            className={`px-4 py-2 border-r-2 rounded-t mt-1 ${
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'stats' ? selectedTabClass : 'bg-slate-300'
             }`}
           >

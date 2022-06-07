@@ -13,7 +13,13 @@ const Header: React.FC<Record<string, null>> = () => (
       </a>
     </div>
     <div className="pl-4 p-2 md:p-4">
-      <h1 className="text-gray-200 font-bold">Last FM Listening Habits</h1>
+      <h1 className="text-gray-200 font-bold inline">Last FM Listening Habits</h1>
+      <img
+        alt=""
+        // onClick={() => actions.setShowModal(true)}
+        className="h-4 cursor-pointer inline-block text-white-200"
+        src={`${process.env.PUBLIC_URL}/help-circle.svg`}
+      />
     </div>
   </nav>
 );
