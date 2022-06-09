@@ -122,7 +122,7 @@ export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
     from.setFullYear(from.getFullYear() - 20);
   }
 
-  let fromDay: number | string = from.getDate() + 1;
+  let fromDay: number | string = from.getDate();
   if (fromDay < 10) fromDay = `0${fromDay}`;
   let toDay: number | string = to.getDate();
   if (toDay < 10) toDay = `0${toDay}`;
