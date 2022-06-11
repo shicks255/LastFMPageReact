@@ -26,7 +26,7 @@ const commonGraphProps: LineProps = {
   margin: {
     top: 25,
     right: 105,
-    left: 30,
+    left: 37,
     bottom: 115
   },
   theme: theme,
