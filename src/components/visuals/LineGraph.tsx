@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
@@ -97,10 +97,6 @@ const LineGraph: React.FC = () => {
   const { state } = useContext(LocalStateContext);
   const [resourceType, setResourceType] = useState<string>('artist');
   const [timeFrame, setTimeFrame] = useState('7day');
-  const [format1, setFormat1] = useState('%Y-%m-%d');
-  const [precision, setPrecision] = useState<'day' | 'month' | 'year'>('day');
-  const [tickValues, setTickValues] = useState('every 1 day');
-  const [bottomXFormat, setBottomXFormat] = useState('%b %d');
 
   const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
   const [start, end] = getDateRangeFromTimeFrame(timeFrame);
@@ -114,23 +110,26 @@ const LineGraph: React.FC = () => {
     12
   );
 
-  useEffect(() => {
-    if (timeFrame === '7day' || timeFrame === '1month') setBottomXFormat('%b %d');
-    if (timeFrame === '6month' || timeFrame === '12month') setBottomXFormat('%b %Y');
-    if (timeFrame === '1year' || timeFrame === 'overall') setBottomXFormat('%Y');
+  let format1 = '%Y-%m-%d';
+  let precision: 'day' | 'month' | 'year' = 'day';
+  let tickValues = 'every 1 day';
+  let bottomXFormat = '%b %d';
 
-    if (timeFrame === '7day' || timeFrame === '1month') setFormat1('%Y-%m-%d');
-    if (timeFrame === '6month' || timeFrame === '12month') setFormat1('%Y-%m');
-    if (timeFrame === '1year' || timeFrame === 'overall') setFormat1('%Y');
+  if (timeFrame === '7day' || timeFrame === '1month') bottomXFormat = '%b %d';
+  if (timeFrame === '6month' || timeFrame === '12month') bottomXFormat = '%b %Y';
+  if (timeFrame === '1year' || timeFrame === 'overall') bottomXFormat = '%Y';
 
-    if (timeFrame === '7day' || timeFrame === '1month') setPrecision('day');
-    if (timeFrame === '6month' || timeFrame === '12month') setPrecision('month');
-    if (timeFrame === '1year' || timeFrame === 'overall') setPrecision('year');
+  if (timeFrame === '7day' || timeFrame === '1month') format1 = '%Y-%m-%d';
+  if (timeFrame === '6month' || timeFrame === '12month') format1 = '%Y-%m';
+  if (timeFrame === '1year' || timeFrame === 'overall') format1 = '%Y';
 
-    if (timeFrame === '7day' || timeFrame === '1month') setTickValues('every 1 day');
-    if (timeFrame === '6month' || timeFrame === '12month') setTickValues('every 1 month');
-    if (timeFrame === '1year' || timeFrame === 'overall') setTickValues('every 1 year');
-  }, [timeFrame, resourceType]);
+  if (timeFrame === '7day' || timeFrame === '1month') precision = 'day';
+  if (timeFrame === '6month' || timeFrame === '12month') precision = 'month';
+  if (timeFrame === '1year' || timeFrame === 'overall') precision = 'year';
+
+  if (timeFrame === '7day' || timeFrame === '1month') tickValues = 'every 1 day';
+  if (timeFrame === '6month' || timeFrame === '12month') tickValues = 'every 1 month';
+  if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 1 year';
 
   if (!scrobbles || !scrobbles.data) {
     return <></>;
