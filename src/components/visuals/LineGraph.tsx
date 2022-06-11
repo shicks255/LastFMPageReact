@@ -116,22 +116,18 @@ const LineGraph: React.FC = () => {
 
   useEffect(() => {
     if (timeFrame === '7day' || timeFrame === '1month') setBottomXFormat('%b %d');
-    if (timeFrame === '3month') setBottomXFormat('%b %Y');
     if (timeFrame === '6month' || timeFrame === '12month') setBottomXFormat('%b %Y');
     if (timeFrame === '1year' || timeFrame === 'overall') setBottomXFormat('%Y');
 
     if (timeFrame === '7day' || timeFrame === '1month') setFormat1('%Y-%m-%d');
-    if (timeFrame === '3month') setFormat1('%Y-%m');
     if (timeFrame === '6month' || timeFrame === '12month') setFormat1('%Y-%m');
     if (timeFrame === '1year' || timeFrame === 'overall') setFormat1('%Y');
 
     if (timeFrame === '7day' || timeFrame === '1month') setPrecision('day');
-    if (timeFrame === '3month') setPrecision('month');
     if (timeFrame === '6month' || timeFrame === '12month') setPrecision('month');
     if (timeFrame === '1year' || timeFrame === 'overall') setPrecision('year');
 
     if (timeFrame === '7day' || timeFrame === '1month') setTickValues('every 1 day');
-    if (timeFrame === '3month') setTickValues('every 1 month');
     if (timeFrame === '6month' || timeFrame === '12month') setTickValues('every 1 month');
     if (timeFrame === '1year' || timeFrame === 'overall') setTickValues('every 1 year');
   }, [timeFrame, resourceType]);
@@ -152,35 +148,48 @@ const LineGraph: React.FC = () => {
   const oldest = sortedDates[0];
   const newest = sortedDates[sortedDates.length - 1];
 
-  const chartNew = scrobbles.data.data.reverse().map((item) => {
-    const id =
-      resourceType === 'artist'
-        ? trimString(item.artistName, 35)
-        : trimString(item.albumName || '', 35);
-    const dataPoints = item.data;
+  const chartNew = scrobbles.data.data
+    .map((item) => {
+      const id =
+        resourceType === 'artist'
+          ? trimString(item.artistName, 35)
+          : trimString(item.albumName || '', 35);
+      const dataPoints = item.data;
 
-    const dd = dataPoints
-      .sort((dp1, dp2) => {
-        if (dp1.timeGroup > dp2.timeGroup) return 1;
-        return -1;
-      })
-      .map((dp) => ({
-        x: dp.timeGroup,
-        y: dp.plays
-      }));
+      const dd = dataPoints
+        .sort((dp1, dp2) => {
+          if (dp1.timeGroup > dp2.timeGroup) return 1;
+          return -1;
+        })
+        .map((dp) => ({
+          x: dp.timeGroup,
+          y: dp.plays
+        }));
 
-    if (!dd.find((x) => x.x === oldest)) {
-      dd.unshift({ x: oldest, y: 0 });
-    }
-    if (!dd.find((x) => x.x === newest)) {
-      dd.push({ x: newest, y: 0 });
-    }
+      if (!dd.find((x) => x.x === oldest)) {
+        dd.unshift({ x: oldest, y: 0 });
+      }
+      if (!dd.find((x) => x.x === newest)) {
+        dd.push({ x: newest, y: 0 });
+      }
 
-    return {
-      id,
-      data: dd
-    };
-  });
+      const totals = dd.reduce((prev, curr) => {
+        return prev + curr.y;
+      }, 0);
+
+      return {
+        id,
+        total: totals,
+        data: dd
+      };
+    })
+    .sort((item1, item2) => {
+      if (item1.total > item2.total) {
+        return 1;
+      }
+
+      return -1;
+    });
 
   return (
     <div>
