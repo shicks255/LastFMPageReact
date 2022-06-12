@@ -9,7 +9,7 @@ const Footer: React.FC<Record<string, null>> = () => {
         <span className="text-gray-200 font-semibold">What is this</span>
         <img
           alt=""
-          onClick={() => setShowInfo(true)}
+          onClick={() => setShowInfo(!showInfo)}
           className="h-4 ml-1 cursor-pointer inline-block"
           src={`${process.env.PUBLIC_URL}/help-circle.svg`}
         />
@@ -23,7 +23,7 @@ const Footer: React.FC<Record<string, null>> = () => {
               rel="noreferrer"
             >
               {' '}
-              LastFM
+              LastFM.
             </a>
             <br />I have been scrobbling my music listening habits pretty regularly since 2005, with
             a few short gaps here and there.

@@ -22,16 +22,14 @@ const NowPlaying: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <br />
-      <div className="inline-flex">
+      <div className="inline-flex items-center">
         <div>
           <img alt="" src={nowPlaying.image[1]['#text']} />
         </div>
-        <div>
-          <span>
-            <span>{nowPlaying.name}</span>
-            <br />
-            <span className="font-semibold">{nowPlaying.artist['#text']}</span>
-          </span>
+        <div className="ml-3">
+          <span>{nowPlaying.name}</span>
+          <br />
+          <span className="font-semibold">{nowPlaying.artist['#text']}</span>
         </div>
       </div>
       <div className=" w-auto">

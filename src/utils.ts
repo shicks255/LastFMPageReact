@@ -15,6 +15,21 @@ export const strategies = {
   getTopTracks: 'Songs'
 };
 
+export const cColors = [
+  '#339B17',
+  '#17339B',
+  '#9B1724',
+  '#666666',
+  '#a6761d',
+  '#C1D432',
+  '#F77B25',
+  '#E61AB9',
+  '#8C26D3',
+  '#31DA1C',
+  '#1058F1',
+  '#F72A2A'
+];
+
 export const chartColors = [
   'rgb(190, 174, 212)',
   'rgb(127, 201, 127)',

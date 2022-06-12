@@ -4,7 +4,12 @@ import React, { useContext, useState } from 'react';
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
 
-import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, trimString } from '../../utils';
+import {
+  getDateRangeFromTimeFrame,
+  getTimeGroupFromTimeFrame,
+  trimString,
+  cColors
+} from '../../utils';
 import Loader from '../common/Loader';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -58,8 +63,8 @@ const commonGraphProps: LineProps = {
     );
   },
   isInteractive: true,
-  // colors={chartColors}
-  colors: { scheme: 'dark2' },
+  colors: cColors,
+  // colors: { scheme: 'dark2' },
   lineWidth: 3,
   pointSize: 10,
   yScale: {
@@ -146,6 +151,17 @@ const LineGraph: React.FC = () => {
 
   const oldest = sortedDates[0];
   const newest = sortedDates[sortedDates.length - 1];
+  const oldestDateWithPlays = scrobbles.data.data
+    .flatMap((x) => x.data)
+    .filter((x) => x.plays > 0)
+    .sort((item1, item2) => {
+      if (item1.timeGroup > item2.timeGroup) {
+        return 1;
+      }
+      return -1;
+    });
+
+  const oldCutoff = timeFrame === 'overall' ? oldestDateWithPlays[0].timeGroup : oldest;
 
   const chartNew = scrobbles.data.data
     .map((item) => {
@@ -160,12 +176,13 @@ const LineGraph: React.FC = () => {
           if (dp1.timeGroup > dp2.timeGroup) return 1;
           return -1;
         })
+        .filter((item) => item.timeGroup >= oldCutoff)
         .map((dp) => ({
           x: dp.timeGroup,
           y: dp.plays
         }));
 
-      if (!dd.find((x) => x.x === oldest)) {
+      if (!dd.find((x) => x.x === oldest) && oldest >= oldCutoff) {
         dd.unshift({ x: oldest, y: 0 });
       }
       if (!dd.find((x) => x.x === newest)) {
@@ -189,6 +206,9 @@ const LineGraph: React.FC = () => {
 
       return -1;
     });
+
+  console.log(oldCutoff);
+  console.log(chartNew);
 
   return (
     <div>
