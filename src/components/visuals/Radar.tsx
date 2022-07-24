@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months, cColors } from '../../utils';
+import { years, months } from '../../utils';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 
