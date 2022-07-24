@@ -46,9 +46,9 @@ const Calendar: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <div style={{ height: boxHeight, fontWeight: 'bold' }}>
+      <div className="mb-12 mt-4 p-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
         <section>
-          <h1>Scrobbles Calendar</h1>
+          <div className="text-left text-2xl font-semibold">Scrobbles Calendar</div>
           <div>
             <div>
               <select
@@ -68,7 +68,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
           from={year[2]}
           to={year[1]}
           margin={{
-            top: 0,
+            top: isMobile ? 25 : 0,
             right: 0,
             bottom: 0,
             left: 0
@@ -86,13 +86,14 @@ const Calendar: React.FC<Record<string, void>> = () => {
           legends={[
             {
               anchor: 'top-left',
-              direction: 'row',
-              translateY: 0,
+              direction: isMobile ? 'column' : 'row',
+              translateY: 25,
+              translateX: isMobile ? 100 : 0,
               itemCount: 4,
               itemWidth: 42,
               itemHeight: 36,
               itemsSpacing: 14,
-              itemDirection: 'right-to-left'
+              itemDirection: isMobile ? 'top-to-bottom' : 'right-to-left'
             }
           ]}
         />

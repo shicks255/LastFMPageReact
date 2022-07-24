@@ -5,6 +5,7 @@ import { ResponsiveBump } from '@nivo/bump';
 
 import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
 import Loader from '../common/Loader';
+import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
@@ -111,32 +112,16 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     };
   });
 
+  const label = resource === 'artistsGrouped' ? 'Artist Rank By Day' : 'Album Rank By Day';
+
   return (
     <div>
-      <div style={{ height: '350px', fontWeight: 'bold' }}>
+      <div className="mt-4 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
         <section>
-          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-          <br />
-          <br />
-          <select
-            className="px-3 py-1.5 md:w-32 w-full
-                    rounded border border-solid
-                    border-gray-300 transition ease-in-out bg-white"
-            value={resourceType}
-            onChange={(e) => setResourceType(e.target.value)}
-          >
-            <option value="album" key="album">
-              Albums
-            </option>
-            <option value="artist" key="artist">
-              Artists
-            </option>
-          </select>
-          <h1>
-            {resource === 'artistsGrouped' && <>Artist Rank By Day</>}
-            {resource === 'albumsGrouped' && <>Album Rank By Day</>}
-          </h1>
+          <div className="text-left text-2xl font-semibold">{label}</div>
         </section>
+        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+        <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
         <ResponsiveBump
           // @ts-ignore
           data={finalNewChart}
@@ -148,10 +133,10 @@ const BumpChart: React.FC<Record<string, void>> = () => {
           // theme={theme}
           // colors={chartColors}
           margin={{
-            top: 50,
+            top: 100,
             right: 150,
             left: 50,
-            bottom: 75
+            bottom: 100
           }}
           axisTop={{
             tickRotation: -75

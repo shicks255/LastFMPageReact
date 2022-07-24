@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
-import { chartColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
+import { cColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
 import Loader from '../common/Loader';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const { state } = useContext(LocalStateContext);
@@ -21,6 +22,8 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
     end,
     50
   );
+
+  const isMobile = useIsMobile();
 
   if (!scrobbles || !scrobbles.data) {
     return <></>;
@@ -59,10 +62,10 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const colorMap = {};
 
   const pp = Object.entries(t).map((k, index) => {
-    colorMap[k[0]] = chartColors[index];
+    colorMap[k[0]] = cColors[index];
     return {
       id: k[0],
-      color: chartColors[index],
+      color: cColors[index],
       children: k[1]
     };
   });
@@ -77,11 +80,11 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
 
   return (
     <div>
-      <div className="relative" style={{ height: '500px', fontWeight: 'bold' }}>
+      <div className="relative mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
         <section>
-          <h1>Album Pie Chart</h1>
-          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+          <div className="text-left text-2xl font-semibold">Album Pie Chart</div>
         </section>
+        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResponsiveSunburst
           data={data}
           margin={{
@@ -89,14 +92,14 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
             bottom: 20,
             right: 150
           }}
-          colors={chartColors}
+          colors={cColors}
           borderColor="#4E4E50"
           cornerRadius={3}
           borderWidth={4}
           isInteractive
         />
-        <div className="absolute right-28 top-20">
-          {artists.map((item) => (
+        <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
+          {artists.slice(0, 10).map((item) => (
             <div key={item} style={{ color: colorMap[item] }}>
               {trimString(item)}
             </div>

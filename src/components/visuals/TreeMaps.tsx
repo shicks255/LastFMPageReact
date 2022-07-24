@@ -18,11 +18,11 @@ const TreeMaps: () => JSX.Element = () => {
       <div>
         <div>
           <div className="p-4">
-            <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-              <b>Time Frame:</b>
-            </div>
             <div>
               <div>
+                <section>
+                  <div className="text-left text-2xl font-semibold">Scrobbles Heat Maps</div>
+                </section>
                 <select
                   className="px-3 py-1.5 md:w-32 w-full
                     rounded border border-solid

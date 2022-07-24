@@ -11,6 +11,7 @@ import {
   cColors
 } from '../../utils';
 import Loader from '../common/Loader';
+import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
@@ -93,7 +94,7 @@ const commonGraphProps: LineProps = {
       direction: 'column',
       justify: false,
       translateX: 90,
-      translateY: -20,
+      translateY: -10,
       itemWidth: 100,
       itemHeight: 15,
       itemsSpacing: 4,
@@ -249,27 +250,12 @@ const LineGraph: React.FC = () => {
 
   return (
     <div>
-      <div className="p-0 lg:p-2" style={{ height: '500px', fontWeight: 'bold', minWidth: 0 }}>
+      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
         <section>
-          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-          <br />
-          <br />
-          <select
-            className="px-3 py-1.5 md:w-32 w-full
-                    rounded border border-solid
-                    border-gray-300 transition ease-in-out bg-white"
-            value={resourceType}
-            onChange={(e) => setResourceType(e.target.value)}
-          >
-            <option value="album" key="album">
-              Albums
-            </option>
-            <option value="artist" key="artist">
-              Artists
-            </option>
-          </select>
-          <div className="text-left text-2xl font-semibold pl-4">Plays Line Chart</div>
+          <div className="text-left text-2xl font-semibold">Scrobbles Line Chart</div>
         </section>
+        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+        <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         <ResponsiveLine
