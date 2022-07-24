@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months } from '../../utils';
+import { years, months, cColors } from '../../utils';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 
@@ -14,7 +14,7 @@ interface ICalData {
 const Radar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
 
-  const [year, setYear] = useState(2021);
+  const [year, setYear] = useState(2022);
   const [month, setMonth] = useState('Jan');
 
   const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
@@ -94,11 +94,14 @@ const Radar: React.FC<Record<string, void>> = () => {
       plays: item.plays
     }));
 
-  const yearStrings = Object.keys(years).map((item) => (
-    <option key={item} value={item}>
-      {item}
-    </option>
-  ));
+  const currentYear = new Date().getFullYear();
+  const yearStrings = Object.keys(years)
+    .filter((year) => year <= `${currentYear}`)
+    .map((item) => (
+      <option key={item} value={item}>
+        {item}
+      </option>
+    ));
   const monthStrings = Object.keys(months).map((item) => (
     <option key={item} value={item}>
       {item}
@@ -108,53 +111,35 @@ const Radar: React.FC<Record<string, void>> = () => {
   return (
     <>
       <div>
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
+        <div className="mb-12 mt-4 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
           <section>
-            <h1>Scrobbles Radar</h1>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
           </section>
-          <ResponsiveRadar indexBy="year" keys={['plays']} data={chart} />
-        </div>
-      </div>
-      <br />
-      <br />
-      <br />
-      <div>
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
-          <ResponsiveRadar indexBy="month" keys={yearKe} data={chart2} />
-        </div>
-      </div>
-      <br />
-      <br />
-      <br />
-      <div>
-        <div>
-          <select
-            className="px-3 py-1.5 md:w-32 w-full
-                    rounded border border-solid
-                    border-gray-300 transition ease-in-out bg-white"
-            value={year}
-            onChange={(event) => setYear(+event.target.value)}
-          >
-            {yearStrings}
-          </select>
-          <select
-            className="px-3 py-1.5 md:w-32 w-full
-                    rounded border border-solid
-                    border-gray-300 transition ease-in-out bg-white"
-            value={month}
-            onChange={(event) => setMonth(event.target.value)}
-          >
-            {monthStrings}
-          </select>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
           <ResponsiveRadar
-            indexBy="day"
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
+            indexBy="year"
             keys={['plays']}
-            data={chart3}
+            data={chart}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          <section>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
+          </section>
+          <ResponsiveRadar
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
             legends={[
               {
                 anchor: 'top-left',
@@ -176,6 +161,47 @@ const Radar: React.FC<Record<string, void>> = () => {
                 ]
               }
             ]}
+            indexBy="month"
+            keys={yearKe}
+            data={chart2}
+          />
+        </div>
+      </div>
+      <div>
+        <div></div>
+        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          <section>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>
+            <select
+              className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+              value={year}
+              onChange={(event) => setYear(+event.target.value)}
+            >
+              {yearStrings}
+            </select>
+            <select
+              className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+              value={month}
+              onChange={(event) => setMonth(event.target.value)}
+            >
+              {monthStrings}
+            </select>
+          </section>
+          <ResponsiveRadar
+            indexBy="day"
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
+            keys={['plays']}
+            data={chart3}
+            // colors=cColors
           />
         </div>
       </div>

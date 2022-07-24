@@ -15,6 +15,22 @@ import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
+interface IScaleType {
+  type: 'time' | 'point';
+  format?: string;
+  useUTC?: boolean;
+  precision?: string;
+}
+
+interface IAxisBottomType {
+  format?: string;
+  tickValues?: string;
+  tickRotation: number;
+  legend?: string;
+  legendPosition?: string;
+  legendOffset?: number;
+}
+
 const theme: Theme = {
   textColor: '#212020',
   axis: {
@@ -207,8 +223,29 @@ const LineGraph: React.FC = () => {
       return -1;
     });
 
-  console.log(oldCutoff);
-  console.log(chartNew);
+  let xScale: IScaleType = {
+    type: 'time',
+    format: format1,
+    useUTC: false,
+    precision
+  };
+
+  let axisBottom: IAxisBottomType = {
+    format: bottomXFormat,
+    tickValues,
+    tickRotation: -75
+  };
+
+  if (timeFrame === '3month') {
+    xScale = { type: 'point' };
+
+    axisBottom = {
+      tickRotation: -75,
+      legend: 'Week of the Year',
+      legendPosition: 'middle',
+      legendOffset: 65
+    };
+  }
 
   return (
     <div>
@@ -233,61 +270,16 @@ const LineGraph: React.FC = () => {
           </select>
           <div className="text-left text-2xl font-semibold pl-4">Plays Line Chart</div>
         </section>
-        {timeFrame === '3month' ? (
-          <PointGraph chartNew={chartNew} />
-        ) : (
-          <ResponsiveLine
-            {...commonGraphProps}
-            data={chartNew}
-            xScale={{
-              type: 'time',
-              format: format1,
-              useUTC: false,
-              precision
-            }}
-            axisBottom={{
-              format: bottomXFormat,
-              tickValues,
-              tickRotation: -75
-            }}
-          />
-        )}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <ResponsiveLine
+          {...commonGraphProps}
+          data={chartNew}
+          xScale={xScale}
+          axisBottom={axisBottom}
+        />
       </div>
     </div>
-  );
-};
-
-interface IPointGraphProps {
-  chartNew: {
-    id: string;
-    data: {
-      x: string;
-      y: number;
-    }[];
-  }[];
-}
-
-/**
- * The week (IW) iso format is not supported by Nivo and messes everything up,
- * So making a component just for that use case.
- */
-const PointGraph: React.FC<IPointGraphProps> = (props) => {
-  const { chartNew } = props;
-
-  return (
-    <ResponsiveLine
-      {...commonGraphProps}
-      data={chartNew}
-      xScale={{
-        type: 'point'
-      }}
-      axisBottom={{
-        tickRotation: -75,
-        legend: 'Week of the Year',
-        legendPosition: 'middle',
-        legendOffset: 65
-      }}
-    />
   );
 };
 

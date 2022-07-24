@@ -6,6 +6,7 @@ import { years } from '../../utils';
 import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
+import useIsMobile from '@/hooks/useIsMobile';
 
 interface ICalData {
   plays: number;
@@ -14,9 +15,10 @@ interface ICalData {
 
 const Calendar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
-  const [timeFrame, setTimeFrame] = useState('2021');
+  const [timeFrame, setTimeFrame] = useState('2022');
   const year = years[timeFrame];
   const chartData = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
+  const isMobile = useIsMobile();
 
   if (!chartData || !chartData.data) {
     return <>HIOHOH</>;
@@ -31,15 +33,20 @@ const Calendar: React.FC<Record<string, void>> = () => {
     value: item.plays
   }));
 
-  const timeFrameSelects = Object.keys(years).map((key) => (
-    <option value={key} key={key}>
-      {key}
-    </option>
-  ));
+  const currentYear = new Date().getFullYear();
+  const timeFrameSelects = Object.keys(years)
+    .filter((year) => year <= `${currentYear}`)
+    .map((key) => (
+      <option value={key} key={key}>
+        {key}
+      </option>
+    ));
+
+  const boxHeight = isMobile ? '900px' : '350px';
 
   return (
     <div>
-      <div style={{ height: '350px', fontWeight: 'bold' }}>
+      <div style={{ height: boxHeight, fontWeight: 'bold' }}>
         <section>
           <h1>Scrobbles Calendar</h1>
           <div>
@@ -66,6 +73,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
             bottom: 0,
             left: 0
           }}
+          direction={isMobile ? 'vertical' : 'horizontal'}
           emptyColor="#eeeeee"
           yearSpacing={40}
           monthSpacing={4}
@@ -77,7 +85,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
           yearLegendOffset={-10}
           legends={[
             {
-              anchor: 'bottom-right',
+              anchor: 'top-left',
               direction: 'row',
               translateY: 0,
               itemCount: 4,
