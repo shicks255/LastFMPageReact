@@ -1,8 +1,6 @@
-import { BlockList } from 'net';
-
 import React, { useContext } from 'react';
 
-import Loader from '../common/Loader';
+import styles from './UserStats.module.css';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useUserStats from '@/hooks/api/musicApi/useUserStats';
 
@@ -12,7 +10,7 @@ const UserStats: React.FC<Record<string, void>> = () => {
 
   const build = (key1: string | undefined) => {
     if (!userStats || userStats.isLoading || !userStats.data) {
-      return <span style={{ width: 100, height: 25, display: 'block', background: 'lightgray' }} />;
+      return <span className={styles.skeletonLoader} />;
     }
     return key1;
   };
