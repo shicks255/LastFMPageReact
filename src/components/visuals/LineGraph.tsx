@@ -153,11 +153,7 @@ const LineGraph: React.FC = () => {
   if (timeFrame === '6month' || timeFrame === '12month') tickValues = 'every 1 month';
   if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 1 year';
 
-  if (!scrobbles || !scrobbles.data) {
-    return <></>;
-  }
-
-  if (scrobbles.isLoading) {
+  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader small={false} />;
   }
 

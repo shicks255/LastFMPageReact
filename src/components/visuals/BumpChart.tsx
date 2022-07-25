@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveBump } from '@nivo/bump';
 
-import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
+import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, cColors } from '../../utils';
 import Loader from '../common/Loader';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
@@ -28,11 +28,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     12
   );
 
-  if (!scrobbles || !scrobbles.data) {
-    return <></>;
-  }
-
-  if (scrobbles.isLoading) {
+  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader small={false} />;
   }
 
@@ -125,13 +121,11 @@ const BumpChart: React.FC<Record<string, void>> = () => {
         <ResponsiveBump
           // @ts-ignore
           data={finalNewChart}
-          // yOuterPadding={-50}
           pointSize={12}
           interpolation="smooth"
           activePointSize={16}
           inactivePointSize={8}
-          // theme={theme}
-          // colors={chartColors}
+          colors={cColors}
           margin={{
             top: 100,
             right: 150,

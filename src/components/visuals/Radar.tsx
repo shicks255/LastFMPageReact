@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { ResponsiveRadar } from '@nivo/radar';
 
 import { years, months } from '../../utils';
+import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 
@@ -112,6 +113,7 @@ const Radar: React.FC<Record<string, void>> = () => {
     <>
       <div>
         <div className="mb-12 mt-4 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart1Data || chart1Data.isLoading) && <Loader small />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
           </section>
@@ -130,6 +132,7 @@ const Radar: React.FC<Record<string, void>> = () => {
       </div>
       <div>
         <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart2Data || chart2Data.isLoading) && <Loader small />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
           </section>
@@ -168,8 +171,8 @@ const Radar: React.FC<Record<string, void>> = () => {
         </div>
       </div>
       <div>
-        <div></div>
         <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart3Data || chart3Data.isLoading) && <Loader small />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>
             <select

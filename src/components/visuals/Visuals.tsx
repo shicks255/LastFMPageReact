@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../common/Loader';
-import ErrorMessage from '../ErrorMessage';
 import DataLoadingModal from '../modals/DataLoadingModal';
 import BumpChart from './BumpChart';
 import CalendarChart from './Calendar';
@@ -13,7 +12,6 @@ import Sunburst from './SunburstChart';
 import TreeMaps from './TreeMaps';
 import UserStats from './UserStats';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
-import useRecentTracksBig from '@/hooks/api/lastFm/useRecentTracksBig';
 
 interface ILoadStatus {
   currentPage: number;
@@ -30,44 +28,43 @@ const Visuals: React.FC = () => {
   const visual = match?.params.visual;
 
   const { state } = useContext(LocalStateContext);
-  const [loadStatus, setLoadStatus] = useState<ILoadStatus>({
-    currentPage: 0,
-    totalPages: 100,
-    message: ''
-  });
-  const { isLoading, error, data } = useRecentTracksBig();
+  const [loadStatus, setLoadStatus] = useState<ILoadStatus | null>();
 
   useEffect(() => {
-    fetch(`https://musicapi.shicks255.com/api/v1/user/load?userName=${state.userName}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const timeoutid = window.setInterval(() => {
-      fetch(`https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setLoadStatus(res);
-          if (res.currentPage === res.totalPages) {
-            clearTimeout(timeoutid);
+    function checkStatus() {
+      return fetch(
+        `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
           }
-        });
-    }, 3500);
+        }
+      );
+    }
+
+    let timeoutid: number | undefined = undefined;
+    checkStatus()
+      .then((res) => res.json())
+      .then((res) => {
+        setLoadStatus(res);
+        if (res.currentPage !== res.totalPages) {
+          timeoutid = window.setInterval(() => {
+            checkStatus()
+              .then((res) => res.json())
+              .then((res) => {
+                setLoadStatus(res);
+                if (res.currentPage === res.totalPages) {
+                  clearTimeout(timeoutid);
+                }
+              });
+          }, 3250);
+        }
+      });
 
     return () => clearInterval(timeoutid);
   }, [state.userName]);
 
-  if (isLoading) return <Loader small />;
-  if (error) {
-    return <ErrorMessage error={error} />;
-  }
-  if (!data) return <ErrorMessage error={new Error('')} />;
+  if (!loadStatus) return <Loader small />;
 
   if (loadStatus.currentPage !== loadStatus.totalPages) {
     return (

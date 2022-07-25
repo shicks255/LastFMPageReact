@@ -25,11 +25,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
 
   const isMobile = useIsMobile();
 
-  if (!scrobbles || !scrobbles.data) {
-    return <></>;
-  }
-
-  if (scrobbles.isLoading) {
+  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader small={false} />;
   }
 

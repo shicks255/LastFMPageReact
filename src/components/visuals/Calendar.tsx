@@ -20,11 +20,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
   const chartData = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
   const isMobile = useIsMobile();
 
-  if (!chartData || !chartData.data) {
-    return <>HIOHOH</>;
-  }
-
-  if (chartData.isLoading) {
+  if (chartData.isLoading || !chartData || !chartData.data) {
     return <Loader small={false} />;
   }
 
@@ -71,7 +67,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
             top: isMobile ? 25 : 0,
             right: 0,
             bottom: 0,
-            left: 0
+            left: 15
           }}
           direction={isMobile ? 'vertical' : 'horizontal'}
           emptyColor="#eeeeee"
@@ -82,13 +78,13 @@ const Calendar: React.FC<Record<string, void>> = () => {
           dayBorderWidth={2}
           dayBorderColor="#ffffff"
           yearLegendPosition="before"
-          yearLegendOffset={-10}
+          yearLegendOffset={6}
           legends={[
             {
               anchor: 'top-left',
               direction: isMobile ? 'column' : 'row',
               translateY: 25,
-              translateX: isMobile ? 100 : 0,
+              translateX: isMobile ? 10 : 0,
               itemCount: 4,
               itemWidth: 42,
               itemHeight: 36,
