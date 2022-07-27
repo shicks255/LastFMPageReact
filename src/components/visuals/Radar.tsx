@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months } from '../../utils';
+import { years, months, cColors } from '../../utils';
 import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
@@ -15,8 +15,9 @@ interface ICalData {
 const Radar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
 
-  const [year, setYear] = useState(2022);
-  const [month, setMonth] = useState('Jan');
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(Object.keys(months)[new Date().getMonth()]);
+  console.log(month);
 
   const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
   const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
@@ -33,20 +34,27 @@ const Radar: React.FC<Record<string, void>> = () => {
   const toArg = `${to.getFullYear()}-${monthArg}-${to.getDate()}`;
   const chart3Data = useScrobblesGrouped(state.userName, 'DAY', fromArg, toArg);
 
-  if (!chart1Data || !chart1Data.data) {
-    return <></>;
-  }
-  if (!chart2Data || !chart2Data.data) {
-    return <></>;
-  }
-  if (!chart3Data || !chart3Data.data) {
-    return <></>;
+  if (
+    !chart1Data ||
+    !chart1Data.data ||
+    !chart2Data ||
+    !chart2Data.data ||
+    !chart3Data ||
+    !chart3Data.data
+  ) {
+    return <Loader small />;
   }
 
-  const chart = chart1Data.data.map((item: ICalData) => ({
-    year: item.timeGroup,
-    plays: item.plays
-  }));
+  const chart = chart1Data.data
+    .sort((a, b) => {
+      return a.timeGroup > b.timeGroup ? 1 : -1;
+    })
+    .map((item: ICalData) => ({
+      year: item.timeGroup,
+      plays: item.plays
+    }));
+
+  console.log(chart);
 
   const chart2: { [key: string]: number }[] = [];
   const yearKeys = new Set<string>();
@@ -137,6 +145,7 @@ const Radar: React.FC<Record<string, void>> = () => {
             <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
           </section>
           <ResponsiveRadar
+            colors={cColors}
             margin={{
               top: 50,
               bottom: 50,

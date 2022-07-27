@@ -42,7 +42,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <div className="mb-12 mt-4 p-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
+      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
         <section>
           <div className="text-left text-2xl font-semibold">Scrobbles Calendar</div>
           <div>

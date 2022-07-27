@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { ResponsiveTreeMap } from '@nivo/treemap';
+import { cColors } from 'utils';
 
 import Loader from '../common/Loader';
 import { useApiState } from '@/contexts/ApiContext';
@@ -51,7 +52,7 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
 
   const treeData = {
     name: '',
-    color: 'hsl(201, 70%, 50%)',
+    // color: 'hsl(201, 70%, 50%)',
     children: dataPoints
   };
 
@@ -74,6 +75,9 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
     return id;
   }
 
+  const colors = [...cColors];
+  colors.unshift('#e5e7eb');
+
   return (
     <div style={{ height: '350px', fontWeight: 'bold' }}>
       <div className="text-left text-2xl font-semibold pl-4">{name}</div>
@@ -81,14 +85,12 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
         data={treeData}
         identity="name"
         value="value"
-        colors={{
-          scheme: 'accent'
-        }}
+        colors={colors}
         nodeOpacity={0.75}
         // @ts-ignore
         label={(node) => trimName(node)}
         margin={{
-          top: 10,
+          top: 0,
           right: 10,
           bottom: 10,
           left: 10

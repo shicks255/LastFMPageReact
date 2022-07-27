@@ -20,7 +20,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
     'DAY',
     start,
     end,
-    50
+    12
   );
 
   const isMobile = useIsMobile();
@@ -66,6 +66,8 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
     };
   });
 
+  console.log(colorMap);
+
   const data = {
     id: 'albums',
     color: '#a32929',
@@ -93,6 +95,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
           cornerRadius={3}
           borderWidth={4}
           isInteractive
+          enableArcLabels={true}
         />
         <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
           {artists.slice(0, 10).map((item) => (

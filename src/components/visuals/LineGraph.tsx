@@ -214,10 +214,10 @@ const LineGraph: React.FC = () => {
     })
     .sort((item1, item2) => {
       if (item1.total > item2.total) {
-        return 1;
+        return -1;
       }
 
-      return -1;
+      return 1;
     });
 
   let xScale: IScaleType = {
@@ -243,6 +243,8 @@ const LineGraph: React.FC = () => {
       legendOffset: 65
     };
   }
+
+  console.log(chartNew);
 
   return (
     <div>
