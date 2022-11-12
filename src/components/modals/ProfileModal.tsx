@@ -48,28 +48,39 @@ function ProfileModal(): JSX.Element {
     return () => window.removeEventListener('keydown', handleKeys);
   }, [tempUserName, actions, submitUsername]);
 
+  useEffect(() => {
+    if (state.modalErrorMessage) {
+      actions.setModalErrorMessage(undefined);
+    }
+  }, [actions, state.modalErrorMessage, tempUserName]);
+
   return (
     <div>
       <div ref={ref}>
-        <div id="profileModal">
+        <div id="profileModal" className="text-center mt-4">
           <label className="label" htmlFor="newUsername">
-            Enter a new Username: &nbsp;&nbsp;
+            Enter a new Username to display their stats
             <div>
               <input
                 onChange={(e) => setTempUserName(e.target.value)}
                 type="text"
                 id="newUsername"
                 aria-placeholder="Username"
+                placeholder="Username"
               />
             </div>
           </label>
-          <button className="button" type="submit" onClick={submitUsername}>
+          <button
+            className="button bg-sky-900 text-gray-200 py-2 px-4 rounded font-semibold mt-2"
+            type="submit"
+            onClick={submitUsername}
+          >
             Submit
           </button>
           <br />
           <span>
             <b>
-              <i>{state.modalErrorMessage}</i>
+              <i className="text-red-500">{state.modalErrorMessage}</i>
             </b>
           </span>
         </div>

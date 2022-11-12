@@ -10,6 +10,10 @@ import { IUser } from '@/types/User';
 
 const getUser = (s: URLSearchParams) => {
   const user: IUser = {
+    url: '',
+    album_count: 0,
+    artist_count: 0,
+    track_count: 0,
     image: [{ '#text': 'testest' }],
     playcount: 500,
     registered: {
