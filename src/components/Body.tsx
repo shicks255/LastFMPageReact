@@ -3,13 +3,11 @@ import React, { lazy, Suspense, useContext } from 'react';
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
 
-import { cColors } from '../utils';
 import ButtonGroup from './common/ButtonGroup';
 import Main from './Main';
 import ImageModal from './modals/ImageModal';
 import Profile from './Profile';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
-import useUserQuery from '@/hooks/api/lastFm/useUser';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 import useNavPathToStrategySync from '@/hooks/useParamToStrategySync';
 
@@ -50,8 +48,7 @@ const commonGraphProps: LineProps = {
 const Body: React.FC<Record<string, void>> = () => {
   useNavPathToStrategySync();
 
-  const { state, actions } = useContext(LocalStateContext);
-  const { isLoading, error, data } = useUserQuery(state.userName);
+  const { state } = useContext(LocalStateContext);
 
   const chartData = useScrobblesGrouped(state.userName, 'DAY', '2022-11-05', '2022-11-12');
 
