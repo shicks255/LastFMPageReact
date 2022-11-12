@@ -7,10 +7,11 @@
     "patch": "node ./scripts/patch-react-spring.js",
     "build": "craco build",
     "test": "craco test --runInBand",
-    "test-ci": "npm test -- --coverage --watchAll=false",
+    "test:ci": "npm test -- --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "lint:style": "stylelint ./src/**/*.css",
     "install": "copyfiles -u 1 ./build/* ./build/static/css/* ./build/static/js/* \\\\thinkcentre\\caddy\\lastFm\\"
   },
   "dependencies": {
@@ -30,7 +31,8 @@
     "react-dom": "^17.0.1",
     "react-query": "~3.6.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0"
+    "react-scripts": "5.0.0",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@craco/craco": "^6.2.0",
@@ -41,6 +43,7 @@
     "@types/node": "^17.0.33",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "5.13.0",
     "@typescript-eslint/parser": "5.13.0",
     "autoprefixer": "10.4.2",
@@ -56,6 +59,8 @@
     "msw": "0.38.1",
     "postcss": "8.4.7",
     "prettier": "2.5.1",
+    "stylelint": "^14.8.4",
+    "stylelint-config-standard": "^25.0.0",
     "tailwindcss": "3.0.23",
     "typescript": "4.5.5"
   },
@@ -71,10 +76,10 @@
     },
     "coverageThreshold": {
       "global": {
-        "branches": 30,
-        "functions": 45,
-        "lines": 45,
-        "statements": 45
+        "branches": 19,
+        "functions": 28,
+        "lines": 34,
+        "statements": 33
       }
     },
     "collectCoverageFrom": [

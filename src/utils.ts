@@ -15,6 +15,21 @@ export const strategies = {
   getTopTracks: 'Songs'
 };
 
+export const cColors = [
+  'rgb(51, 155, 23',
+  'rgb(23, 51, 155)',
+  'rgb(155, 23, 36)',
+  'rgb(102, 102, 102)',
+  'rgb(166, 118, 29)',
+  'rgb(186, 191, 42)',
+  'rgb(247, 123, 37)',
+  'rgb(230, 26, 185)',
+  'rgb(140, 38, 211)',
+  'rgb(49, 218, 28)',
+  'rgb(16, 88, 241)',
+  'rgb(247, 42, 42)'
+];
+
 export const chartColors = [
   'rgb(190, 174, 212)',
   'rgb(127, 201, 127)',
@@ -81,7 +96,11 @@ export const years = {
   2018: ['2018-01-01', '2018-12-31', '2018-01-02'],
   2019: ['2019-01-01', '2019-12-31', '2019-01-02'],
   2020: ['2020-01-01', '2020-12-31', '2020-01-02'],
-  2021: ['2021-01-01', '2021-12-31', '2021-01-02']
+  2021: ['2021-01-01', '2021-12-31', '2021-01-02'],
+  2022: ['2022-01-01', '2022-12-31', '2022-01-02'],
+  2023: ['2023-01-01', '2023-12-31', '2023-01-02'],
+  2024: ['2024-01-01', '2024-12-31', '2024-01-02'],
+  2025: ['2025-01-01', '2025-12-31', '2025-01-02']
 };
 
 export const months = {
@@ -122,7 +141,7 @@ export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
     from.setFullYear(from.getFullYear() - 20);
   }
 
-  let fromDay: number | string = from.getDate() + 1;
+  let fromDay: number | string = from.getDate();
   if (fromDay < 10) fromDay = `0${fromDay}`;
   let toDay: number | string = to.getDate();
   if (toDay < 10) toDay = `0${toDay}`;

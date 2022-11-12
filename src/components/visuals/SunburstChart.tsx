@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
-import { chartColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
-import Loader from '../Loader';
-import TimeFrameSelect from '../TimeFrameSelect';
+import { cColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
+import Loader from '../common/Loader';
+import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const { state } = useContext(LocalStateContext);
@@ -19,14 +20,12 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
     'DAY',
     start,
     end,
-    50
+    12
   );
 
-  if (!scrobbles || !scrobbles.data) {
-    return <></>;
-  }
+  const isMobile = useIsMobile();
 
-  if (scrobbles.isLoading) {
+  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader small={false} />;
   }
 
@@ -59,13 +58,15 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const colorMap = {};
 
   const pp = Object.entries(t).map((k, index) => {
-    colorMap[k[0]] = chartColors[index];
+    colorMap[k[0]] = cColors[index];
     return {
       id: k[0],
-      color: chartColors[index],
+      color: cColors[index],
       children: k[1]
     };
   });
+
+  console.log(colorMap);
 
   const data = {
     id: 'albums',
@@ -76,12 +77,12 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const artists = data.children.map((k) => k.id);
 
   return (
-    <div className="column is-full has-text-centered">
-      <div className="relative" style={{ height: '500px', fontWeight: 'bold' }}>
-        <section className="mainContent">
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Album Pie Chart</h1>
-          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
+    <div>
+      <div className="relative mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
+        <section>
+          <div className="text-left text-2xl font-semibold">Album Pie Chart</div>
         </section>
+        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResponsiveSunburst
           data={data}
           margin={{
@@ -89,14 +90,15 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
             bottom: 20,
             right: 150
           }}
-          colors={chartColors}
+          colors={cColors}
           borderColor="#4E4E50"
           cornerRadius={3}
           borderWidth={4}
           isInteractive
+          enableArcLabels={true}
         />
-        <div className="absolute right-28 top-20">
-          {artists.map((item) => (
+        <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
+          {artists.slice(0, 10).map((item) => (
             <div key={item} style={{ color: colorMap[item] }}>
               {trimString(item)}
             </div>

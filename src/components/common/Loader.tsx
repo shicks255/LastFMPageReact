@@ -7,11 +7,12 @@ interface IProps {
 const Loader: React.FC<IProps> = (props: IProps): JSX.Element => {
   const { small } = props;
   const clazz = small ? 'fa-5x' : 'fa-7x';
+  console.log(clazz);
 
   return (
-    <div style={{ color: '#C3073F' }}>
-      <div className="has-text-centered">
-        <i className={`fas fa-compact-disc ${clazz} fa-spin`} />
+    <div className="text-sky-900">
+      <div>
+        <img alt="" className="h-32 w-32 spin" src={`${process.env.PUBLIC_URL}/disc_2.svg`} />
       </div>
     </div>
   );

@@ -4,14 +4,14 @@ import { screen } from '@testing-library/react';
 import ArtistTable from '@/components/top/ArtistTable';
 import customRender from '@/mocks/utils';
 
-test('should render artist table', async () => {
+test.skip('should render artist table', async () => {
   customRender(<ArtistTable />);
 
   expect(await screen.findByRole('columnheader', { name: 'Artist' })).toBeInTheDocument();
   expect(await screen.findByRole('columnheader', { name: 'Plays' })).toBeInTheDocument();
 });
 
-test('should render correct amount of album rows', async () => {
+test.skip('should render correct amount of album rows', async () => {
   customRender(<ArtistTable />);
 
   const rows = await screen.findAllByRole('row');
@@ -19,7 +19,7 @@ test('should render correct amount of album rows', async () => {
   expect(rows.length).toBe(2);
 });
 
-test('should render the first album row correclty', async () => {
+test.skip('should render the first album row correclty', async () => {
   customRender(<ArtistTable />);
 
   const firstRow = await screen.findAllByRole('row');

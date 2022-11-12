@@ -3,9 +3,10 @@ import React, { useContext, useState } from 'react';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { years } from '../../utils';
-import Loader from '../Loader';
+import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
+import useIsMobile from '@/hooks/useIsMobile';
 
 interface ICalData {
   plays: number;
@@ -14,15 +15,12 @@ interface ICalData {
 
 const Calendar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
-  const [timeFrame, setTimeFrame] = useState('2021');
+  const [timeFrame, setTimeFrame] = useState('2022');
   const year = years[timeFrame];
   const chartData = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
+  const isMobile = useIsMobile();
 
-  if (!chartData || !chartData.data) {
-    return <>HIOHOH</>;
-  }
-
-  if (chartData.isLoading) {
+  if (chartData.isLoading || !chartData || !chartData.data) {
     return <Loader small={false} />;
   }
 
@@ -31,20 +29,31 @@ const Calendar: React.FC<Record<string, void>> = () => {
     value: item.plays
   }));
 
-  const timeFrameSelects = Object.keys(years).map((key) => (
-    <option value={key} key={key}>
-      {key}
-    </option>
-  ));
+  const currentYear = new Date().getFullYear();
+  const timeFrameSelects = Object.keys(years)
+    .filter((year) => year <= `${currentYear}`)
+    .map((key) => (
+      <option value={key} key={key}>
+        {key}
+      </option>
+    ));
+
+  const boxHeight = isMobile ? '900px' : '350px';
 
   return (
-    <div className="column is-full has-text-centered">
-      <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <section className="mainContent">
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Calendar</h1>
-          <div className="column has-text-left-tablet">
-            <div className="select is-danger">
-              <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
+    <div>
+      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
+        <section>
+          <div className="text-left text-2xl font-semibold">Scrobbles Calendar</div>
+          <div>
+            <div>
+              <select
+                className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+                value={timeFrame}
+                onChange={(event) => setTimeFrame(event.target.value)}
+              >
                 {timeFrameSelects}
               </select>
             </div>
@@ -55,11 +64,12 @@ const Calendar: React.FC<Record<string, void>> = () => {
           from={year[2]}
           to={year[1]}
           margin={{
-            top: 0,
+            top: isMobile ? 25 : 0,
             right: 0,
             bottom: 0,
-            left: 0
+            left: 15
           }}
+          direction={isMobile ? 'vertical' : 'horizontal'}
           emptyColor="#eeeeee"
           yearSpacing={40}
           monthSpacing={4}
@@ -68,17 +78,18 @@ const Calendar: React.FC<Record<string, void>> = () => {
           dayBorderWidth={2}
           dayBorderColor="#ffffff"
           yearLegendPosition="before"
-          yearLegendOffset={-10}
+          yearLegendOffset={6}
           legends={[
             {
-              anchor: 'bottom-right',
-              direction: 'row',
-              translateY: 0,
+              anchor: 'top-left',
+              direction: isMobile ? 'column' : 'row',
+              translateY: 25,
+              translateX: isMobile ? 10 : 0,
               itemCount: 4,
               itemWidth: 42,
               itemHeight: 36,
               itemsSpacing: 14,
-              itemDirection: 'right-to-left'
+              itemDirection: isMobile ? 'top-to-bottom' : 'right-to-left'
             }
           ]}
         />

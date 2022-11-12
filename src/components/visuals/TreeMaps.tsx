@@ -15,18 +15,21 @@ const TreeMaps: () => JSX.Element = () => {
   return (
     <>
       <hr />
-      <div className="is-mobile">
-        <div className="box column is-half is-offset-one-quarter has-text-centered">
-          <div className="columns has-text-black" style={{ padding: '10px' }}>
-            <div
-              className="column has-text-right-tablet"
-              style={{ marginTop: 'auto', marginBottom: 'auto' }}
-            >
-              <b>Time Frame:</b>
-            </div>
-            <div className="column has-text-left-tablet">
-              <div className="select is-danger">
-                <select value={timeFrame} onChange={(event) => setTimeFrame(event.target.value)}>
+      <div>
+        <div>
+          <div className="p-4">
+            <div>
+              <div>
+                <section>
+                  <div className="text-left text-2xl font-semibold">Scrobbles Heat Maps</div>
+                </section>
+                <select
+                  className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+                  value={timeFrame}
+                  onChange={(event) => setTimeFrame(event.target.value)}
+                >
                   {timeFrameSelects}
                 </select>
               </div>
@@ -35,11 +38,10 @@ const TreeMaps: () => JSX.Element = () => {
         </div>
       </div>
       <section>
-        <article className="mainContent">
+        <article>
           <TreeMap name="Artists" keyy="name" value="playcount" />
         </article>
-        <br />
-        <article className="mainContent">
+        <article className="mt-16">
           <TreeMap name="Albums" keyy="name" value="playcount" />
         </article>
         <br />

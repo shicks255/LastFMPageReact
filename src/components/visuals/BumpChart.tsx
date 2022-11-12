@@ -3,9 +3,10 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveBump } from '@nivo/bump';
 
-import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame } from '../../utils';
-import Loader from '../Loader';
-import TimeFrameSelect from '../TimeFrameSelect';
+import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, cColors } from '../../utils';
+import Loader from '../common/Loader';
+import ResourceSelect from '../common/ResourceSelect';
+import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
@@ -27,11 +28,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     12
   );
 
-  if (!scrobbles || !scrobbles.data) {
-    return <></>;
-  }
-
-  if (scrobbles.isLoading) {
+  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader small={false} />;
   }
 
@@ -111,39 +108,29 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     };
   });
 
+  const label = resource === 'artistsGrouped' ? 'Artist Rank By Day' : 'Album Rank By Day';
+
   return (
-    <div className="column is-full has-text-centered">
-      <div style={{ height: '350px', fontWeight: 'bold' }}>
-        <section className="mainContent">
-          <TimeFrameSelect onChange={(e: string) => setTimeFrame(e)} />
-          <select value={resourceType} onChange={(e) => setResourceType(e.target.value)}>
-            <option value="album" key="album">
-              Albums
-            </option>
-            <option value="artist" key="artist">
-              Artists
-            </option>
-          </select>
-          <h1 className="title myTitle has-text-left-tablet noMarginBottom">
-            {resource === 'artistsGrouped' && <>Artist Rank By Day</>}
-            {resource === 'albumsGrouped' && <>Album Rank By Day</>}
-          </h1>
+    <div>
+      <div className="mt-4 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
+        <section>
+          <div className="text-left text-2xl font-semibold">{label}</div>
         </section>
+        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+        <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
         <ResponsiveBump
           // @ts-ignore
           data={finalNewChart}
-          // yOuterPadding={-50}
           pointSize={12}
           interpolation="smooth"
           activePointSize={16}
           inactivePointSize={8}
-          // theme={theme}
-          // colors={chartColors}
+          colors={cColors}
           margin={{
-            top: 50,
+            top: 100,
             right: 150,
             left: 50,
-            bottom: 75
+            bottom: 100
           }}
           axisTop={{
             tickRotation: -75

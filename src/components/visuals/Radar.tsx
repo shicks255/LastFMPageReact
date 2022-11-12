@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months } from '../../utils';
+import { years, months, cColors } from '../../utils';
+import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 
@@ -14,8 +15,9 @@ interface ICalData {
 const Radar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
 
-  const [year, setYear] = useState(2021);
-  const [month, setMonth] = useState('Jan');
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(Object.keys(months)[new Date().getMonth()]);
+  console.log(month);
 
   const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
   const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
@@ -32,20 +34,27 @@ const Radar: React.FC<Record<string, void>> = () => {
   const toArg = `${to.getFullYear()}-${monthArg}-${to.getDate()}`;
   const chart3Data = useScrobblesGrouped(state.userName, 'DAY', fromArg, toArg);
 
-  if (!chart1Data || !chart1Data.data) {
-    return <></>;
-  }
-  if (!chart2Data || !chart2Data.data) {
-    return <></>;
-  }
-  if (!chart3Data || !chart3Data.data) {
-    return <></>;
+  if (
+    !chart1Data ||
+    !chart1Data.data ||
+    !chart2Data ||
+    !chart2Data.data ||
+    !chart3Data ||
+    !chart3Data.data
+  ) {
+    return <Loader small />;
   }
 
-  const chart = chart1Data.data.map((item: ICalData) => ({
-    year: item.timeGroup,
-    plays: item.plays
-  }));
+  const chart = chart1Data.data
+    .sort((a, b) => {
+      return a.timeGroup > b.timeGroup ? 1 : -1;
+    })
+    .map((item: ICalData) => ({
+      year: item.timeGroup,
+      plays: item.plays
+    }));
+
+  console.log(chart);
 
   const chart2: { [key: string]: number }[] = [];
   const yearKeys = new Set<string>();
@@ -94,11 +103,14 @@ const Radar: React.FC<Record<string, void>> = () => {
       plays: item.plays
     }));
 
-  const yearStrings = Object.keys(years).map((item) => (
-    <option key={item} value={item}>
-      {item}
-    </option>
-  ));
+  const currentYear = new Date().getFullYear();
+  const yearStrings = Object.keys(years)
+    .filter((year) => year <= `${currentYear}`)
+    .map((item) => (
+      <option key={item} value={item}>
+        {item}
+      </option>
+    ));
   const monthStrings = Object.keys(months).map((item) => (
     <option key={item} value={item}>
       {item}
@@ -107,42 +119,39 @@ const Radar: React.FC<Record<string, void>> = () => {
 
   return (
     <>
-      <div className="column is-full has-text-centered">
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
-          <section className="mainContent">
-            <h1 className="title myTitle has-text-left-tablet noMarginBottom">Scrobbles Radar</h1>
+      <div>
+        <div className="mb-12 mt-4 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart1Data || chart1Data.isLoading) && <Loader small />}
+          <section>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
           </section>
-          <ResponsiveRadar indexBy="year" keys={['plays']} data={chart} />
-        </div>
-      </div>
-      <br />
-      <br />
-      <br />
-      <div className="column is-full has-text-centered">
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
-          <ResponsiveRadar indexBy="month" keys={yearKe} data={chart2} />
-        </div>
-      </div>
-      <br />
-      <br />
-      <br />
-      <div className="column is-full has-text-centered">
-        <div className="select is-danger">
-          <select value={year} onChange={(event) => setYear(+event.target.value)}>
-            {yearStrings}
-          </select>
-          <select value={month} onChange={(event) => setMonth(event.target.value)}>
-            {monthStrings}
-          </select>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div style={{ height: '350px', fontWeight: 'bold' }}>
           <ResponsiveRadar
-            indexBy="day"
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
+            indexBy="year"
             keys={['plays']}
-            data={chart3}
+            data={chart}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart2Data || chart2Data.isLoading) && <Loader small />}
+          <section>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
+          </section>
+          <ResponsiveRadar
+            colors={cColors}
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
             legends={[
               {
                 anchor: 'top-left',
@@ -164,6 +173,47 @@ const Radar: React.FC<Record<string, void>> = () => {
                 ]
               }
             ]}
+            indexBy="month"
+            keys={yearKe}
+            data={chart2}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+          {(!chart3Data || chart3Data.isLoading) && <Loader small />}
+          <section>
+            <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>
+            <select
+              className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+              value={year}
+              onChange={(event) => setYear(+event.target.value)}
+            >
+              {yearStrings}
+            </select>
+            <select
+              className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+              value={month}
+              onChange={(event) => setMonth(event.target.value)}
+            >
+              {monthStrings}
+            </select>
+          </section>
+          <ResponsiveRadar
+            indexBy="day"
+            margin={{
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
+            }}
+            keys={['plays']}
+            data={chart3}
+            // colors=cColors
           />
         </div>
       </div>

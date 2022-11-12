@@ -2,7 +2,11 @@ import { IImage } from './Image';
 
 interface IUser {
   playcount: number;
+  artist_count: number;
+  track_count: number;
+  album_count;
   image: IImage[];
+  url: string;
   registered: {
     unixtime: number;
   };
