@@ -43,4 +43,4 @@ function useModalState(): IType {
   return context;
 }
 
-export { ModalContextProvider, useModalState };
+export { ModalContextProvider, useModalState, ModalContext };
