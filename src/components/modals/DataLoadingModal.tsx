@@ -15,7 +15,7 @@ const DataLoadingModal: React.FC<IProps> = (props: IProps) => {
       <div style={{ color: '#C3073F' }}>
         <div>
           <div>
-            <Loader small={false} />
+            <Loader />
             <progress value={done} max={total}>
               0
             </progress>

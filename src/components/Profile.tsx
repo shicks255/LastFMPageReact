@@ -12,7 +12,7 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
 
   if (error) return <ErrorMessage error={error} />;
   if (isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
   if (!data) return <div />;
 
@@ -50,22 +50,24 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
       <div className="m-auto">{state.showModal ? <ProfileModal /> : ''}</div>
       <div className="px-4 mt-2">
         <table className="w-full">
-          <tr>
-            <td className="text-right font-bold">{user.playCount}</td>
-            <td className="font-thin p-2">scrobbles</td>
-          </tr>
-          <tr>
-            <td className="text-right font-bold">{user.artists}</td>
-            <td className="font-thin p-2">artists</td>
-          </tr>
-          <tr>
-            <td className="text-right font-bold">{user.albums}</td>
-            <td className="font-thin p-2">albums</td>
-          </tr>
-          <tr>
-            <td className="text-right font-bold">{user.tracks}</td>
-            <td className="font-thin p-2">tracks</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className="text-right font-bold">{user.playCount}</td>
+              <td className="font-thin p-2">scrobbles</td>
+            </tr>
+            <tr>
+              <td className="text-right font-bold">{user.artists}</td>
+              <td className="font-thin p-2">artists</td>
+            </tr>
+            <tr>
+              <td className="text-right font-bold">{user.albums}</td>
+              <td className="font-thin p-2">albums</td>
+            </tr>
+            <tr>
+              <td className="text-right font-bold">{user.tracks}</td>
+              <td className="font-thin p-2">tracks</td>
+            </tr>
+          </tbody>
         </table>
         <br />
         <span className="font-thin">Registered on </span>

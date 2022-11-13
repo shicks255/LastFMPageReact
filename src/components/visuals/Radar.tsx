@@ -17,7 +17,6 @@ const Radar: React.FC<Record<string, void>> = () => {
 
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(Object.keys(months)[new Date().getMonth()]);
-  console.log(month);
 
   const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
   const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
@@ -42,7 +41,7 @@ const Radar: React.FC<Record<string, void>> = () => {
     !chart3Data ||
     !chart3Data.data
   ) {
-    return <Loader small />;
+    return <Loader />;
   }
 
   const chart = chart1Data.data
@@ -53,8 +52,6 @@ const Radar: React.FC<Record<string, void>> = () => {
       year: item.timeGroup,
       plays: item.plays
     }));
-
-  console.log(chart);
 
   const chart2: { [key: string]: number }[] = [];
   const yearKeys = new Set<string>();
@@ -121,7 +118,7 @@ const Radar: React.FC<Record<string, void>> = () => {
     <>
       <div>
         <div className="mb-12 mt-4 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
-          {(!chart1Data || chart1Data.isLoading) && <Loader small />}
+          {(!chart1Data || chart1Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
           </section>
@@ -140,7 +137,7 @@ const Radar: React.FC<Record<string, void>> = () => {
       </div>
       <div>
         <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
-          {(!chart2Data || chart2Data.isLoading) && <Loader small />}
+          {(!chart2Data || chart2Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
           </section>
@@ -181,7 +178,7 @@ const Radar: React.FC<Record<string, void>> = () => {
       </div>
       <div>
         <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
-          {(!chart3Data || chart3Data.isLoading) && <Loader small />}
+          {(!chart3Data || chart3Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>
             <select

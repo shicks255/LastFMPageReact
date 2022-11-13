@@ -4,6 +4,7 @@ import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
 import { trimString } from '../../utils';
 import HoverImage from '../common/HoverImage';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
@@ -13,7 +14,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
   const { isLoading, error, data } = useTopAlbums(topItemsTimeFrame, topItemsPage);
 
   if (isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
   if (error) {
     return <ErrorMessage error={error} />;
@@ -30,6 +31,7 @@ const AlbumTable: React.FC<Record<string, void>> = () => {
       </div>
       <Pagination page={topItemsPage} totalPages={topAlbums['@attr'].totalPages} />
       <div>
+        {topAlbums.album.length === 0 && <NoData />}
         {topAlbums.album.map((val) => {
           const smallImgSrc =
             val?.image?.[1]?.['#text'] ??

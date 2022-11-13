@@ -21,7 +21,7 @@ const Calendar: React.FC<Record<string, void>> = () => {
   const isMobile = useIsMobile();
 
   if (chartData.isLoading || !chartData || !chartData.data) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
 
   const chart = chartData.data.map((item: ICalData) => ({

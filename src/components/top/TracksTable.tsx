@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { convertDurationToTimestamp, trimString } from '../../utils';
 import ArtistImage from '../common/ArtistImage';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
@@ -17,10 +18,8 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   const artistNameRef = useRef<HTMLDivElement | null>(null);
   const trackNameRef = useRef<HTMLDivElement | null>(null);
 
-  console.log(isMobile);
-
   if (isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
   if (error) return <ErrorMessage error={error} />;
   if (!data) return <ErrorMessage error={new Error('')} />;
@@ -28,7 +27,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
   const topTracks = data.toptracks;
   const tracks = topTracks.track;
 
-  if (!tracks) return <Loader small={false} />;
+  if (!tracks) return <Loader />;
 
   return (
     <div>
@@ -38,6 +37,7 @@ const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
       </div>
       <Pagination page={topItemsPage} totalPages={topTracks['@attr'].totalPages} />
       <div>
+        {tracks.length === 0 && <NoData />}
         {tracks.map((val) => {
           const time = convertDurationToTimestamp(val.duration);
 

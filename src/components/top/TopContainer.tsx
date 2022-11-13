@@ -18,7 +18,7 @@ const TopContainer: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <MainMenu />
-      <Suspense fallback={<Loader small={false} />}>
+      <Suspense fallback={<Loader />}>
         <Switch>
           <Route path={`${url}/artists`}>
             <LazyArtistTable />

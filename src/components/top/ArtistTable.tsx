@@ -3,6 +3,7 @@ import React from 'react';
 import { trimString } from '../../utils';
 import ArtistImage from '../common/ArtistImage';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
@@ -13,7 +14,7 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
   const { isLoading, error, data } = useTopArtists(topItemsTimeFrame, topItemsPage);
 
   if (isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
   if (error) {
     return <ErrorMessage error={error} />;
@@ -31,6 +32,7 @@ const ArtistTable: React.FC<Record<string, void>> = () => {
       </div>
       <Pagination page={topItemsPage} totalPages={artist['@attr'].totalPages} />
       <div>
+        {artists.length === 0 && <NoData />}
         {artists.map((val) => {
           const rank = val['@attr']?.rank;
 

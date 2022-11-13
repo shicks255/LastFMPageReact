@@ -19,7 +19,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   const trackNameRef = useRef<HTMLDivElement | null>(null);
   const artistNameRef = useRef<HTMLDivElement | null>(null);
 
-  if (isLoading) return <Loader small={false} />;
+  if (isLoading) return <Loader />;
   if (error) return <ErrorMessage error={error} />;
   if (!data) return <ErrorMessage error={new Error('o no')} />;
 

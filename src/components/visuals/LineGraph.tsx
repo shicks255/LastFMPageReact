@@ -11,6 +11,7 @@ import {
   cColors
 } from '../../utils';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -154,7 +155,7 @@ const LineGraph: React.FC = () => {
   if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 1 year';
 
   if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
 
   const sortedDates = scrobbles.data.data
@@ -244,8 +245,6 @@ const LineGraph: React.FC = () => {
     };
   }
 
-  console.log(chartNew);
-
   return (
     <div>
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
@@ -254,6 +253,7 @@ const LineGraph: React.FC = () => {
         </section>
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
+        {chartNew.length === 0 && <NoData />}
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         <ResponsiveLine
@@ -261,6 +261,7 @@ const LineGraph: React.FC = () => {
           data={chartNew}
           xScale={xScale}
           axisBottom={axisBottom}
+          pointLabelYOffset={0}
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ const Main: React.FC = () => {
 
   return (
     <div>
-      <Suspense fallback={<Loader small={false} />}>
+      <Suspense fallback={<Loader />}>
         <Switch>
           <Route path="/recent">
             <RecentTracksTable />

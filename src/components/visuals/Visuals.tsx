@@ -64,7 +64,7 @@ const Visuals: React.FC = () => {
     return () => clearInterval(timeoutid);
   }, [state.userName]);
 
-  if (!loadStatus) return <Loader small />;
+  if (!loadStatus) return <Loader />;
 
   if (loadStatus.currentPage !== loadStatus.totalPages) {
     return (

@@ -5,6 +5,7 @@ import { ResponsiveTreeMap } from '@nivo/treemap';
 import { cColors } from 'utils';
 
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import { useApiState } from '@/contexts/ApiContext';
 import useTopAlbums from '@/hooks/api/lastFm/useTopAlbums';
 import useTopArtists from '@/hooks/api/lastFm/useTopArtists';
@@ -23,19 +24,19 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
   const topAlbums = useTopAlbums(timeFrame, page);
   const topArtists = useTopArtists(timeFrame, page);
 
-  // const queryResult =
-  //   name === 'Albums' ? useTopAlbums(timeFrame, page) : useTopArtists(timeFrame, page);
-
   if (name === 'Albums' && topAlbums.isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
   if (name === 'Artists' && topArtists.isLoading) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
 
   let data;
-  if (name === 'Albums') data = topAlbums.data?.topalbums.album;
-  else data = topArtists.data?.topartists.artist;
+  if (name === 'Albums') {
+    data = topAlbums.data?.topalbums.album;
+  } else {
+    data = topArtists.data?.topartists.artist;
+  }
 
   const dataPoints = data.map((item) => {
     if (name === 'Albums') {
@@ -52,7 +53,6 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
 
   const treeData = {
     name: '',
-    // color: 'hsl(201, 70%, 50%)',
     children: dataPoints
   };
 
@@ -81,25 +81,29 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
   return (
     <div style={{ height: '350px', fontWeight: 'bold' }}>
       <div className="text-left text-2xl font-semibold pl-4">{name}</div>
-      <ResponsiveTreeMap
-        data={treeData}
-        identity="name"
-        value="value"
-        colors={colors}
-        nodeOpacity={0.75}
-        // @ts-ignore
-        label={(node) => trimName(node)}
-        margin={{
-          top: 0,
-          right: 10,
-          bottom: 10,
-          left: 10
-        }}
-        labelSkipSize={45}
-        labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
-        parentLabelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
-        borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
-      />
+      {(treeData.children as any[]).length === 0 ? (
+        <NoData />
+      ) : (
+        <ResponsiveTreeMap
+          data={treeData}
+          identity="name"
+          value="value"
+          colors={colors}
+          nodeOpacity={0.75}
+          // @ts-ignore
+          label={(node) => trimName(node)}
+          margin={{
+            top: 0,
+            right: 10,
+            bottom: 10,
+            left: 10
+          }}
+          labelSkipSize={45}
+          labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
+          parentLabelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
+          borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
+        />
+      )}
     </div>
   );
 };

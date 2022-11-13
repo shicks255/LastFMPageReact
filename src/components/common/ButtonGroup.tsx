@@ -6,7 +6,6 @@ import { useApiState } from '@/contexts/ApiContext';
 
 const ButtonGroup: React.FC<Record<string, void>> = () => {
   const { selected } = useApiState();
-  console.log(selected);
 
   const selectedTabClass = 'text-gray-200 bg-sky-900';
   const selectButtonClass = 'font-semibold';

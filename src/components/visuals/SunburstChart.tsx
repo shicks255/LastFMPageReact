@@ -4,6 +4,7 @@ import { ResponsiveSunburst } from '@nivo/sunburst';
 
 import { cColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
@@ -26,7 +27,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const isMobile = useIsMobile();
 
   if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
 
   const t = {};
@@ -66,8 +67,6 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
     };
   });
 
-  console.log(colorMap);
-
   const data = {
     id: 'albums',
     color: '#a32929',
@@ -83,27 +82,33 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
           <div className="text-left text-2xl font-semibold">Album Pie Chart</div>
         </section>
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-        <ResponsiveSunburst
-          data={data}
-          margin={{
-            top: 15,
-            bottom: 20,
-            right: 150
-          }}
-          colors={cColors}
-          borderColor="#4E4E50"
-          cornerRadius={3}
-          borderWidth={4}
-          isInteractive
-          enableArcLabels={true}
-        />
-        <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
-          {artists.slice(0, 10).map((item) => (
-            <div key={item} style={{ color: colorMap[item] }}>
-              {trimString(item)}
+        {scrobbles.data.data.length === 0 ? (
+          <NoData />
+        ) : (
+          <>
+            <ResponsiveSunburst
+              data={data}
+              margin={{
+                top: 15,
+                bottom: 20,
+                right: 150
+              }}
+              colors={cColors}
+              borderColor="#4E4E50"
+              cornerRadius={3}
+              borderWidth={4}
+              isInteractive
+              enableArcLabels={true}
+            />
+            <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
+              {artists.slice(0, 10).map((item) => (
+                <div key={item} style={{ color: colorMap[item] }}>
+                  {trimString(item)}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

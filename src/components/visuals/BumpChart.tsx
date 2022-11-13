@@ -5,6 +5,7 @@ import { ResponsiveBump } from '@nivo/bump';
 
 import { getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame, cColors } from '../../utils';
 import Loader from '../common/Loader';
+import NoData from '../common/NoData';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -29,10 +30,10 @@ const BumpChart: React.FC<Record<string, void>> = () => {
   );
 
   if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
-    return <Loader small={false} />;
+    return <Loader />;
   }
 
-  const countPerTimeGroup = scrobbles.data.data.map((result) => {
+  const countPerTimeGroup = scrobbles?.data?.data.map((result) => {
     let runningTotal = 0;
     const items = result.data;
     const nestedPlays = items.map((item) => {
@@ -56,8 +57,8 @@ const BumpChart: React.FC<Record<string, void>> = () => {
   });
 
   const darRanks = {};
-  const timeGroups = countPerTimeGroup[0].data.map((x) => x.timeGroup);
-  timeGroups.forEach((tg) => {
+  const timeGroups = countPerTimeGroup[0]?.data.map((x) => x.timeGroup);
+  timeGroups?.forEach((tg) => {
     const dayRank: string[] = [];
     const itemsForDay = countPerTimeGroup
       .map((item) => {
@@ -65,7 +66,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
         if (resourceType === 'artist') {
           return {
             name: item.artistName || '',
-            plays: dayPlay[0].plays
+            plays: dayPlay[0]?.plays
           };
         }
         return {
@@ -118,34 +119,38 @@ const BumpChart: React.FC<Record<string, void>> = () => {
         </section>
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
-        <ResponsiveBump
-          // @ts-ignore
-          data={finalNewChart}
-          pointSize={12}
-          interpolation="smooth"
-          activePointSize={16}
-          inactivePointSize={8}
-          colors={cColors}
-          margin={{
-            top: 100,
-            right: 150,
-            left: 50,
-            bottom: 100
-          }}
-          axisTop={{
-            tickRotation: -75
-          }}
-          axisBottom={{
-            tickSize: 5,
-            tickRotation: -75
-          }}
-          axisLeft={{
-            tickSize: 5,
-            legend: 'Ranking',
-            legendOffset: -35,
-            legendPosition: 'middle'
-          }}
-        />
+        {scrobbles.data.data.length === 0 ? (
+          <NoData />
+        ) : (
+          <ResponsiveBump
+            // @ts-ignore
+            data={finalNewChart}
+            pointSize={12}
+            interpolation="smooth"
+            activePointSize={16}
+            inactivePointSize={8}
+            colors={cColors}
+            margin={{
+              top: 100,
+              right: 150,
+              left: 50,
+              bottom: 100
+            }}
+            axisTop={{
+              tickRotation: -75
+            }}
+            axisBottom={{
+              tickSize: 5,
+              tickRotation: -75
+            }}
+            axisLeft={{
+              tickSize: 5,
+              legend: 'Ranking',
+              legendOffset: -35,
+              legendPosition: 'middle'
+            }}
+          />
+        )}
       </div>
     </div>
   );
