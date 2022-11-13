@@ -81,7 +81,7 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
   return (
     <div style={{ height: '350px', fontWeight: 'bold' }}>
       <div className="text-left text-2xl font-semibold pl-4">{name}</div>
-      {(treeData.children as any[]).length === 0 ? (
+      {(treeData.children as unknown[]).length === 0 ? (
         <NoData />
       ) : (
         <ResponsiveTreeMap
