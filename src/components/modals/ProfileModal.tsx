@@ -22,12 +22,12 @@ function ProfileModal(): JSX.Element {
       actions.setModalErrorMessage('Enter a new username');
       return;
     }
-    checkUserName(tempUserName).then((exists) => {
+    checkUserName(tempUserName.trim()).then((exists) => {
       if (exists) {
         actions.setShowModal(false);
         setTempUserName('');
         actions.setModalErrorMessage('');
-        actions.setUserName(tempUserName);
+        actions.setUserName(tempUserName.trim());
       } else {
         actions.setModalErrorMessage(`Username ${tempUserName} does not exist`);
       }
