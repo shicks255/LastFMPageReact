@@ -1,7 +1,7 @@
 import { onlineManager } from 'react-query';
 
 import { IRecentTracksResponse } from '@/types/RecentTracks';
-import { IScrobblesGrouped } from '@/types/Scrobble';
+import { IScrobblesGrouped, IScrobbleTotals } from '@/types/Scrobble';
 import { ITopAlbumsResponse } from '@/types/TopAlbums';
 import { ITopArtistsResponse } from '@/types/TopArtists';
 import { ITopTracksResponse } from '@/types/TopTracks';
@@ -9,6 +9,7 @@ import { IUserResponse } from '@/types/User';
 import UserStats from '@/types/UserStats';
 
 const apiKey = process.env.REACT_APP_LAST_FM_KEY;
+// const musicApi = 'http://localhost:8686/api/v1';
 const musicApi = 'https://musicapi.shicks255.com/api/v1';
 const audioscrobblerApi = 'https://ws.audioscrobbler.com/2.0';
 
@@ -210,6 +211,37 @@ function scrobblesGroupedQuery(
     .then((res) => res);
 }
 
+function scrobbleTotals(
+  userName: string,
+  timeGroup: string,
+  start?: string,
+  end?: string
+): Promise<IScrobbleTotals> {
+  let url = `${musicApi}/scrobbles/runningTotals?userName=${userName}&timeGroup=${timeGroup}`;
+
+  if (start) {
+    url += `&from=${start}`;
+  }
+
+  if (end) {
+    url += `$to=${end}`;
+  }
+
+  return fetch(url)
+    .then((res) => Promise.all([res.ok, res.json()]))
+    .then(([ok, body]) => {
+      if (!ok) {
+        throw Error(
+          JSON.stringify({
+            technical: body.message,
+            business: 'Problem loading scrobble totals'
+          })
+        );
+      }
+      return body;
+    });
+}
+
 function scrobblesAlbumOrArtistGroupedQuery(
   resource: string,
   userName: string,
@@ -260,6 +292,7 @@ export {
   recentTracksQuery,
   recentTracksBigQuery,
   scrobblesGroupedQuery,
+  scrobbleTotals,
   topTracksQuery,
   topAlbumsQuery,
   topArtistsQuery,

@@ -9,6 +9,7 @@ import CalendarChart from './Calendar';
 import LineGraph from './LineGraph';
 import Radar from './Radar';
 import Sunburst from './SunburstChart';
+import TotalsGraph from './TotalsGraph';
 import TreeMaps from './TreeMaps';
 import UserStats from './UserStats';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -33,7 +34,8 @@ const Visuals: React.FC = () => {
   useEffect(() => {
     function checkStatus() {
       return fetch(
-        `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
+        // `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
+        `http://localhost:8686/api/v1/user/loadStatus?userName=${state.userName}`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -102,6 +104,15 @@ const Visuals: React.FC = () => {
             <span className={visual === 'line' ? selectedButtonClass : ''}>Line</span>
           </Link>
           <Link
+            to={`${path}/totals`}
+            className={`px-8 py-4 border-r-2 rounded-t mt-1 ${
+              visual === 'totals' ? selectedTabClass : 'bg-slate-300'
+            }`}
+          >
+            <i className="fas fa-3x fa-chart-line" />
+            <span className={visual === 'totals' ? selectedButtonClass : ''}>Totals</span>
+          </Link>
+          <Link
             to={`${path}/sunburst`}
             className={`px-8 py-4 border-r-2 rounded-top mt-1 ${
               visual === 'sunburst' ? selectedTabClass : 'bg-slate-300'
@@ -155,6 +166,9 @@ const Visuals: React.FC = () => {
           </Route>
           <Route path={`${path}/line`}>
             <LineGraph />
+          </Route>
+          <Route path={`${path}/totals`}>
+            <TotalsGraph />
           </Route>
           <Route path={`${path}/sunburst`}>
             <Sunburst />

@@ -13,6 +13,15 @@ interface IScrobblesGrouped {
   data: IArtistScrobbleData[];
 }
 
+interface IScrobbleTotals {
+  data: IScrobbleTotalsData[];
+}
+
+interface IScrobbleTotalsData {
+  timeGroup: string;
+  count: number;
+}
+
 interface IArtistScrobbleData {
   artistName: string;
   albumName?: string;
@@ -31,4 +40,11 @@ interface IScrobbleData {
   timeGroup: string;
 }
 
-export type { IScrobblesGrouped, IArtistScrobbleData, IScrobbleData, IScrobble };
+export type {
+  IScrobblesGrouped,
+  IArtistScrobbleData,
+  IScrobbleData,
+  IScrobble,
+  IScrobbleTotals,
+  IScrobbleTotalsData
+};

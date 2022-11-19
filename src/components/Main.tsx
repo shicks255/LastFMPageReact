@@ -14,6 +14,7 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     fetch(`https://musicapi.shicks255.com/api/v1/user/load?userName=${state.userName}`, {
+      // fetch(`http://localhost:8686/api/v1/user/load?userName=${state.userName}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

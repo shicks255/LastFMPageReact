@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import { Theme } from '@nivo/core';
 import { ResponsiveLine } from '@nivo/line';
+import { getDateRangeFromTimeFrame } from 'utils';
 
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
@@ -20,7 +21,9 @@ const theme: Theme = {
 const WeeklyScrobbleChart: React.FC = () => {
   const { state } = useContext(LocalStateContext);
 
-  const chartData = useScrobblesGrouped(state.userName, 'DAY', '2022-11-05', '2022-11-12');
+  const x = getDateRangeFromTimeFrame('7day');
+
+  const chartData = useScrobblesGrouped(state.userName, 'DAY', x[0], x[1]);
 
   if (!chartData.data || chartData.data.length === 0) {
     return null;
