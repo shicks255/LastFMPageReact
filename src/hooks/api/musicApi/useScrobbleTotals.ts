@@ -2,7 +2,7 @@ import { QueryObserverResult, useQuery } from 'react-query';
 
 import { scrobbleTotals } from '@/service/api';
 import queryOptions from '@/service/queryOptions';
-import { IScrobblesGrouped, IScrobbleTotals } from '@/types/Scrobble';
+import { IScrobbleTotals } from '@/types/Scrobble';
 
 export default function useScrobbleTotals(
   userName: string,
