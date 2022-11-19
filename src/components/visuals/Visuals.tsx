@@ -34,8 +34,8 @@ const Visuals: React.FC = () => {
   useEffect(() => {
     function checkStatus() {
       return fetch(
-        // `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
-        `http://localhost:8686/api/v1/user/loadStatus?userName=${state.userName}`,
+        `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
+        // `http://localhost:8686/api/v1/user/loadStatus?userName=${state.userName}`,
         {
           headers: {
             'Content-Type': 'application/json'
