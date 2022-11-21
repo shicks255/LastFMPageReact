@@ -245,6 +245,10 @@ export function stripTimeFrameQueryParam(search: string): string {
   return maybeTimeFrame || '7day';
 }
 
+export function formatNumber(num: number | string): string {
+  return new Intl.NumberFormat('en-US').format(Number(num));
+}
+
 export function getActualArtistUrl(mbid: string, artistName: string): string {
   return mbid && mbid.length > 0
     ? getFanArtImage(mbid, artistName, false)

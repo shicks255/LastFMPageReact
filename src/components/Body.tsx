@@ -26,7 +26,7 @@ const Body: React.FC<Record<string, void>> = () => {
         <div className="col-span-2 mt-6 lg:mt-0">
           <WeeklyScrobbleChart />
           <ButtonGroup />
-          <div className="bg-gray-200 max-w-5xl">
+          <div className="bg-gray-200 max-w-5xl rounded-bl-lg rounded-br-lg rounded-tr-lg">
             <ImageModal />
             <Main />
           </div>

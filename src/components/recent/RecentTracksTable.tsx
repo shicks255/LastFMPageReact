@@ -49,7 +49,7 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
 
   return (
     <div>
-      <div className="text-left text-2xl font-semibold p-4">Recent Scrobbles</div>
+      <div className="text-left rounded-lg text-2xl font-semibold p-4">Recent Scrobbles</div>
       <div className="py-1">
         <div className="w-full border-t border-gray-700"></div>
       </div>

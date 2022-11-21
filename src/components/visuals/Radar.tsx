@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months, cColors } from '../../utils';
+import { years, months, cColors, formatNumber } from '../../utils';
 import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
@@ -123,6 +123,7 @@ const Radar: React.FC<Record<string, void>> = () => {
             <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
           </section>
           <ResponsiveRadar
+            colors={['rgb(12 74 110']}
             margin={{
               top: 50,
               bottom: 50,
@@ -132,6 +133,9 @@ const Radar: React.FC<Record<string, void>> = () => {
             indexBy="year"
             keys={['plays']}
             data={chart}
+            valueFormat={(num) => {
+              return formatNumber(num);
+            }}
           />
         </div>
       </div>
@@ -210,7 +214,7 @@ const Radar: React.FC<Record<string, void>> = () => {
             }}
             keys={['plays']}
             data={chart3}
-            // colors=cColors
+            colors={['rgb(12 74 110']}
           />
         </div>
       </div>

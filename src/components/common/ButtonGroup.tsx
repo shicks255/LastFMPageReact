@@ -22,7 +22,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           <button
             id="recentButton"
             type="submit"
-            className={`${selected === 'recent' ? selectButtonClass : ''}`}
+            className={`font-semibold ${selected === 'recent' ? selectButtonClass : ''}`}
           >
             Recents
           </button>
@@ -36,7 +36,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           <button
             id="topButton"
             type="submit"
-            className={`${selected === 'top' ? selectButtonClass : ''}`}
+            className={`font-semibold ${selected === 'top' ? selectButtonClass : ''}`}
           >
             Ranks
           </button>
@@ -50,7 +50,7 @@ const ButtonGroup: React.FC<Record<string, void>> = () => {
           <button
             id="vis"
             type="submit"
-            className={`${selected === 'vis' ? selectButtonClass : ''}`}
+            className={`font-semibold ${selected === 'vis' ? selectButtonClass : ''}`}
           >
             Visuals
           </button>

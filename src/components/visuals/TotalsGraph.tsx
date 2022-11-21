@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { Theme } from '@nivo/core';
 import { ResponsiveLine } from '@nivo/line';
-import { cColors } from 'utils';
+import { cColors, formatNumber } from 'utils';
 
 import Loader from '../common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -42,9 +42,17 @@ const TotalsGraph: React.FC = () => {
     }
   ];
 
+  let tickValues = 'every 1 years';
+  if (scrobbles.data.data.length > 10) {
+    tickValues = 'every 2 years';
+  }
+
   return (
     <div>
-      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px' }}>
+      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
+        <section className="mb-2">
+          <div className="text-left text-2xl font-semibold">Running Scrobble Totals</div>
+        </section>
         <ResponsiveLine
           margin={{
             top: 10,
@@ -62,9 +70,9 @@ const TotalsGraph: React.FC = () => {
           enableSlices="x"
           sliceTooltip={(e) => {
             return (
-              <>
-                {new Intl.NumberFormat('en-US').format(Number(e.slice.points[0].data.y.toString()))}
-              </>
+              <div className="bg-white p-2 text-sky-900 rounded">
+                {formatNumber(e.slice.points[0].data.y.toString())}
+              </div>
             );
           }}
           xScale={{
@@ -75,9 +83,14 @@ const TotalsGraph: React.FC = () => {
           }}
           xFormat="time:%Y-%m-%d"
           axisBottom={{
-            tickValues: 'every 2 years',
+            tickValues: tickValues,
             tickRotation: -75,
             format: '%Y'
+          }}
+          axisLeft={{
+            format: (val) => {
+              return formatNumber(val);
+            }
           }}
         />
       </div>

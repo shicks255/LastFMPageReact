@@ -67,19 +67,19 @@ const Profile: React.FC<Record<string, null>> = (): JSX.Element => {
               <td className="text-right font-bold">{user.tracks}</td>
               <td className="font-thin p-2">tracks</td>
             </tr>
+            <tr>
+              <td className="text-right font-bold">Registered on </td>
+              <td className="font-thin p-2">
+                {' '}
+                {user.registered.toLocaleString(undefined, {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </td>
+            </tr>
           </tbody>
         </table>
-        <br />
-        <span className="font-thin">Registered on </span>
-        <span className="font-bold">
-          {' '}
-          {user.registered.toLocaleString(undefined, {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-          })}
-        </span>
-        <br />
       </div>
     </>
   );

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ResponsiveTreeMap } from '@nivo/treemap';
-import { cColors } from 'utils';
+import { cColors, formatNumber } from 'utils';
 
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
@@ -102,6 +102,13 @@ const TreeMap: React.FC<IProps> = (props: IProps) => {
           labelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
           parentLabelTextColor={{ from: 'color', modifiers: [['darker', 3]] }}
           borderColor={{ from: 'color', modifiers: [['darker', 0.1]] }}
+          // tooltip={(node) => {
+          //   return (
+          //     <>
+          //       {node.node.label}: {formatNumber(node.node.formattedValue)}
+          //     </>
+          //   );
+          // }}
         />
       )}
     </div>

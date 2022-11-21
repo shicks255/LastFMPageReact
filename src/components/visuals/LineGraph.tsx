@@ -8,7 +8,8 @@ import {
   getDateRangeFromTimeFrame,
   getTimeGroupFromTimeFrame,
   trimString,
-  cColors
+  cColors,
+  formatNumber
 } from '../../utils';
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
@@ -66,17 +67,18 @@ const commonGraphProps: LineProps = {
         return 1;
       })
       .map((p, index) => (
-        <tr key={p.id} className={`${index % 2 == 0 ? 'bg-slate-300' : 'bg-gray-200'} pl-2 pr-2`}>
-          <td style={{ color: p.serieColor }} className="pl-4">
-            {trimString(p.serieId.toString(), 45)}
+        <tr key={p.id} className={`pl-2 pr-2 bg-white`}>
+          <td className="pl-2">
+            <div style={{ backgroundColor: p.serieColor, width: 15, height: 15 }} className="" />
           </td>
-          <td className="pr-4 pl-2 text-right">{p.data.y}</td>
+          <td className="pl-1 text-sky-900">{trimString(p.serieId.toString(), 45)}:</td>
+          <td className="pr-4 text-right">{formatNumber(p.data.y.toString())}</td>
         </tr>
       ));
 
     return (
-      <table>
-        <tbody className="rounded-lg p-4 even:bg-slate-300 odd:bg-gray-200">{rows}</tbody>
+      <table className="rounded-lg">
+        <tbody className="rounded-xl p-4 even:bg-slate-300 odd:bg-gray-200">{rows}</tbody>
       </table>
     );
   },
@@ -150,9 +152,10 @@ const LineGraph: React.FC = () => {
   if (timeFrame === '6month' || timeFrame === '12month') precision = 'month';
   if (timeFrame === '1year' || timeFrame === 'overall') precision = 'year';
 
-  if (timeFrame === '7day' || timeFrame === '1month') tickValues = 'every 1 day';
+  if (timeFrame === '7day') tickValues = 'every 1 day';
+  if (timeFrame === '1month') tickValues = 'every 3 days';
   if (timeFrame === '6month' || timeFrame === '12month') tickValues = 'every 1 month';
-  if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 1 year';
+  if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 2 year';
 
   if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
     return <Loader />;
@@ -262,6 +265,9 @@ const LineGraph: React.FC = () => {
           xScale={xScale}
           axisBottom={axisBottom}
           pointLabelYOffset={0}
+          axisLeft={{
+            format: (val) => formatNumber(val)
+          }}
         />
       </div>
     </div>
