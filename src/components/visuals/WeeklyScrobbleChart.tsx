@@ -48,7 +48,7 @@ const WeeklyScrobbleChart: React.FC = () => {
 
   return (
     <div
-      className={`p-1 mb-4 bg-gray-200 ${!isMobile ? 'rounded-lg' : ''}`}
+      className={`p-1 mb-4 bg-gray-200 max-w-5xl ${!isMobile ? 'rounded-lg' : ''}`}
       style={{ height: 100, fontWeight: 'bold' }}
     >
       <div className="pl-1">Last Week</div>
