@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ResponsiveTreeMap } from '@nivo/treemap';
-import { cColors, formatNumber } from 'utils';
+import { cColors } from 'utils';
 
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';

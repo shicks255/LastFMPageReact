@@ -66,7 +66,7 @@ const commonGraphProps: LineProps = {
         }
         return 1;
       })
-      .map((p, index) => (
+      .map((p) => (
         <tr key={p.id} className={`pl-2 pr-2 bg-white`}>
           <td className="pl-2">
             <div style={{ backgroundColor: p.serieColor, width: 15, height: 15 }} className="" />
