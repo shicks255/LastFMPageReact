@@ -151,7 +151,7 @@ const Visuals: React.FC = () => {
           </Link>
         </div>
       </div>
-      <div className="bg-gray-200 pb-20 rounded-tr-lg rounded-bl-lg rounded-br-lg">
+      <div className="bg-gray-200 pb-10 rounded-tr-lg rounded-bl-lg rounded-br-lg">
         <Switch>
           <Route path={`${path}/tree`}>
             <TreeMaps />

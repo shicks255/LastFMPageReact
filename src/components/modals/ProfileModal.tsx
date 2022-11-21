@@ -67,6 +67,7 @@ function ProfileModal(): JSX.Element {
                 id="newUsername"
                 aria-placeholder="Username"
                 placeholder="Username"
+                className="p-1"
               />
             </div>
           </label>

@@ -22,6 +22,94 @@ const UserStats: React.FC<Record<string, void>> = () => {
   const desktopThirdClass = 'flex-none w-32 text-center';
   const mobileLastClass = 'flex-auto m-auto text-right';
 
+  if (isMobile) {
+    return (
+      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', minWidth: '350px' }}>
+        <section>
+          <div className="text-left text-2xl font-semibold">User Statistics</div>
+        </section>
+        <div className="even:bg-slate-300 odd:bg-gray-200 mt-4">
+          <table className="w-full">
+            <tr className="even:bg-slate-300 odd:bg-gray-200">
+              <td className="p-2">
+                <span className="font-semibold">Largest Artist Play Span</span>
+                <br />
+                <span className="ml-8" /> {build(userStats?.data?.oldestAndNewestArtist?.name)}
+              </td>
+              <td>
+                <span className="font-semibold">First Play</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.oldestAndNewestArtist?.timeStat.oldest)}
+                <br />
+                <span className="font-semibold">Last Play</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.oldestAndNewestArtist?.timeStat.newest)}
+              </td>
+            </tr>
+            <tr className="even:bg-slate-300 odd:bg-gray-200">
+              <td className="p-2">
+                <span className="font-semibold">Largest Album Play Span</span>
+                <br />
+                <span className="ml-8" />{' '}
+                <i>{build(userStats?.data?.oldestAndNewestAlbum?.name)}</i>
+                <br />
+                <span className="ml-8" /> {build(userStats?.data?.oldestAndNewestAlbum?.extra)}
+              </td>
+              <td>
+                <span className="font-semibold">First Play</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.oldestAndNewestAlbum?.timeStat.oldest)}
+                <br />
+                <span className="font-semibold">Last Play</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.oldestAndNewestAlbum?.timeStat.newest)}
+              </td>
+            </tr>
+            <tr className="even:bg-slate-300 odd:bg-gray-200">
+              <td className="p-2">
+                <span className="font-semibold">Longest Dormant Artist</span>
+                <br />
+                <span className="ml-8" /> {build(userStats?.data?.longestDormancyArtist?.name)}
+              </td>
+              <td>
+                <span className="font-semibold">No plays between</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.longestDormancyArtist?.timeStat.oldest)}
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.longestDormancyArtist?.timeStat.newest)}
+              </td>
+            </tr>
+            <tr>
+              <td className="p-2">
+                <span className="font-semibold">Longest Dormant Album</span>
+                <br />
+                <span className="ml-8" />{' '}
+                <i>{build(userStats?.data?.longestDormancyAlbum?.name)}</i>
+                <br />
+                <span className="ml-8" /> {build(userStats?.data?.longestDormancyAlbum?.extra)}
+              </td>
+              <td>
+                <span className="font-semibold">No plays between</span>
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.longestDormancyAlbum?.timeStat.oldest)}
+                <br />
+                <span className="ml-8" />{' '}
+                {build(userStats?.data?.longestDormancyAlbum?.timeStat.newest)}s
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
       <section>
@@ -46,7 +134,8 @@ const UserStats: React.FC<Record<string, void>> = () => {
         )}
         {isMobile && (
           <div className={mobileLastClass}>
-            First Play {build(userStats?.data?.oldestAndNewestArtist?.timeStat.oldest)}
+            First Play <br />
+            {build(userStats?.data?.oldestAndNewestArtist?.timeStat.oldest)}
             <br />
             Last Play {build(userStats?.data?.oldestAndNewestArtist?.timeStat.newest)}
           </div>

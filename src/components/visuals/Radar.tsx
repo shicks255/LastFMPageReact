@@ -117,7 +117,7 @@ const Radar: React.FC<Record<string, void>> = () => {
   return (
     <>
       <div>
-        <div className="mb-12 mt-4 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+        <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
           {(!chart1Data || chart1Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Year Radar</div>
@@ -140,7 +140,7 @@ const Radar: React.FC<Record<string, void>> = () => {
         </div>
       </div>
       <div>
-        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+        <div className="mb-12 mt-10 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
           {(!chart2Data || chart2Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Month Radar</div>
@@ -181,7 +181,7 @@ const Radar: React.FC<Record<string, void>> = () => {
         </div>
       </div>
       <div>
-        <div className="mb-12 mt-10 pl-4" style={{ height: '450px', fontWeight: 'bold' }}>
+        <div className="mb-12 mt-10 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
           {(!chart3Data || chart3Data.isLoading) && <Loader />}
           <section>
             <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>

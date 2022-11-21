@@ -6,6 +6,7 @@ import { getDateRangeFromTimeFrame } from 'utils';
 
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const theme: Theme = {
   textColor: '#212020',
@@ -20,6 +21,8 @@ const theme: Theme = {
 
 const WeeklyScrobbleChart: React.FC = () => {
   const { state } = useContext(LocalStateContext);
+
+  const isMobile = useIsMobile();
 
   const x = getDateRangeFromTimeFrame('7day');
 
@@ -44,7 +47,11 @@ const WeeklyScrobbleChart: React.FC = () => {
   ];
 
   return (
-    <div style={{ height: 100 }}>
+    <div
+      className={`p-1 mb-4 bg-gray-200 ${!isMobile ? 'rounded-lg' : ''}`}
+      style={{ height: 100, fontWeight: 'bold' }}
+    >
+      <div className="pl-1">Last Week</div>
       <ResponsiveLine
         margin={{
           top: 10,
@@ -53,7 +60,7 @@ const WeeklyScrobbleChart: React.FC = () => {
           bottom: 50
         }}
         theme={theme}
-        isInteractive={false}
+        isInteractive={true}
         enableGridY={false}
         enableGridX={false}
         colors={['rgb(50,82,168']}
