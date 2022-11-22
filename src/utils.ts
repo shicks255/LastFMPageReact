@@ -6,6 +6,8 @@ export const timeFrames = {
   '3month': '3 Months',
   '6month': '6 Months',
   '12month': '1 Year',
+  '2year': '2 Years',
+  '3year': '3 Years',
   overall: 'All Time'
 };
 
@@ -137,6 +139,12 @@ export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
   if (timeFrame === '12month') {
     from.setFullYear(from.getFullYear() - 1);
   }
+  if (timeFrame === '2year') {
+    from.setFullYear(from.getFullYear() - 2);
+  }
+  if (timeFrame === '3year') {
+    from.setFullYear(from.getFullYear() - 3);
+  }
   if (timeFrame === 'overall') {
     from.setFullYear(from.getFullYear() - 20);
   }
@@ -172,7 +180,7 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
   if (timeFrame === '6month') {
     timeGroup = 'MONTH';
   }
-  if (timeFrame === '12month') {
+  if (timeFrame === '12month' || timeFrame === '2year' || timeFrame === '3year') {
     timeGroup = 'MONTH';
   }
   if (timeFrame === 'overall') {

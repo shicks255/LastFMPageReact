@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
 import { years, months, cColors, formatNumber } from '../../utils';
 import Loader from '../common/Loader';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 
@@ -18,8 +19,8 @@ const Radar: React.FC<Record<string, void>> = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(Object.keys(months)[new Date().getMonth()]);
 
-  const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2021-12-31');
-  const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2021-12-31');
+  const chart1Data = useScrobblesGrouped(state.userName, 'YEAR', '2005-01-01', '2022-12-31');
+  const chart2Data = useScrobblesGrouped(state.userName, 'MONTH', '2005-01-01', '2022-12-31');
 
   const monthOrdinal = months[month] - 1;
   const from = new Date(year, monthOrdinal, 1);
@@ -157,18 +158,19 @@ const Radar: React.FC<Record<string, void>> = () => {
               {
                 anchor: 'top-left',
                 direction: 'column',
-                translateX: 55,
-                translateY: 0,
+                itemDirection: 'left-to-right',
+                translateX: 0,
+                translateY: 40,
                 itemWidth: 80,
                 itemHeight: 20,
-                itemTextColor: '#999',
+                itemTextColor: 'rgb(12, 74, 110',
                 symbolSize: 12,
                 symbolShape: 'circle',
                 effects: [
                   {
                     on: 'hover',
                     style: {
-                      itemTextColor: '#000'
+                      itemTextColor: 'rgb(12, 74, 110)'
                     }
                   }
                 ]
@@ -184,7 +186,7 @@ const Radar: React.FC<Record<string, void>> = () => {
         <div className="mb-12 mt-10 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
           {(!chart3Data || chart3Data.isLoading) && <Loader />}
           <section>
-            <div className="text-left text-2xl font-semibold">Scrobbles Per Day Radar</div>
+            <VisualTitle title="Scrobbles Per Day Radar" />
             <select
               className="px-3 py-1.5 md:w-32 w-full
                     rounded border border-solid

@@ -6,6 +6,7 @@ import { cColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -78,9 +79,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   return (
     <div>
       <div className="relative mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-        <section>
-          <div className="text-left text-2xl font-semibold">Album Pie Chart</div>
-        </section>
+        <VisualTitle title="Album Pie Chart" />
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         {scrobbles.data.data.length === 0 ? (
           <NoData />
@@ -90,7 +89,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
               data={data}
               margin={{
                 top: 15,
-                bottom: 20,
+                bottom: 50,
                 right: 150
               }}
               colors={cColors}
@@ -98,7 +97,6 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
               cornerRadius={3}
               borderWidth={4}
               isInteractive
-              enableArcLabels={true}
             />
             <div className={`absolute top-52 ${isMobile ? 'right-2' : 'right-32'}`}>
               {artists.slice(0, 10).map((item) => (

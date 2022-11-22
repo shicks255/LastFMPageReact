@@ -5,6 +5,7 @@ import { ResponsiveLine } from '@nivo/line';
 import { cColors, formatNumber } from 'utils';
 
 import Loader from '../common/Loader';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobbleTotals from '@/hooks/api/musicApi/useScrobbleTotals';
 
@@ -50,9 +51,7 @@ const TotalsGraph: React.FC = () => {
   return (
     <div>
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-        <section className="mb-2">
-          <div className="text-left text-2xl font-semibold">Running Scrobble Totals</div>
-        </section>
+        <VisualTitle title="Running Scrobbles Total" />
         <ResponsiveLine
           margin={{
             top: 10,

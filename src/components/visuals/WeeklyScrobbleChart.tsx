@@ -51,7 +51,7 @@ const WeeklyScrobbleChart: React.FC = () => {
       className={`p-1 mb-4 bg-gray-200 max-w-5xl ${!isMobile ? 'rounded-lg' : ''}`}
       style={{ height: 100, fontWeight: 'bold' }}
     >
-      <div className="pl-1">Last Week</div>
+      <div className="pl-4">Last Week</div>
       <ResponsiveLine
         margin={{
           top: 10,

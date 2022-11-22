@@ -4,6 +4,7 @@ import { ResponsiveCalendar } from '@nivo/calendar';
 
 import { years } from '../../utils';
 import Loader from '../common/Loader';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -15,7 +16,7 @@ interface ICalData {
 
 const Calendar: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
-  const [timeFrame, setTimeFrame] = useState('2022');
+  const [timeFrame, setTimeFrame] = useState(new Date().getFullYear().toString());
   const year = years[timeFrame];
   const chartData = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
   const isMobile = useIsMobile();
@@ -43,22 +44,20 @@ const Calendar: React.FC<Record<string, void>> = () => {
   return (
     <div>
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
-        <section>
-          <div className="text-left text-2xl font-semibold">Scrobbles Calendar</div>
+        <VisualTitle title="Scrobble Calendar" />
+        <div>
           <div>
-            <div>
-              <select
-                className="px-3 py-1.5 md:w-32 w-full
+            <select
+              className="px-3 py-1.5 md:w-32 w-full
                     rounded border border-solid
                     border-gray-300 transition ease-in-out bg-white"
-                value={timeFrame}
-                onChange={(event) => setTimeFrame(event.target.value)}
-              >
-                {timeFrameSelects}
-              </select>
-            </div>
+              value={timeFrame}
+              onChange={(event) => setTimeFrame(event.target.value)}
+            >
+              {timeFrameSelects}
+            </select>
           </div>
-        </section>
+        </div>
         <ResponsiveCalendar
           data={chart}
           from={year[2]}

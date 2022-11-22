@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { timeFrames } from '../../utils';
+import VisualTitle from './common/VisualTitle';
 import TreeMap from './TreeMap';
 import { useApiDispatch, useApiState } from '@/contexts/ApiContext';
 
@@ -20,9 +21,7 @@ const TreeMaps: () => JSX.Element = () => {
           <div className="p-4">
             <div>
               <div>
-                <section>
-                  <div className="text-left text-2xl font-semibold">Scrobbles Heat Maps</div>
-                </section>
+                <VisualTitle title="Scrobbles Heat Maps" />
                 <select
                   className="px-3 py-1.5 md:w-32 w-full
                     rounded border border-solid

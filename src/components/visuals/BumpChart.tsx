@@ -8,6 +8,7 @@ import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
@@ -109,14 +110,15 @@ const BumpChart: React.FC<Record<string, void>> = () => {
     };
   });
 
-  const label = resource === 'artistsGrouped' ? 'Artist Rank By Day' : 'Album Rank By Day';
+  const label =
+    resource === 'artistsGrouped'
+      ? `Artist Rank By ${timeGroup.substring(0, 1) + timeGroup.substring(1).toLowerCase()}`
+      : `Album Rank By ${timeGroup.substring(0, 1) + timeGroup.substring(1).toLowerCase()}`;
 
   return (
     <div>
       <div className="mt-4 pl-4 pr-4" style={{ height: '450px', fontWeight: 'bold' }}>
-        <section>
-          <div className="text-left text-2xl font-semibold">{label}</div>
-        </section>
+        <VisualTitle title={label} />
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
         {scrobbles.data.data.length === 0 ? (
@@ -134,7 +136,7 @@ const BumpChart: React.FC<Record<string, void>> = () => {
               top: 100,
               right: 150,
               left: 50,
-              bottom: 100
+              bottom: 105
             }}
             axisTop={{
               tickRotation: -75

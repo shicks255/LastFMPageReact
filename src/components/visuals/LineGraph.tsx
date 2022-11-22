@@ -15,6 +15,7 @@ import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
@@ -141,20 +142,44 @@ const LineGraph: React.FC = () => {
   let bottomXFormat = '%b %d';
 
   if (timeFrame === '7day' || timeFrame === '1month') bottomXFormat = '%b %d';
-  if (timeFrame === '6month' || timeFrame === '12month') bottomXFormat = '%b %Y';
+  if (
+    timeFrame === '6month' ||
+    timeFrame === '12month' ||
+    timeFrame === '2year' ||
+    timeFrame === '3year'
+  )
+    bottomXFormat = '%b %Y';
   if (timeFrame === '1year' || timeFrame === 'overall') bottomXFormat = '%Y';
 
   if (timeFrame === '7day' || timeFrame === '1month') format1 = '%Y-%m-%d';
-  if (timeFrame === '6month' || timeFrame === '12month') format1 = '%Y-%m';
+  if (
+    timeFrame === '6month' ||
+    timeFrame === '12month' ||
+    timeFrame === '2year' ||
+    timeFrame === '3year'
+  )
+    format1 = '%Y-%m';
   if (timeFrame === '1year' || timeFrame === 'overall') format1 = '%Y';
 
   if (timeFrame === '7day' || timeFrame === '1month') precision = 'day';
-  if (timeFrame === '6month' || timeFrame === '12month') precision = 'month';
+  if (
+    timeFrame === '6month' ||
+    timeFrame === '12month' ||
+    timeFrame === '2year' ||
+    timeFrame === '3year'
+  )
+    precision = 'month';
   if (timeFrame === '1year' || timeFrame === 'overall') precision = 'year';
 
   if (timeFrame === '7day') tickValues = 'every 1 day';
   if (timeFrame === '1month') tickValues = 'every 3 days';
-  if (timeFrame === '6month' || timeFrame === '12month') tickValues = 'every 1 month';
+  if (
+    timeFrame === '6month' ||
+    timeFrame === '12month' ||
+    timeFrame === '2year' ||
+    timeFrame === '3year'
+  )
+    tickValues = 'every 1 month';
   if (timeFrame === '1year' || timeFrame === 'overall') tickValues = 'every 2 year';
 
   if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
@@ -251,9 +276,7 @@ const LineGraph: React.FC = () => {
   return (
     <div>
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-        <section>
-          <div className="text-left text-2xl font-semibold">Scrobbles Line Chart</div>
-        </section>
+        <VisualTitle title="Scrobbles Line Chart" />
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
         <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
         {chartNew.length === 0 && <NoData />}
