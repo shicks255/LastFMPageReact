@@ -6,5 +6,5 @@ import customRender from '@/mocks/utils';
 test('should render calendar', async () => {
   customRender(<Calendar />);
 
-  expect(await screen.findByText('Scrobbles Calendar')).toBeInTheDocument();
+  expect(await screen.findByText('Scrobble Calendar')).toBeInTheDocument();
 });
