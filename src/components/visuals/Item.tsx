@@ -1,23 +1,23 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, { useContext, useState } from 'react';
 
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
-
 import {
+  cColors,
+  formatNumber,
   getDateRangeFromTimeFrame,
   getTimeGroupFromTimeFrame,
-  trimString,
-  cColors,
-  formatNumber
-} from '../../utils';
-import Loader from '../common/Loader';
+  trimString
+} from 'utils';
+
 import NoData from '../common/NoData';
-import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+import useSuggestArtist from '@/hooks/api/musicApi/useSuggestArtist';
 
 interface IScaleType {
   type: 'time' | 'point';
@@ -119,26 +119,28 @@ const commonGraphProps: LineProps = {
   ]
 };
 
-const LineGraph: React.FC = () => {
+const ItemGraph = () => {
   const { state } = useContext(LocalStateContext);
-  const [resourceType, setResourceType] = useState<string>('artist');
   const [timeFrame, setTimeFrame] = useState('7day');
-
-  const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
   const [start, end] = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
+
+  const [artist, setArtist] = useState<string | undefined>(undefined);
+
+  const [search, setSearch] = useState('');
+
   const scrobbles = useScrobblesArtistOrAlbumGrouped(
-    resource,
+    'artistsGrouped',
     state.userName,
     timeGroup,
     start,
     end,
-    12
+    undefined,
+    artist ? [artist] : undefined,
+    !!artist
   );
 
-  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
-    return <Loader />;
-  }
+  const response = useSuggestArtist(state.userName, search);
 
   let format1 = '%Y-%m-%d';
   let precision: 'day' | 'month' | 'year' = 'day';
@@ -175,72 +177,76 @@ const LineGraph: React.FC = () => {
   }
   if (timeFrame === '3year' || timeFrame === 'overall') tickValues = 'every 1 year';
 
-  if (timeFrame === 'overall' && scrobbles.data.data.length > 20) {
-    tickValues = 'every 2 year';
-  }
+  //   if (timeFrame === 'overall' && scrobbles?.data?.data?.length > 20) {
+  //     tickValues = 'every 2 year';
+  //   }
 
-  const sortedDates = scrobbles.data.data
-    .flatMap((x) => x.data)
-    .flatMap((x) => x.timeGroup)
-    .sort();
+  const generateChart = (scrobbles) => {
+    if (!scrobbles || !scrobbles.data) {
+      return [];
+    }
+    const sortedDates = scrobbles?.data?.data
+      .flatMap((x) => x.data)
+      .flatMap((x) => x.timeGroup)
+      .sort();
 
-  const oldest = sortedDates[0];
-  const newest = sortedDates[sortedDates.length - 1];
-  const oldestDateWithPlays = scrobbles.data.data
-    .flatMap((x) => x.data)
-    .filter((x) => x.plays > 0)
-    .sort((item1, item2) => {
-      if (item1.timeGroup > item2.timeGroup) {
-        return 1;
-      }
-      return -1;
-    });
-
-  const oldCutoff = timeFrame === 'overall' ? oldestDateWithPlays[0].timeGroup : oldest;
-
-  const chartNew = scrobbles.data.data
-    .map((item) => {
-      const id =
-        resourceType === 'artist'
-          ? trimString(item.artistName, 35)
-          : trimString(item.albumName || '', 35);
-      const dataPoints = item.data;
-
-      const dd = dataPoints
-        .sort((dp1, dp2) => {
-          if (dp1.timeGroup > dp2.timeGroup) return 1;
-          return -1;
-        })
-        .filter((item) => item.timeGroup >= oldCutoff)
-        .map((dp) => ({
-          x: dp.timeGroup,
-          y: dp.plays
-        }));
-
-      if (!dd.find((x) => x.x === oldest) && oldest >= oldCutoff) {
-        dd.unshift({ x: oldest, y: 0 });
-      }
-      if (!dd.find((x) => x.x === newest)) {
-        dd.push({ x: newest, y: 0 });
-      }
-
-      const totals = dd.reduce((prev, curr) => {
-        return prev + curr.y;
-      }, 0);
-
-      return {
-        id,
-        total: totals,
-        data: dd
-      };
-    })
-    .sort((item1, item2) => {
-      if (item1.total > item2.total) {
+    const oldest = sortedDates[0];
+    const newest = sortedDates[sortedDates.length - 1];
+    const oldestDateWithPlays = scrobbles.data.data
+      .flatMap((x) => x.data)
+      .filter((x) => x.plays > 0)
+      .sort((item1, item2) => {
+        if (item1.timeGroup > item2.timeGroup) {
+          return 1;
+        }
         return -1;
-      }
+      });
 
-      return 1;
-    });
+    const oldCutoff = timeFrame === 'overall' ? oldestDateWithPlays[0].timeGroup : oldest;
+
+    const chartNew = scrobbles.data.data
+      .map((item) => {
+        const id = trimString(item.artistName, 35);
+        const dataPoints = item.data;
+
+        const dd = dataPoints
+          .sort((dp1, dp2) => {
+            if (dp1.timeGroup > dp2.timeGroup) return 1;
+            return -1;
+          })
+          .filter((item) => item.timeGroup >= oldCutoff)
+          .map((dp) => ({
+            x: dp.timeGroup,
+            y: dp.plays
+          }));
+
+        if (!dd.find((x) => x.x === oldest) && oldest >= oldCutoff) {
+          dd.unshift({ x: oldest, y: 0 });
+        }
+        if (!dd.find((x) => x.x === newest)) {
+          dd.push({ x: newest, y: 0 });
+        }
+
+        const totals = dd.reduce((prev, curr) => {
+          return prev + curr.y;
+        }, 0);
+
+        return {
+          id,
+          total: totals,
+          data: dd
+        };
+      })
+      .sort((item1, item2) => {
+        if (item1.total > item2.total) {
+          return -1;
+        }
+
+        return 1;
+      });
+
+    return chartNew;
+  };
 
   let xScale: IScaleType = {
     type: 'time',
@@ -266,28 +272,40 @@ const LineGraph: React.FC = () => {
     };
   }
 
+  const chartData = generateChart(scrobbles);
+  console.log(chartData);
+
   return (
     <div>
+      <input onChange={(e) => setSearch(e.target.value)} />
+      <br />
+      {response.data?.map((item) => {
+        return (
+          <div onClick={() => setArtist(item)}>
+            {item}
+            <br />
+          </div>
+        );
+      })}
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
         <VisualTitle title="Scrobbles Line Chart" />
         <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-        <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
-        {chartNew.length === 0 && <NoData />}
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-        {/* @ts-ignore */}
-        <ResponsiveLine
-          {...commonGraphProps}
-          data={chartNew}
-          xScale={xScale}
-          axisBottom={axisBottom}
-          pointLabelYOffset={0}
-          axisLeft={{
-            format: (val) => formatNumber(val)
-          }}
-        />
+        {chartData.length === 0 && <NoData />}
+        {chartData && (
+          <ResponsiveLine
+            {...commonGraphProps}
+            data={generateChart(scrobbles)}
+            xScale={xScale}
+            axisBottom={axisBottom}
+            pointLabelYOffset={0}
+            axisLeft={{
+              format: (val) => formatNumber(val)
+            }}
+          />
+        )}
       </div>
     </div>
   );
 };
 
-export default LineGraph;
+export default ItemGraph;

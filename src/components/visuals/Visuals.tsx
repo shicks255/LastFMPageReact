@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
+import { musicApi } from 'utils';
 
 import Loader from '../common/Loader';
 import DataLoadingModal from '../modals/DataLoadingModal';
 import BumpChart from './BumpChart';
 import CalendarChart from './Calendar';
+import ItemGraph from './Item';
 import LineGraph from './LineGraph';
 import Radar from './Radar';
 import Sunburst from './SunburstChart';
@@ -33,15 +35,11 @@ const Visuals: React.FC = () => {
 
   useEffect(() => {
     function checkStatus() {
-      return fetch(
-        `https://musicapi.shicks255.com/api/v1/user/loadStatus?userName=${state.userName}`,
-        // `http://localhost:8686/api/v1/user/loadStatus?userName=${state.userName}`,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
+      return fetch(`${musicApi}/user/loadStatus?userName=${state.userName}`, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
     }
 
     let timeoutid: number | undefined = undefined;
@@ -149,6 +147,14 @@ const Visuals: React.FC = () => {
           >
             <span className={visual === 'stats' ? selectedButtonClass : ''}>User Stats</span>
           </Link>
+          <Link
+            to={`${path}/item`}
+            className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
+              visual === 'item' ? selectedTabClass : 'bg-slate-300'
+            }`}
+          >
+            <span className={visual === 'item' ? selectedButtonClass : ''}>Item</span>
+          </Link>
         </div>
       </div>
       <div className="bg-gray-200 pb-10 rounded-tr-lg rounded-bl-lg rounded-br-lg">
@@ -176,6 +182,9 @@ const Visuals: React.FC = () => {
           </Route>
           <Route path={`${path}/stats`}>
             <UserStats />
+          </Route>
+          <Route path={`${path}/item`}>
+            <ItemGraph />
           </Route>
         </Switch>
       </div>

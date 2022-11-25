@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useContext, useEffect } from 'react';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { musicApi } from 'utils';
 
 import Loader from './common/Loader';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
@@ -13,8 +14,7 @@ const Main: React.FC = () => {
   const { state } = useContext(LocalStateContext);
 
   useEffect(() => {
-    fetch(`https://musicapi.shicks255.com/api/v1/user/load?userName=${state.userName}`, {
-      // fetch(`http://localhost:8686/api/v1/user/load?userName=${state.userName}`, {
+    fetch(`${musicApi}/user/load?userName=${state.userName}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

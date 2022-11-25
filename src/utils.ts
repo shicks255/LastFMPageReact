@@ -1,5 +1,7 @@
 import { parse } from 'query-string';
 
+export const musicApi = 'https://musicapi.shicks255.com/api/v1';
+
 export const timeFrames = {
   '7day': '7 Days',
   '1month': '1 Month',
@@ -183,7 +185,7 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
   if (timeFrame === '12month' || timeFrame === '2year' || timeFrame === '3year') {
     timeGroup = 'MONTH';
   }
-  if (timeFrame === 'overall') {
+  if (timeFrame === '3year' || timeFrame === 'overall') {
     timeGroup = 'YEAR';
   }
 
@@ -191,7 +193,7 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
 }
 
 const fanartKey = process.env.REACT_APP_FANART_KEY;
-const noImageUrl =
+export const noImageUrl =
   'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png';
 
 function getMusicBrainzId(artistName) {

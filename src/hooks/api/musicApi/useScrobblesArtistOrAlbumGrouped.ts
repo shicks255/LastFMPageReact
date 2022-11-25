@@ -10,12 +10,26 @@ export default function useScrobblesArtistOrAlbumGrouped(
   timeGroup: string,
   start?: string,
   end?: string,
-  limit?: number
+  limit?: number,
+  items?: string[],
+  enabled = true
 ): QueryObserverResult<IScrobblesGrouped, Error> {
   return useQuery(
-    ['scrobblesGroupedArtistOrAlbum', resource, timeGroup, start, end, userName],
+    ['scrobblesGroupedArtistOrAlbum', resource, items, timeGroup, start, end, userName],
     async () =>
-      scrobblesAlbumOrArtistGroupedQuery(resource, userName, timeGroup, start, end, limit, true),
-    queryOptions
+      scrobblesAlbumOrArtistGroupedQuery(
+        resource,
+        userName,
+        timeGroup,
+        start,
+        end,
+        limit,
+        true,
+        items
+      ),
+    {
+      ...queryOptions,
+      enabled: enabled
+    }
   );
 }

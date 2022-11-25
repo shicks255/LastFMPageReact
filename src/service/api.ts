@@ -1,4 +1,5 @@
 import { onlineManager } from 'react-query';
+import { musicApi } from 'utils';
 
 import { IRecentTracksResponse } from '@/types/RecentTracks';
 import { IScrobblesGrouped, IScrobbleTotals } from '@/types/Scrobble';
@@ -9,12 +10,10 @@ import { IUserResponse } from '@/types/User';
 import UserStats from '@/types/UserStats';
 
 const apiKey = process.env.REACT_APP_LAST_FM_KEY;
-// const musicApi = 'http://localhost:8686/api/v1';
-const musicApi = 'https://musicapi.shicks255.com/api/v1';
 const audioscrobblerApi = 'https://ws.audioscrobbler.com/2.0';
 
 function generateUrl(type, page, period, key, userName) {
-  return `https://ws.audioscrobbler.com/2.0/?method=${type}
+  return `${audioscrobblerApi}/?method=${type}
         &user=${userName}
         &api_key=${key}
         &format=json
@@ -58,7 +57,7 @@ function userQuery(userName: string): Promise<IUserResponse> {
 }
 
 function checkUserName(userName: string): Promise<boolean> {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo
+  const url = `${audioscrobblerApi}/?method=user.getinfo
         &user=${userName}
         &api_key=${apiKey}
         &format=json`;
@@ -93,7 +92,7 @@ function recentTracksQuery(page: number, userName: string): Promise<IRecentTrack
 }
 
 function recentTracksBigQuery(userName: string): Promise<IRecentTracksResponse> {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks
+  const url = `${audioscrobblerApi}/?method=user.getrecenttracks
         &user=${userName}
         &api_key=${apiKey}
         &format=json
@@ -249,7 +248,8 @@ function scrobblesAlbumOrArtistGroupedQuery(
   start?: string,
   end?: string,
   limit?: number,
-  empties?: boolean
+  empties?: boolean,
+  items?: string[] | undefined
 ): Promise<IScrobblesGrouped> {
   let url = `${musicApi}/scrobbles/${resource}?userName=${userName}&timeGroup=${timeGroup}`;
   if (start) {
@@ -263,6 +263,12 @@ function scrobblesAlbumOrArtistGroupedQuery(
   }
   if (empties) {
     url += `&empties=${empties}`;
+  }
+
+  if (items) {
+    if (resource === 'artistsGrouped') {
+      url += `&artistNames=${items[0]}`;
+    }
   }
 
   return fetch(url)
@@ -286,6 +292,12 @@ function userStatsQuery(userName: string): Promise<UserStats> {
     .then((res) => res);
 }
 
+function suggestArtist(userName: string, text: string): Promise<string[]> {
+  return fetch(`${musicApi}/search/artists?userName=${userName}&query=${text}`)
+    .then((res) => res.json())
+    .then((res) => res);
+}
+
 export {
   userQuery,
   checkUserName,
@@ -299,6 +311,7 @@ export {
   scrobblesQuery,
   scrobblesAlbumOrArtistGroupedQuery,
   userStatsQuery,
+  suggestArtist,
   audioscrobblerApi,
   musicApi
 };
