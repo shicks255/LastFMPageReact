@@ -9,7 +9,8 @@ import {
   getTimeGroupFromTimeFrame,
   trimString,
   cColors,
-  formatNumber
+  formatNumber,
+  generateChart
 } from '../../utils';
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
@@ -179,68 +180,7 @@ const LineGraph: React.FC = () => {
     tickValues = 'every 2 year';
   }
 
-  const sortedDates = scrobbles.data.data
-    .flatMap((x) => x.data)
-    .flatMap((x) => x.timeGroup)
-    .sort();
-
-  const oldest = sortedDates[0];
-  const newest = sortedDates[sortedDates.length - 1];
-  const oldestDateWithPlays = scrobbles.data.data
-    .flatMap((x) => x.data)
-    .filter((x) => x.plays > 0)
-    .sort((item1, item2) => {
-      if (item1.timeGroup > item2.timeGroup) {
-        return 1;
-      }
-      return -1;
-    });
-
-  const oldCutoff = timeFrame === 'overall' ? oldestDateWithPlays[0].timeGroup : oldest;
-
-  const chartNew = scrobbles.data.data
-    .map((item) => {
-      const id =
-        resourceType === 'artist'
-          ? trimString(item.artistName, 35)
-          : trimString(item.albumName || '', 35);
-      const dataPoints = item.data;
-
-      const dd = dataPoints
-        .sort((dp1, dp2) => {
-          if (dp1.timeGroup > dp2.timeGroup) return 1;
-          return -1;
-        })
-        .filter((item) => item.timeGroup >= oldCutoff)
-        .map((dp) => ({
-          x: dp.timeGroup,
-          y: dp.plays
-        }));
-
-      if (!dd.find((x) => x.x === oldest) && oldest >= oldCutoff) {
-        dd.unshift({ x: oldest, y: 0 });
-      }
-      if (!dd.find((x) => x.x === newest)) {
-        dd.push({ x: newest, y: 0 });
-      }
-
-      const totals = dd.reduce((prev, curr) => {
-        return prev + curr.y;
-      }, 0);
-
-      return {
-        id,
-        total: totals,
-        data: dd
-      };
-    })
-    .sort((item1, item2) => {
-      if (item1.total > item2.total) {
-        return -1;
-      }
-
-      return 1;
-    });
+  const chartNew = generateChart(scrobbles, timeFrame);
 
   let xScale: IScaleType = {
     type: 'time',

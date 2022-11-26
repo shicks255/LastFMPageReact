@@ -2,6 +2,7 @@
 // @ts-nocheck
 import React, { useContext, useState } from 'react';
 
+import { ResponsiveCalendar } from '@nivo/calendar';
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
 import {
@@ -9,7 +10,10 @@ import {
   formatNumber,
   getDateRangeFromTimeFrame,
   getTimeGroupFromTimeFrame,
-  trimString
+  trimString,
+  years,
+  generateChart,
+  generateCalendarChart2
 } from 'utils';
 
 import NoData from '../common/NoData';
@@ -18,6 +22,7 @@ import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useSuggestArtist from '@/hooks/api/musicApi/useSuggestArtist';
+import useIsMobile from '@/hooks/useIsMobile';
 
 interface IScaleType {
   type: 'time' | 'point';
@@ -140,7 +145,34 @@ const ItemGraph = () => {
     !!artist
   );
 
+  const [timeFrame2, setTimeFrame2] = useState(new Date().getFullYear().toString());
+  const year = years[timeFrame2];
+  //   const chartData2 = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
+  const chartData2 = useScrobblesArtistOrAlbumGrouped(
+    'artistsGrouped',
+    state.userName,
+    'DAY',
+    year[0],
+    year[1],
+    undefined,
+    artist ? [artist] : undefined,
+    !!artist
+  );
+  const isMobile = useIsMobile();
+
   const response = useSuggestArtist(state.userName, search);
+
+  const chart2 = generateCalendarChart2(chartData2);
+  console.log(chart2);
+
+  const currentYear = new Date().getFullYear();
+  const timeFrameSelects = Object.keys(years)
+    .filter((year) => year <= `${currentYear}`)
+    .map((key) => (
+      <option value={key} key={key}>
+        {key}
+      </option>
+    ));
 
   let format1 = '%Y-%m-%d';
   let precision: 'day' | 'month' | 'year' = 'day';
@@ -181,73 +213,6 @@ const ItemGraph = () => {
   //     tickValues = 'every 2 year';
   //   }
 
-  const generateChart = (scrobbles) => {
-    if (!scrobbles || !scrobbles.data) {
-      return [];
-    }
-    const sortedDates = scrobbles?.data?.data
-      .flatMap((x) => x.data)
-      .flatMap((x) => x.timeGroup)
-      .sort();
-
-    const oldest = sortedDates[0];
-    const newest = sortedDates[sortedDates.length - 1];
-    const oldestDateWithPlays = scrobbles.data.data
-      .flatMap((x) => x.data)
-      .filter((x) => x.plays > 0)
-      .sort((item1, item2) => {
-        if (item1.timeGroup > item2.timeGroup) {
-          return 1;
-        }
-        return -1;
-      });
-
-    const oldCutoff = timeFrame === 'overall' ? oldestDateWithPlays[0].timeGroup : oldest;
-
-    const chartNew = scrobbles.data.data
-      .map((item) => {
-        const id = trimString(item.artistName, 35);
-        const dataPoints = item.data;
-
-        const dd = dataPoints
-          .sort((dp1, dp2) => {
-            if (dp1.timeGroup > dp2.timeGroup) return 1;
-            return -1;
-          })
-          .filter((item) => item.timeGroup >= oldCutoff)
-          .map((dp) => ({
-            x: dp.timeGroup,
-            y: dp.plays
-          }));
-
-        if (!dd.find((x) => x.x === oldest) && oldest >= oldCutoff) {
-          dd.unshift({ x: oldest, y: 0 });
-        }
-        if (!dd.find((x) => x.x === newest)) {
-          dd.push({ x: newest, y: 0 });
-        }
-
-        const totals = dd.reduce((prev, curr) => {
-          return prev + curr.y;
-        }, 0);
-
-        return {
-          id,
-          total: totals,
-          data: dd
-        };
-      })
-      .sort((item1, item2) => {
-        if (item1.total > item2.total) {
-          return -1;
-        }
-
-        return 1;
-      });
-
-    return chartNew;
-  };
-
   let xScale: IScaleType = {
     type: 'time',
     format: format1,
@@ -272,39 +237,104 @@ const ItemGraph = () => {
     };
   }
 
-  const chartData = generateChart(scrobbles);
+  const chartData = generateChart(scrobbles, timeFrame);
   console.log(chartData);
 
+  const handleClick = (item: string) => {
+    setArtist(item);
+    setSearch('');
+  };
+
+  const boxHeight = isMobile ? '900px' : '350px';
+
   return (
-    <div>
-      <input onChange={(e) => setSearch(e.target.value)} />
-      <br />
-      {response.data?.map((item) => {
-        return (
-          <div onClick={() => setArtist(item)}>
-            {item}
-            <br />
-          </div>
-        );
-      })}
-      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-        <VisualTitle title="Scrobbles Line Chart" />
-        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-        {chartData.length === 0 && <NoData />}
-        {chartData && (
-          <ResponsiveLine
-            {...commonGraphProps}
-            data={generateChart(scrobbles)}
-            xScale={xScale}
-            axisBottom={axisBottom}
-            pointLabelYOffset={0}
-            axisLeft={{
-              format: (val) => formatNumber(val)
-            }}
-          />
-        )}
+    <>
+      <div>
+        <div className="bg-gray-200 p-4">
+          <input onChange={(e) => setSearch(e.target.value)} placeholder="Artist" value={search} />
+          <br />
+          {response.data?.map((item) => {
+            return (
+              <div className="cursor-pointer hover:bg-slate-300" onClick={() => handleClick(item)}>
+                {item}
+                <br />
+              </div>
+            );
+          })}
+        </div>
+        <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
+          <VisualTitle title={`${artist}`} />
+          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+          {chartData.length === 0 && <NoData />}
+          {chartData && (
+            <ResponsiveLine
+              {...commonGraphProps}
+              data={generateChart(scrobbles)}
+              xScale={xScale}
+              axisBottom={axisBottom}
+              pointLabelYOffset={0}
+              axisLeft={{
+                format: (val) => formatNumber(val)
+              }}
+            />
+          )}
+        </div>
       </div>
-    </div>
+      <div>
+        <div className="mb-12 mt-32 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
+          <VisualTitle title="Scrobble Calendar" />
+          <div>
+            <div>
+              <select
+                className="px-3 py-1.5 md:w-32 w-full
+                    rounded border border-solid
+                    border-gray-300 transition ease-in-out bg-white"
+                value={timeFrame2}
+                onChange={(event) => setTimeFrame2(event.target.value)}
+              >
+                {timeFrameSelects}
+              </select>
+            </div>
+          </div>
+          {chart2 && (
+            <ResponsiveCalendar
+              data={chart2}
+              from={year[2]}
+              to={year[1]}
+              margin={{
+                top: isMobile ? 25 : 0,
+                right: 0,
+                bottom: 0,
+                left: 15
+              }}
+              direction={isMobile ? 'vertical' : 'horizontal'}
+              emptyColor="#ffffff"
+              //   yearSpacing={40}
+              //   monthSpacing={4}
+              monthBorderColor="#ffffff"
+              maxValue={75}
+              dayBorderWidth={2}
+              dayBorderColor="#ffffff"
+              yearLegendPosition="before"
+              yearLegendOffset={6}
+              legends={[
+                {
+                  anchor: 'top-left',
+                  direction: isMobile ? 'column' : 'row',
+                  translateY: 25,
+                  translateX: isMobile ? 10 : 0,
+                  itemCount: 4,
+                  itemWidth: 42,
+                  itemHeight: 36,
+                  itemsSpacing: 14,
+                  itemDirection: isMobile ? 'top-to-bottom' : 'right-to-left'
+                }
+              ]}
+            />
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 
