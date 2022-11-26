@@ -1,7 +1,5 @@
 import { parse } from 'query-string';
 
-import ItemGraph from './components/visuals/Item';
-
 export const musicApi = 'https://musicapi.shicks255.com/api/v1';
 
 export const timeFrames = {
