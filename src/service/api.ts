@@ -266,7 +266,7 @@ function scrobblesAlbumOrArtistGroupedQuery(
   }
 
   if (items) {
-    if (resource === 'artistsGrouped') {
+    if (resource === 'artistsGrouped' || resource === 'albumsGrouped') {
       url += `&artistNames=${items[0]}`;
     }
   }

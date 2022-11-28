@@ -180,7 +180,8 @@ const LineGraph: React.FC = () => {
     tickValues = 'every 2 year';
   }
 
-  const chartNew = generateChart(scrobbles, timeFrame);
+  const chartNew = generateChart(scrobbles, timeFrame, resourceType);
+  console.log(chartNew);
 
   let xScale: IScaleType = {
     type: 'time',

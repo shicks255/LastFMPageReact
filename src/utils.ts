@@ -1,5 +1,6 @@
 import { parse } from 'query-string';
 
+// export const musicApi = 'http://localhost:8686/api/v1';
 export const musicApi = 'https://musicapi.shicks255.com/api/v1';
 
 export const timeFrames = {
@@ -280,7 +281,7 @@ export function trimString(word: string, max = 25): string {
   return `${word.slice(0, max)}...`;
 }
 
-export function generateChart(scrobbles, timeFrame) {
+export function generateChart(scrobbles, timeFrame, resourceType) {
   if (!scrobbles || !scrobbles.data) {
     return [];
   }
@@ -305,7 +306,10 @@ export function generateChart(scrobbles, timeFrame) {
 
   const chartNew = scrobbles.data.data
     .map((item) => {
-      const id = trimString(item.artistName, 35);
+      const id =
+        resourceType === 'artist'
+          ? trimString(item.artistName, 35)
+          : trimString(item.albumName || '', 35);
       const dataPoints = item.data;
 
       const dd = dataPoints
@@ -368,10 +372,78 @@ export function generateCalendarChart2(scrobbles) {
     return [];
   }
 
-  return scrobbles.data.data[0].data.map((item: ICalData) => {
+  return scrobbles.data.data[0].data
+    .filter((item: ICalData) => {
+      return item.plays && item.plays > 0;
+    })
+    .map((item: ICalData) => {
+      return {
+        day: item.timeGroup,
+        value: item.plays > 0 ? item.plays : undefined
+      };
+    });
+}
+
+export function generateSunburstChart(scrobbles) {
+  const t = {};
+
+  if (!scrobbles || !scrobbles.data) {
+    return t;
+  }
+
+  scrobbles.data.data.forEach((item) => {
+    const id = item.artistName;
+    if (Object.prototype.hasOwnProperty.call(t, id)) {
+      const th = t[id];
+      const album = item.albumName;
+      const { plays } = item.data[0];
+      const newTh = {
+        id: album,
+        value: plays
+      };
+      th.push(newTh);
+      t[id] = th;
+    } else {
+      const album = item.albumName;
+      const { total } = item;
+      const newTh = {
+        id: album,
+        value: total
+      };
+      const children = [newTh];
+      t[id] = children;
+    }
+  });
+
+  const colorMap = {};
+
+  const pp = Object.entries(t).map((k, index) => {
+    colorMap[k[0]] = cColors[index];
     return {
-      day: item.timeGroup,
-      value: item.plays > 0 ? item.plays : undefined
+      id: k[0],
+      color: cColors[index],
+      children: k[1]
+    };
+  });
+
+  const data = {
+    id: 'albums',
+    color: '#a32929',
+    children: pp
+  };
+
+  return data;
+}
+
+export function generatePieChart(scrobbles) {
+  if (!scrobbles || !scrobbles.data) {
+    return [];
+  }
+
+  return scrobbles.data.data.map((item) => {
+    return {
+      id: item.albumName.split(' - ')[0],
+      value: item.total
     };
   });
 }

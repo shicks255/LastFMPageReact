@@ -5,6 +5,7 @@ import React, { useContext, useState } from 'react';
 import { ResponsiveCalendar } from '@nivo/calendar';
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
+import { ResponsivePie } from '@nivo/pie';
 import {
   cColors,
   formatNumber,
@@ -13,7 +14,8 @@ import {
   trimString,
   years,
   generateChart,
-  generateCalendarChart2
+  generateCalendarChart2,
+  generatePieChart
 } from 'utils';
 
 import NoData from '../common/NoData';
@@ -55,7 +57,7 @@ const commonGraphProps: LineProps = {
   data: [],
   margin: {
     top: 25,
-    right: 105,
+    right: 50,
     left: 37,
     bottom: 115
   },
@@ -96,32 +98,7 @@ const commonGraphProps: LineProps = {
   yScale: {
     type: 'linear',
     min: 0
-  },
-  legends: [
-    {
-      anchor: 'top-right',
-      direction: 'column',
-      justify: false,
-      translateX: 90,
-      translateY: -10,
-      itemWidth: 100,
-      itemHeight: 15,
-      itemsSpacing: 4,
-      itemTextColor: 'rgb(12 74 110)',
-      itemDirection: 'right-to-left',
-      symbolSize: 10,
-      symbolShape: 'circle',
-      effects: [
-        {
-          on: 'hover',
-          style: {
-            itemOpacity: 1,
-            symbolSize: 25
-          }
-        }
-      ]
-    }
-  ]
+  }
 };
 
 const ItemGraph = () => {
@@ -158,12 +135,25 @@ const ItemGraph = () => {
     artist ? [artist] : undefined,
     !!artist
   );
+
+  const chartData3 = useScrobblesArtistOrAlbumGrouped(
+    'albumsGrouped',
+    state.userName,
+    timeGroup,
+    start,
+    end,
+    undefined,
+    artist ? [artist] : undefined,
+    !!artist
+  );
+
+  const chart3 = generatePieChart(chartData3);
+
   const isMobile = useIsMobile();
 
   const response = useSuggestArtist(state.userName, search);
 
   const chart2 = generateCalendarChart2(chartData2);
-  console.log(chart2);
 
   const currentYear = new Date().getFullYear();
   const timeFrameSelects = Object.keys(years)
@@ -237,7 +227,7 @@ const ItemGraph = () => {
     };
   }
 
-  const chartData = generateChart(scrobbles, timeFrame);
+  const chartData = generateChart(scrobbles, timeFrame, 'artist');
   console.log(chartData);
 
   const handleClick = (item: string) => {
@@ -247,6 +237,20 @@ const ItemGraph = () => {
 
   const boxHeight = isMobile ? '900px' : '350px';
 
+  const margin = {
+    top: 30,
+    bottom: 25,
+    right: 50,
+    left: 50
+  };
+
+  const mobileMargin = {
+    top: 30,
+    bottom: 25,
+    right: 150,
+    left: 150
+  };
+
   return (
     <>
       <div>
@@ -255,84 +259,112 @@ const ItemGraph = () => {
           <br />
           {response.data?.map((item) => {
             return (
-              <div className="cursor-pointer hover:bg-slate-300" onClick={() => handleClick(item)}>
+              <div
+                key={item}
+                className="cursor-pointer hover:bg-slate-300"
+                onClick={() => handleClick(item)}
+              >
                 {item}
                 <br />
               </div>
             );
           })}
         </div>
-        <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-          <VisualTitle title={`${artist}`} />
-          <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-          {chartData.length === 0 && <NoData />}
-          {chartData && (
-            <ResponsiveLine
-              {...commonGraphProps}
-              data={generateChart(scrobbles)}
-              xScale={xScale}
-              axisBottom={axisBottom}
-              pointLabelYOffset={0}
-              axisLeft={{
-                format: (val) => formatNumber(val)
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <div>
-        <div className="mb-12 mt-32 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
-          <VisualTitle title="Scrobble Calendar" />
-          <div>
-            <div>
-              <select
-                className="px-3 py-1.5 md:w-32 w-full
-                    rounded border border-solid
-                    border-gray-300 transition ease-in-out bg-white"
-                value={timeFrame2}
-                onChange={(event) => setTimeFrame2(event.target.value)}
-              >
-                {timeFrameSelects}
-              </select>
+        {!artist && <>Select an artist</>}
+        {artist && (
+          <>
+            <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
+              <VisualTitle title={`${artist} Scrobbles`} />
+              <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+              {chartData.length === 0 && <NoData />}
+              {chartData && (
+                <ResponsiveLine
+                  {...commonGraphProps}
+                  data={chartData}
+                  xScale={xScale}
+                  axisBottom={axisBottom}
+                  pointLabelYOffset={0}
+                  axisLeft={{
+                    format: (val) => formatNumber(val)
+                  }}
+                />
+              )}
             </div>
-          </div>
-          {chart2 && (
-            <ResponsiveCalendar
-              data={chart2}
-              from={year[2]}
-              to={year[1]}
-              margin={{
-                top: isMobile ? 25 : 0,
-                right: 0,
-                bottom: 0,
-                left: 15
-              }}
-              direction={isMobile ? 'vertical' : 'horizontal'}
-              emptyColor="#ffffff"
-              //   yearSpacing={40}
-              //   monthSpacing={4}
-              monthBorderColor="#ffffff"
-              maxValue={75}
-              dayBorderWidth={2}
-              dayBorderColor="#ffffff"
-              yearLegendPosition="before"
-              yearLegendOffset={6}
-              legends={[
-                {
-                  anchor: 'top-left',
-                  direction: isMobile ? 'column' : 'row',
-                  translateY: 25,
-                  translateX: isMobile ? 10 : 0,
-                  itemCount: 4,
-                  itemWidth: 42,
-                  itemHeight: 36,
-                  itemsSpacing: 14,
-                  itemDirection: isMobile ? 'top-to-bottom' : 'right-to-left'
-                }
-              ]}
-            />
-          )}
-        </div>
+            <div
+              className="relative mt-4 pl-4 pr-4"
+              style={{ height: '500px', fontWeight: 'bold' }}
+            >
+              <VisualTitle title="Album Pie Chart" />
+              <ResponsivePie
+                data={chart3}
+                margin={isMobile ? mobileMargin : margin}
+                colors={cColors}
+                animate
+                activeOuterRadiusOffset={8}
+                arcLinkLabelsColor={{
+                  from: 'color'
+                }}
+              />
+            </div>
+            <div>
+              <div
+                className="mb-12 mt-32 pl-4 pr-4"
+                style={{ height: boxHeight, fontWeight: 'bold' }}
+              >
+                <VisualTitle title="Scrobble Calendar" />
+                <div>
+                  <div>
+                    <select
+                      className="px-3 py-1.5 md:w-32 w-full
+                rounded border border-solid
+                border-gray-300 transition ease-in-out bg-white"
+                      value={timeFrame2}
+                      onChange={(event) => setTimeFrame2(event.target.value)}
+                    >
+                      {timeFrameSelects}
+                    </select>
+                  </div>
+                </div>
+                {chart2 && (
+                  <ResponsiveCalendar
+                    data={chart2}
+                    from={year[2]}
+                    to={year[1]}
+                    margin={{
+                      top: isMobile ? 25 : 0,
+                      right: 0,
+                      bottom: 0,
+                      left: 15
+                    }}
+                    direction={isMobile ? 'vertical' : 'horizontal'}
+                    emptyColor="#ffffff"
+                    //   yearSpacing={40}
+                    //   monthSpacing={4}
+                    monthBorderColor="#ffffff"
+                    maxValue={75}
+                    dayBorderWidth={2}
+                    dayBorderColor="#ffffff"
+                    yearLegendPosition="before"
+                    yearLegendOffset={6}
+                    legends={[
+                      {
+                        anchor: 'top-left',
+                        direction: isMobile ? 'column' : 'row',
+                        translateY: 25,
+                        translateX: isMobile ? 10 : 0,
+                        itemCount: 4,
+                        itemWidth: 42,
+                        itemHeight: 36,
+                        itemsSpacing: 14,
+                        itemDirection: isMobile ? 'top-to-bottom' : 'right-to-left'
+                      }
+                    ]}
+                  />
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
