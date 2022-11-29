@@ -1,11 +1,10 @@
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
-import TreeMaps from './TreeMaps';
+import Tree from '../Tree';
 import customRender from '@/mocks/utils';
 
 test('should render bump chart for artists', async () => {
-  customRender(<TreeMaps />);
+  customRender(<Tree />);
 
   expect(await screen.findByText('Scrobbles Heat Maps')).toBeInTheDocument();
 });

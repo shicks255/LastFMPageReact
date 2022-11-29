@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Switch, Link, Route, useRouteMatch } from 'react-router-dom';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { musicApi } from 'utils';
 
 import Loader from '../common/Loader';
 import DataLoadingModal from '../modals/DataLoadingModal';
-import BumpChart from './BumpChart';
-import CalendarChart from './Calendar';
+import Bump from './Bump';
+import Calendar from './Calendar';
+import Radar from './charts/Radar';
+import Sunburst from './charts/SunburstChart';
 import ItemGraph from './Item';
-import LineGraph from './LineGraph';
-import Radar from './Radar';
-import Sunburst from './SunburstChart';
-import TotalsGraph from './TotalsGraph';
-import TreeMaps from './TreeMaps';
+import Line from './Line';
+import Totals from './Totals';
+import Tree from './Tree';
 import UserStats from './UserStats';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 
@@ -160,22 +160,22 @@ const Visuals: React.FC = () => {
       <div className="bg-gray-200 pb-10 rounded-tr-lg rounded-bl-lg rounded-br-lg">
         <Switch>
           <Route path={`${path}/tree`}>
-            <TreeMaps />
+            <Tree />
           </Route>
           <Route path={`${path}/line`}>
-            <LineGraph />
+            <Line />
           </Route>
           <Route path={`${path}/totals`}>
-            <TotalsGraph />
+            <Totals />
           </Route>
           <Route path={`${path}/sunburst`}>
             <Sunburst />
           </Route>
           <Route path={`${path}/bump`}>
-            <BumpChart />
+            <Bump />
           </Route>
           <Route path={`${path}/calendar`}>
-            <CalendarChart />
+            <Calendar />
           </Route>
           <Route path={`${path}/radar`}>
             <Radar />

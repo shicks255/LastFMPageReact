@@ -1,23 +1,11 @@
 import React, { useContext } from 'react';
 
-import { Theme } from '@nivo/core';
-import { ResponsiveLine } from '@nivo/line';
 import { getDateRangeFromTimeFrame } from 'utils';
 
+import LineChart from './charts/LineChart';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 import useIsMobile from '@/hooks/useIsMobile';
-
-const theme: Theme = {
-  textColor: '#212020',
-  axis: {
-    domain: {
-      line: {
-        stroke: '#968f8f'
-      }
-    }
-  }
-};
 
 const WeeklyScrobbleChart: React.FC = () => {
   const { state } = useContext(LocalStateContext);
@@ -26,13 +14,13 @@ const WeeklyScrobbleChart: React.FC = () => {
 
   const x = getDateRangeFromTimeFrame('7day');
 
-  const chartData = useScrobblesGrouped(state.userName, 'DAY', x[0], x[1]);
+  const scrobbles = useScrobblesGrouped(state.userName, 'DAY', x[0], x[1]);
 
-  if (!chartData.data || chartData.data.length === 0) {
+  if (!scrobbles.data || scrobbles.data.length === 0) {
     return null;
   }
 
-  const newChart = chartData.data.map((obj) => {
+  const chartData = scrobbles.data.map((obj) => {
     return {
       x: obj.timeGroup,
       y: obj.plays
@@ -42,7 +30,8 @@ const WeeklyScrobbleChart: React.FC = () => {
   const finalChart = [
     {
       id: 'Plays',
-      data: newChart
+      data: chartData,
+      total: 0
     }
   ];
 
@@ -52,31 +41,31 @@ const WeeklyScrobbleChart: React.FC = () => {
       style={{ height: 100, fontWeight: 'bold' }}
     >
       <div className="pl-4">Last Week</div>
-      <ResponsiveLine
-        margin={{
-          top: 10,
-          right: 15,
-          left: 25,
-          bottom: 50
-        }}
-        theme={theme}
-        isInteractive={true}
-        enableGridY={false}
-        enableGridX={false}
-        colors={['rgb(50,82,168']}
-        lineWidth={2}
-        pointSize={5}
-        pointLabelYOffset={0}
-        yScale={{
-          type: 'linear',
-          min: 0
-        }}
-        data={finalChart}
-        axisLeft={{
-          tickValues: 2
-        }}
-        axisBottom={{
-          format: (value) => value.toString().substring(5)
+      <LineChart
+        chartData={finalChart}
+        timeFrame={'7day'}
+        options={{
+          margin: {
+            top: 10,
+            right: 15,
+            left: 25,
+            bottom: 50
+          },
+          lineWidth: 2,
+          pointSize: 5,
+          colors: ['rgb(50,82,168'],
+          isInteractive: false,
+          enableGridX: false,
+          enableGridY: false,
+          axisLeft: {
+            tickValues: 2
+          },
+          axisBottom: {
+            tickValues: 'every 1 day',
+            format: (value) => {
+              return value.getMonth() + 1 + '-' + value.getDate();
+            }
+          }
         }}
       />
     </div>

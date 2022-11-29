@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveSunburst } from '@nivo/sunburst';
 
-import { cColors, getDateRangeFromTimeFrame, trimString } from '../../utils';
-import Loader from '../common/Loader';
-import NoData from '../common/NoData';
-import TimeFrameSelect from '../common/TimeFrameSelect';
-import VisualTitle from './common/VisualTitle';
+import { cColors, getDateRangeFromTimeFrame, trimString } from '../../../utils';
+import Loader from '../../common/Loader';
+import NoData from '../../common/NoData';
+import TimeFrameSelect from '../../common/TimeFrameSelect';
+import VisualTitle from '../common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useIsMobile from '@/hooks/useIsMobile';

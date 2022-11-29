@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { parse } from 'query-string';
 
 // export const musicApi = 'http://localhost:8686/api/v1';
@@ -281,7 +282,7 @@ export function trimString(word: string, max = 25): string {
   return `${word.slice(0, max)}...`;
 }
 
-export function generateChart(scrobbles, timeFrame, resourceType) {
+export function generateLineChart(scrobbles, timeFrame, resourceType) {
   if (!scrobbles || !scrobbles.data) {
     return [];
   }
@@ -446,4 +447,89 @@ export function generatePieChart(scrobbles) {
       value: item.total
     };
   });
+}
+
+export function generateBumpChart(scrobbles, resourceType) {
+  if (!scrobbles || !scrobbles.data) {
+    return [];
+  }
+
+  const countPerTimeGroup = scrobbles?.data?.data.map((result) => {
+    let runningTotal = 0;
+    const items = result.data;
+    const nestedPlays = items.map((item) => {
+      runningTotal += item.plays;
+      return {
+        plays: runningTotal,
+        timeGroup: item.timeGroup
+      };
+    });
+
+    if (resourceType === 'artist') {
+      return {
+        artistName: result.artistName,
+        data: nestedPlays
+      };
+    }
+    return {
+      albumName: result.albumName,
+      data: nestedPlays
+    };
+  });
+
+  const darRanks = {};
+  const timeGroups = countPerTimeGroup[0]?.data.map((x) => x.timeGroup);
+  timeGroups?.forEach((tg) => {
+    const dayRank: string[] = [];
+    const itemsForDay = countPerTimeGroup
+      .map((item) => {
+        const dayPlay = item.data.filter((x) => x.timeGroup === tg);
+        if (resourceType === 'artist') {
+          return {
+            name: item.artistName || '',
+            plays: dayPlay[0]?.plays
+          };
+        }
+        return {
+          name: item.albumName || '',
+          plays: dayPlay[0].plays
+        };
+      })
+      .sort((item1, item2) => {
+        if (item1.plays > item2.plays) return 1;
+        return -1;
+      });
+
+    itemsForDay
+      .sort((ifd1, ifd2) => {
+        if (ifd1.plays > ifd2.plays) return 1;
+        return -1;
+      })
+      .reverse()
+      .forEach((d) => {
+        dayRank.push(d.name);
+      });
+
+    darRanks[tg] = dayRank;
+  });
+
+  const artists =
+    resourceType === 'artist'
+      ? scrobbles.data.data.map((x) => x.artistName)
+      : scrobbles.data.data.map((x) => x.albumName);
+
+  const finalNewChart = artists.map((artist) => {
+    const myRanks = Object.entries(darRanks).map(([k, v]) => ({
+      x: k,
+      //@ts-ignore
+      y: v.indexOf(artist) + 1
+    }));
+
+    return {
+      id: artist,
+      data: myRanks
+    };
+  });
+
+  return finalNewChart;
 }

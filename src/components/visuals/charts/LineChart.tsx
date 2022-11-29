@@ -1,24 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import React, { useContext, useState } from 'react';
+// @ts-nocheck
+import React from 'react';
 
 import { Theme } from '@nivo/core';
 import { LineProps, ResponsiveLine } from '@nivo/line';
 
-import {
-  getDateRangeFromTimeFrame,
-  getTimeGroupFromTimeFrame,
-  trimString,
-  cColors,
-  formatNumber,
-  generateChart
-} from '../../utils';
-import Loader from '../common/Loader';
-import NoData from '../common/NoData';
-import ResourceSelect from '../common/ResourceSelect';
-import TimeFrameSelect from '../common/TimeFrameSelect';
-import VisualTitle from './common/VisualTitle';
-import { LocalStateContext } from '@/contexts/LocalStateContext';
-import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
+import { cColors, formatNumber, trimString } from '../../../utils';
+import NoData from '../../common/NoData';
 
 interface IScaleType {
   type: 'time' | 'point';
@@ -120,27 +109,24 @@ const commonGraphProps: LineProps = {
   ]
 };
 
-const LineGraph: React.FC = () => {
-  const { state } = useContext(LocalStateContext);
-  const [resourceType, setResourceType] = useState<string>('artist');
-  const [timeFrame, setTimeFrame] = useState('7day');
+interface IProps {
+  chartData: ILineChartObject[];
+  timeFrame: string;
+  options?: Partial<LineProps>;
+}
 
-  const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
-  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
-  const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
-  const scrobbles = useScrobblesArtistOrAlbumGrouped(
-    resource,
-    state.userName,
-    timeGroup,
-    start,
-    end,
-    12
-  );
+interface ILineChartObject {
+  data: ILineChartData[];
+  id: string;
+  total: number;
+}
 
-  if (scrobbles.isLoading || !scrobbles || !scrobbles.data) {
-    return <Loader />;
-  }
+interface ILineChartData {
+  x: string;
+  y: number;
+}
 
+const LineChart: React.FC<IProps> = ({ chartData, timeFrame, options }: IProps) => {
   let format1 = '%Y-%m-%d';
   let precision: 'day' | 'month' | 'year' = 'day';
   let tickValues = 'every 1 day';
@@ -176,12 +162,9 @@ const LineGraph: React.FC = () => {
   }
   if (timeFrame === '3year' || timeFrame === 'overall') tickValues = 'every 1 year';
 
-  if (timeFrame === 'overall' && scrobbles.data.data.length > 20) {
+  if (timeFrame === 'overall' && chartData.length > 20) {
     tickValues = 'every 2 year';
   }
-
-  const chartNew = generateChart(scrobbles, timeFrame, resourceType);
-  console.log(chartNew);
 
   let xScale: IScaleType = {
     type: 'time',
@@ -207,28 +190,23 @@ const LineGraph: React.FC = () => {
     };
   }
 
+  if (chartData.length === 0) {
+    return <NoData />;
+  }
+
   return (
-    <div>
-      <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-        <VisualTitle title="Scrobbles Line Chart" />
-        <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-        <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
-        {chartNew.length === 0 && <NoData />}
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-        {/* @ts-ignore */}
-        <ResponsiveLine
-          {...commonGraphProps}
-          data={chartNew}
-          xScale={xScale}
-          axisBottom={axisBottom}
-          pointLabelYOffset={0}
-          axisLeft={{
-            format: (val) => formatNumber(val)
-          }}
-        />
-      </div>
-    </div>
+    <ResponsiveLine
+      {...commonGraphProps}
+      data={chartData}
+      xScale={xScale}
+      axisBottom={axisBottom}
+      pointLabelYOffset={0}
+      axisLeft={{
+        format: (val) => formatNumber(val)
+      }}
+      {...options}
+    />
   );
 };
 
-export default LineGraph;
+export default LineChart;

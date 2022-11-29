@@ -2,9 +2,9 @@ import React, { useContext, useState } from 'react';
 
 import { ResponsiveRadar } from '@nivo/radar';
 
-import { years, months, cColors, formatNumber } from '../../utils';
-import Loader from '../common/Loader';
-import VisualTitle from './common/VisualTitle';
+import { years, months, cColors, formatNumber } from '../../../utils';
+import Loader from '../../common/Loader';
+import VisualTitle from '../common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 

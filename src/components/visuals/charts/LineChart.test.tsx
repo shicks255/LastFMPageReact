@@ -1,11 +1,12 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import LineGraph from './LineGraph';
+import Line from '../Line';
+import LineGraph from './LineChart';
 import customRender from '@/mocks/utils';
 
 test('should render line graph', async () => {
-  customRender(<LineGraph />);
+  customRender(<Line />);
 
   screen.debug();
 
@@ -13,7 +14,7 @@ test('should render line graph', async () => {
 });
 
 test.skip('should render line graph for albums', async () => {
-  customRender(<LineGraph />);
+  customRender(<Line />);
 
   const select = await screen.findAllByRole('combobox');
   userEvent.selectOptions(select[1], 'Albums');
