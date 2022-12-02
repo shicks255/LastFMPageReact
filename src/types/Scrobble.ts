@@ -13,6 +13,13 @@ interface IScrobblesGrouped {
   data: IArtistScrobbleData[];
 }
 
+interface IArtistStats {
+  rank: number;
+  firstPlay: string[];
+  mostRecent: string[];
+  topFive: string[][];
+}
+
 interface IScrobbleTotals {
   data: IScrobbleTotalsData[];
 }
@@ -46,5 +53,6 @@ export type {
   IScrobbleData,
   IScrobble,
   IScrobbleTotals,
-  IScrobbleTotalsData
+  IScrobbleTotalsData,
+  IArtistStats
 };

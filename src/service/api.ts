@@ -2,7 +2,7 @@ import { onlineManager } from 'react-query';
 import { musicApi } from 'utils';
 
 import { IRecentTracksResponse } from '@/types/RecentTracks';
-import { IScrobblesGrouped, IScrobbleTotals } from '@/types/Scrobble';
+import { IArtistStats, IScrobblesGrouped, IScrobbleTotals } from '@/types/Scrobble';
 import { ITopAlbumsResponse } from '@/types/TopAlbums';
 import { ITopArtistsResponse } from '@/types/TopArtists';
 import { ITopTracksResponse } from '@/types/TopTracks';
@@ -241,6 +241,24 @@ function scrobbleTotals(
     });
 }
 
+function artistStatsQuery(userName: string, artistName: string): Promise<IArtistStats> {
+  const url = `${musicApi}/scrobbles/artistStats?userName=${userName}&artistName=${artistName}`;
+
+  return fetch(url)
+    .then((res) => Promise.all([res.ok, res.json()]))
+    .then(([ok, body]) => {
+      if (!ok) {
+        throw Error(
+          JSON.stringify({
+            technical: body.message,
+            business: 'Problem loading artist stats'
+          })
+        );
+      }
+      return body;
+    });
+}
+
 function scrobblesAlbumOrArtistGroupedQuery(
   resource: string,
   userName: string,
@@ -312,6 +330,7 @@ export {
   scrobblesAlbumOrArtistGroupedQuery,
   userStatsQuery,
   suggestArtist,
+  artistStatsQuery,
   audioscrobblerApi,
   musicApi
 };

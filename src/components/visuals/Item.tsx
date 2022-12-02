@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { useContext, useState } from 'react';
 
 import { ResponsivePie } from '@nivo/pie';
@@ -19,6 +18,7 @@ import CalendarChart from './charts/CalendarChart';
 import LineChart from './charts/LineChart';
 import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
+import useArtistStats from '@/hooks/api/musicApi/useArtistStats';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useSuggestArtist from '@/hooks/api/musicApi/useSuggestArtist';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -69,6 +69,8 @@ const ItemGraph = () => {
     !!artist
   );
 
+  const artistStats = useArtistStats(state.userName, artist || '');
+
   const chart3 = generatePieChart(chartData3);
 
   const isMobile = useIsMobile();
@@ -109,6 +111,12 @@ const ItemGraph = () => {
     left: 150
   };
 
+  const dateThing = (time: string): string => {
+    const unixDate = new Date(Number(time) * 1000);
+    console.log(time);
+    return unixDate.toDateString();
+  };
+
   return (
     <>
       <div>
@@ -128,6 +136,40 @@ const ItemGraph = () => {
             );
           })}
         </div>
+        {artistStats.data && (
+          <table>
+            <tbody>
+              <tr>
+                <td>Rank: {artistStats.data.rank}</td>
+              </tr>
+              <tr>
+                <td>
+                  First Play: {artistStats.data.firstPlay[0]} {artistStats.data.firstPlay[1]}
+                  {dateThing(artistStats.data.firstPlay[2])}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  Last Play: {artistStats.data.mostRecent[0]} {artistStats.data.mostRecent[1]}
+                  {dateThing(artistStats.data.mostRecent[2])}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Top Songs:{' '}
+                  {artistStats.data.topFive.map((item) => {
+                    return (
+                      <span>
+                        {item[1]} - {item[0]} plays
+                      </span>
+                    );
+                  })}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        )}
         {!artist && <>Select an artist</>}
         {artist && (
           <>
