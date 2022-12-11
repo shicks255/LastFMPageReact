@@ -14,6 +14,8 @@ interface IScrobblesGrouped {
 }
 
 interface IArtistStats {
+  previousArtist?: string;
+  nextArtist?: string;
   rank: number;
   firstPlay: string[];
   mostRecent: string[];

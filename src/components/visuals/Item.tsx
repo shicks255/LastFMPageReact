@@ -12,6 +12,7 @@ import {
   years
 } from 'utils';
 
+import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import TimeFrameSelect from '../common/TimeFrameSelect';
 import CalendarChart from './charts/CalendarChart';
@@ -113,7 +114,6 @@ const ItemGraph = () => {
 
   const dateThing = (time: string): string => {
     const unixDate = new Date(Number(time) * 1000);
-    console.log(time);
     return unixDate.toDateString();
   };
 
@@ -123,6 +123,7 @@ const ItemGraph = () => {
         <div className="bg-gray-200 p-4">
           <input onChange={(e) => setSearch(e.target.value)} placeholder="Artist" value={search} />
           <br />
+          {!artist && <>Select an artist</>}
           {response.data?.map((item) => {
             return (
               <div
@@ -136,64 +137,103 @@ const ItemGraph = () => {
             );
           })}
         </div>
+        {artistStats.isLoading && <Loader />}
+        {artist && <VisualTitle title={artist} />}
         {artistStats.data && (
-          <table>
-            <tbody>
-              <tr>
-                <td>Rank: {artistStats.data.rank}</td>
-              </tr>
-              <tr>
-                <td>
-                  First Play: {artistStats.data.firstPlay[0]} {artistStats.data.firstPlay[1]}
-                  {dateThing(artistStats.data.firstPlay[2])}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  {' '}
-                  Last Play: {artistStats.data.mostRecent[0]} {artistStats.data.mostRecent[1]}
-                  {dateThing(artistStats.data.mostRecent[2])}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Top Songs:{' '}
-                  {artistStats.data.topFive.map((item) => {
-                    return (
-                      <span>
-                        {item[1]} - {item[0]} plays
-                      </span>
-                    );
-                  })}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="mb-12 mt-4 pl-4 pr-4 ${}">
+            <div>
+              <button
+                disabled={!artistStats.data.previousArtist}
+                onClick={() => setArtist(artistStats.data.previousArtist)}
+              >
+                {artistStats.data.previousArtist ? (
+                  <img
+                    alt=""
+                    className="h-6 inline"
+                    src={`${process.env.PUBLIC_URL}/skip-back.svg`}
+                  />
+                ) : (
+                  <img
+                    alt=""
+                    className="h-6 inline"
+                    src={`${process.env.PUBLIC_URL}/skip-back-disabled.svg`}
+                  />
+                )}
+              </button>
+            </div>
+            <div>
+              <button onClick={() => setArtist(artistStats.data.nextArtist)}>
+                <img
+                  alt=""
+                  className="h-6 inline"
+                  src={`${process.env.PUBLIC_URL}/skip-forward.svg`}
+                />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 content-center gap-4">
+              <div className="bg-red-200 flex items-center justify-center">
+                <div className="font-semibold">Rank</div>
+                {artistStats.data.rank}
+              </div>
+              <div className="bg-red-300 text-center items-center justify-center p-2">
+                <div className="font-semibold flex-none">First Play</div>
+                <div>
+                  {artistStats.data.firstPlay[0]}
+                  <br />
+                  <p className="italic">{artistStats.data.firstPlay[1]}</p>
+                </div>
+                {dateThing(artistStats.data.firstPlay[2])}
+              </div>
+              <div className="bg-red-400 text-center items-center justify-center p-2">
+                <div className="font-semibold">Last Play</div>
+                <div>
+                  {artistStats.data.mostRecent[0]}
+                  <br />
+                  <p className="italic">{artistStats.data.mostRecent[1]}</p>
+                </div>
+                {dateThing(artistStats.data.mostRecent[2])}
+              </div>
+              <div className="bg-red-500 text-center col-span-2 items-center justify-center p-2">
+                <div className="font-semibold">Top Songs</div>
+                {artistStats.data.topFive.map((item) => {
+                  return (
+                    <div key={item[1]}>
+                      {item[1]} - {item[0]} plays
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         )}
-        {!artist && <>Select an artist</>}
         {artist && (
           <>
-            <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
-              <VisualTitle title={`${artist} Scrobbles`} />
-              <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
-              {lineChartData.length === 0 && <NoData />}
+            <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
+            <div
+              className="mb-12 mt-4 pl-4 pr-4"
+              style={{ height: lineChartData.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
+            >
+              <VisualTitle title="Scrobbles Line Chart" />
               {lineChartData && <LineChart chartData={lineChartData} timeFrame={timeFrame} />}
             </div>
             <div
               className="relative mt-4 pl-4 pr-4"
-              style={{ height: '500px', fontWeight: 'bold' }}
+              style={{ height: chart3.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
             >
               <VisualTitle title="Album Pie Chart" />
-              <ResponsivePie
-                data={chart3}
-                margin={isMobile ? mobileMargin : margin}
-                colors={cColors}
-                animate
-                activeOuterRadiusOffset={8}
-                arcLinkLabelsColor={{
-                  from: 'color'
-                }}
-              />
+              {chart3.length === 0 && <NoData />}
+              {chart3.length > 0 && (
+                <ResponsivePie
+                  data={chart3}
+                  margin={isMobile ? mobileMargin : margin}
+                  colors={cColors}
+                  animate
+                  activeOuterRadiusOffset={8}
+                  arcLinkLabelsColor={{
+                    from: 'color'
+                  }}
+                />
+              )}
             </div>
             <div>
               <div

@@ -369,7 +369,7 @@ export function generateCalendarChart(scrobbles) {
 }
 
 export function generateCalendarChart2(scrobbles) {
-  if (!scrobbles || !scrobbles.data) {
+  if (!scrobbles || !scrobbles.data || scrobbles.data.data.length < 1) {
     return [];
   }
 
