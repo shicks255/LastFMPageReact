@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import {
   cColors,
+  formatNumber,
   generateCalendarChart2,
   generateLineChart,
   generatePieChart,
@@ -23,6 +24,33 @@ import useArtistStats from '@/hooks/api/musicApi/useArtistStats';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useSuggestArtist from '@/hooks/api/musicApi/useSuggestArtist';
 import useIsMobile from '@/hooks/useIsMobile';
+
+interface IStatItemProps {
+  title: string;
+  children: React.ReactNode;
+  noFlex?: boolean;
+  colSpan?: number;
+}
+
+const StatItem: React.FC<IStatItemProps> = ({
+  title,
+  noFlex,
+  colSpan,
+  children
+}: IStatItemProps) => {
+  return (
+    <div
+      className={`${
+        noFlex ? 'flex-col' : 'flex-col'
+      } bg-sky-900 min-h-[55px] p-2 rounded text-gray-200 text-center justify-center ${
+        colSpan ? `sm;col-span-${colSpan}` : ''
+      }`}
+    >
+      <div className={`font-semibold`}>{title}</div>
+      <div>{children}</div>
+    </div>
+  );
+};
 
 const ItemGraph = () => {
   const { state } = useContext(LocalStateContext);
@@ -171,30 +199,25 @@ const ItemGraph = () => {
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 content-center gap-4">
-              <div className="bg-red-200 flex items-center justify-center">
-                <div className="font-semibold">Rank</div>
-                {artistStats.data.rank}
-              </div>
-              <div className="bg-red-300 text-center items-center justify-center p-2">
-                <div className="font-semibold flex-none">First Play</div>
+              <StatItem title="Rank">{artistStats.data.rank}</StatItem>
+              <StatItem title="Plays">{formatNumber(artistStats.data.plays)}</StatItem>
+              <StatItem title="First Play" noFlex>
                 <div>
                   {artistStats.data.firstPlay[0]}
                   <br />
                   <p className="italic">{artistStats.data.firstPlay[1]}</p>
                 </div>
                 {dateThing(artistStats.data.firstPlay[2])}
-              </div>
-              <div className="bg-red-400 text-center items-center justify-center p-2">
-                <div className="font-semibold">Last Play</div>
+              </StatItem>
+              <StatItem title="Last Play" noFlex>
                 <div>
                   {artistStats.data.mostRecent[0]}
                   <br />
                   <p className="italic">{artistStats.data.mostRecent[1]}</p>
                 </div>
                 {dateThing(artistStats.data.mostRecent[2])}
-              </div>
-              <div className="bg-red-500 text-center col-span-2 items-center justify-center p-2">
-                <div className="font-semibold">Top Songs</div>
+              </StatItem>
+              <StatItem title="Top Songs" colSpan={2} noFlex>
                 {artistStats.data.topFive.map((item) => {
                   return (
                     <div key={item[1]}>
@@ -202,7 +225,7 @@ const ItemGraph = () => {
                     </div>
                   );
                 })}
-              </div>
+              </StatItem>
             </div>
           </div>
         )}

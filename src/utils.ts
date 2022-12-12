@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { parse } from 'query-string';
 
-// export const musicApi = 'http://localhost:8686/api/v1';
-export const musicApi = 'https://musicapi.shicks255.com/api/v1';
+export const musicApi = 'http://localhost:8686/api/v1';
+// export const musicApi = 'https://musicapi.shicks255.com/api/v1';
 
 export const timeFrames = {
   '7day': '7 Days',

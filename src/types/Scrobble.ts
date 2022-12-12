@@ -20,6 +20,7 @@ interface IArtistStats {
   firstPlay: string[];
   mostRecent: string[];
   topFive: string[][];
+  plays: number;
 }
 
 interface IScrobbleTotals {
