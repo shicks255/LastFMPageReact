@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import { ResponsivePie } from '@nivo/pie';
 import {
@@ -23,6 +23,7 @@ import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useArtistStats from '@/hooks/api/musicApi/useArtistStats';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useSuggestArtist from '@/hooks/api/musicApi/useSuggestArtist';
+import useClickOutside from '@/hooks/useClickOutside';
 import useIsMobile from '@/hooks/useIsMobile';
 
 interface IStatItemProps {
@@ -42,27 +43,30 @@ const StatItem: React.FC<IStatItemProps> = ({
     <div
       className={`${
         noFlex ? 'flex-col' : 'flex-col'
-      } bg-sky-900 min-h-[55px] p-2 rounded text-gray-200 text-center justify-center ${
+      } bg-sky-900 min-h-[55px] p-2 rounded text-gray-200 text-center justify-center align-middle ${
         colSpan ? `sm;col-span-${colSpan}` : ''
       }`}
     >
-      <div className={`font-semibold`}>{title}</div>
+      <div className={`font-semibold text-lg`}>{title}</div>
       <div>{children}</div>
     </div>
   );
 };
 
-const ItemGraph = () => {
+const ArtistStats = () => {
   const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('7day');
   const [start, end] = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
   const [artist, setArtist] = useState<string | undefined>(undefined);
-
   const [search, setSearch] = useState('');
+  const searchRef = useRef(null);
+  useClickOutside(searchRef, () => setSearch(''));
+  const [timeFrame2, setTimeFrame2] = useState(new Date().getFullYear().toString());
+  const isMobile = useIsMobile();
 
-  const scrobbles = useScrobblesArtistOrAlbumGrouped(
+  const lineChartData = useScrobblesArtistOrAlbumGrouped(
     'artistsGrouped',
     state.userName,
     timeGroup,
@@ -72,11 +76,10 @@ const ItemGraph = () => {
     artist ? [artist] : undefined,
     !!artist
   );
+  const lineChart = generateLineChart(lineChartData, timeFrame, 'artist');
 
-  const [timeFrame2, setTimeFrame2] = useState(new Date().getFullYear().toString());
   const year = years[timeFrame2];
-  //   const chartData2 = useScrobblesGrouped(state.userName, 'DAY', year[0], year[1]);
-  const chartData2 = useScrobblesArtistOrAlbumGrouped(
+  const calendarChartData = useScrobblesArtistOrAlbumGrouped(
     'artistsGrouped',
     state.userName,
     'DAY',
@@ -86,8 +89,9 @@ const ItemGraph = () => {
     artist ? [artist] : undefined,
     !!artist
   );
+  const calendarChart = generateCalendarChart2(calendarChartData);
 
-  const chartData3 = useScrobblesArtistOrAlbumGrouped(
+  const pieChartData = useScrobblesArtistOrAlbumGrouped(
     'albumsGrouped',
     state.userName,
     timeGroup,
@@ -97,16 +101,11 @@ const ItemGraph = () => {
     artist ? [artist] : undefined,
     !!artist
   );
+  const pieChart = generatePieChart(pieChartData);
 
   const artistStats = useArtistStats(state.userName, artist || '');
 
-  const chart3 = generatePieChart(chartData3);
-
-  const isMobile = useIsMobile();
-
   const response = useSuggestArtist(state.userName, search);
-
-  const chart2 = generateCalendarChart2(chartData2);
 
   const currentYear = new Date().getFullYear();
   const timeFrameSelects = Object.keys(years)
@@ -116,8 +115,6 @@ const ItemGraph = () => {
         {key}
       </option>
     ));
-
-  const lineChartData = generateLineChart(scrobbles, timeFrame, 'artist');
 
   const handleClick = (item: string) => {
     setArtist(item);
@@ -147,58 +144,71 @@ const ItemGraph = () => {
 
   return (
     <>
-      <div>
-        <div className="bg-gray-200 p-4">
-          <input onChange={(e) => setSearch(e.target.value)} placeholder="Artist" value={search} />
+      <div className="mt-4 pl-4 pr-4">
+        <VisualTitle title="Artist Stats" />
+        <div className="bg-gray-200 mb-2" ref={searchRef}>
+          <input
+            className="px-3 py-1.5"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search for an artist"
+            value={search}
+          />
           <br />
-          {!artist && <>Select an artist</>}
-          {response.data?.map((item) => {
-            return (
-              <div
-                key={item}
-                className="cursor-pointer hover:bg-slate-300"
-                onClick={() => handleClick(item)}
-              >
-                {item}
-                <br />
-              </div>
-            );
-          })}
+          {response && search && (
+            <div className="border-2 shadow-lg max-h-40 overflow-auto w-80 font-semibold absolute">
+              {response.data?.map((item) => {
+                return (
+                  <div
+                    key={item}
+                    className="cursor-pointer px-2 py-1 odd:bg-gray-300 even:bg-slate-300 hover:bg-sky-900 hover:text-gray-200"
+                    onClick={() => handleClick(item)}
+                  >
+                    {item}
+                    <br />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
         {artistStats.isLoading && <Loader />}
-        {artist && <VisualTitle title={artist} />}
-        {artistStats.data && (
-          <div className="mb-12 mt-4 pl-4 pr-4 ${}">
-            <div>
-              <button
-                disabled={!artistStats.data.previousArtist}
-                onClick={() => setArtist(artistStats.data.previousArtist)}
-              >
-                {artistStats.data.previousArtist ? (
+        {artist && artistStats.data && (
+          <>
+            <div className="flex items-center mb-2">
+              <div className="pr-2">
+                <button
+                  disabled={!artistStats.data.previousArtist}
+                  onClick={() => setArtist(artistStats.data.previousArtist)}
+                >
+                  {artistStats.data.previousArtist ? (
+                    <img
+                      alt=""
+                      className="h-4 inline"
+                      src={`${process.env.PUBLIC_URL}/skip-back.svg`}
+                    />
+                  ) : (
+                    <img
+                      alt=""
+                      className="h-4 inline"
+                      src={`${process.env.PUBLIC_URL}/skip-back-disabled.svg`}
+                    />
+                  )}
+                </button>
+              </div>
+              <div className="text-sky-900">
+                <VisualTitle noMargin title={artist} />
+              </div>
+              <div className="pl-2">
+                <button onClick={() => setArtist(artistStats.data.nextArtist)}>
                   <img
                     alt=""
-                    className="h-6 inline"
-                    src={`${process.env.PUBLIC_URL}/skip-back.svg`}
+                    className="h-4 inline"
+                    src={`${process.env.PUBLIC_URL}/skip-forward.svg`}
                   />
-                ) : (
-                  <img
-                    alt=""
-                    className="h-6 inline"
-                    src={`${process.env.PUBLIC_URL}/skip-back-disabled.svg`}
-                  />
-                )}
-              </button>
+                </button>
+              </div>
             </div>
-            <div>
-              <button onClick={() => setArtist(artistStats.data.nextArtist)}>
-                <img
-                  alt=""
-                  className="h-6 inline"
-                  src={`${process.env.PUBLIC_URL}/skip-forward.svg`}
-                />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 content-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 content-center gap-4 mb-2 justify-center">
               <StatItem title="Rank">{artistStats.data.rank}</StatItem>
               <StatItem title="Plays">{formatNumber(artistStats.data.plays)}</StatItem>
               <StatItem title="First Play" noFlex>
@@ -227,27 +237,23 @@ const ItemGraph = () => {
                 })}
               </StatItem>
             </div>
-          </div>
-        )}
-        {artist && (
-          <>
             <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
             <div
               className="mb-12 mt-4 pl-4 pr-4"
-              style={{ height: lineChartData.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
+              style={{ height: lineChart.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
             >
               <VisualTitle title="Scrobbles Line Chart" />
-              {lineChartData && <LineChart chartData={lineChartData} timeFrame={timeFrame} />}
+              {lineChart && <LineChart chartData={lineChart} timeFrame={timeFrame} />}
             </div>
             <div
-              className="relative mt-4 pl-4 pr-4"
-              style={{ height: chart3.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
+              className="mb-12 mt-4 pl-4 pr-4"
+              style={{ height: pieChart.length > 0 ? '500px' : '100px', fontWeight: 'bold' }}
             >
               <VisualTitle title="Album Pie Chart" />
-              {chart3.length === 0 && <NoData />}
-              {chart3.length > 0 && (
+              {pieChart.length === 0 && <NoData />}
+              {pieChart.length > 0 && (
                 <ResponsivePie
-                  data={chart3}
+                  data={pieChart}
                   margin={isMobile ? mobileMargin : margin}
                   colors={cColors}
                   animate
@@ -260,7 +266,7 @@ const ItemGraph = () => {
             </div>
             <div>
               <div
-                className="mb-12 mt-32 pl-4 pr-4"
+                className="mb-12 mt-4 pl-4 pr-4"
                 style={{ height: boxHeight, fontWeight: 'bold' }}
               >
                 <VisualTitle title="Scrobble Calendar" />
@@ -277,7 +283,9 @@ const ItemGraph = () => {
                     </select>
                   </div>
                 </div>
-                {chart2 && <CalendarChart from={year[2]} to={year[1]} chartData={chart2} />}
+                {calendarChart && (
+                  <CalendarChart from={year[2]} to={year[1]} chartData={calendarChart} />
+                )}
               </div>
             </div>
           </>
@@ -287,4 +295,4 @@ const ItemGraph = () => {
   );
 };
 
-export default ItemGraph;
+export default ArtistStats;

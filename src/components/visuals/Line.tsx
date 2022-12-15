@@ -34,14 +34,14 @@ const Line: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
       <VisualTitle title="Scrobbles Line Chart" />
       <TimeFrameSelect value={timeFrame} onChange={(e: string) => setTimeFrame(e)} />
       <ResourceSelect value={resourceType} onChange={(e: string) => setResourceType(e)} />
       <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: '500px', fontWeight: 'bold' }}>
         <LineChart chartData={chartNew} timeFrame={timeFrame} />
       </div>
-    </>
+    </div>
   );
 };
 

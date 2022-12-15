@@ -261,6 +261,20 @@ export function formatNumber(num: number | string): string {
   return new Intl.NumberFormat('en-US').format(Number(num));
 }
 
+export function formatDateToTime(date: Date): string[] {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const hour = date.toLocaleString('en-us', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true
+  });
+
+  return [`${month}/${day}/${year}`, `${hour}`];
+}
+
 export function getActualArtistUrl(mbid: string, artistName: string): string {
   return mbid && mbid.length > 0
     ? getFanArtImage(mbid, artistName, false)

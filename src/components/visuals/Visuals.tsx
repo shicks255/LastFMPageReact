@@ -5,11 +5,11 @@ import { musicApi } from 'utils';
 
 import Loader from '../common/Loader';
 import DataLoadingModal from '../modals/DataLoadingModal';
+import ArtistStats from './Artist';
 import Bump from './Bump';
 import Calendar from './Calendar';
 import Radar from './charts/Radar';
 import Sunburst from './charts/SunburstChart';
-import ItemGraph from './Item';
 import Line from './Line';
 import Totals from './Totals';
 import Tree from './Tree';
@@ -148,12 +148,12 @@ const Visuals: React.FC = () => {
             <span className={visual === 'stats' ? selectedButtonClass : ''}>User Stats</span>
           </Link>
           <Link
-            to={`${path}/item`}
+            to={`${path}/artist`}
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
-              visual === 'item' ? selectedTabClass : 'bg-slate-300'
+              visual === 'artist' ? selectedTabClass : 'bg-slate-300'
             }`}
           >
-            <span className={visual === 'item' ? selectedButtonClass : ''}>Item</span>
+            <span className={visual === 'artist' ? selectedButtonClass : ''}>Artist</span>
           </Link>
         </div>
       </div>
@@ -183,8 +183,8 @@ const Visuals: React.FC = () => {
           <Route path={`${path}/stats`}>
             <UserStats />
           </Route>
-          <Route path={`${path}/item`}>
-            <ItemGraph />
+          <Route path={`${path}/artist`}>
+            <ArtistStats />
           </Route>
         </Switch>
       </div>

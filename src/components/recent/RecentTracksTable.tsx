@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { trimString } from '../../utils';
+import { formatDateToTime, trimString } from '../../utils';
 import HoverImage from '../common/HoverImage';
 import Loader from '../common/Loader';
 import Pagination from '../common/Pagination';
@@ -26,23 +26,13 @@ const RecentTracksTable: React.FC<Record<string, void>> = () => {
   const recentTracks = data.recenttracks;
 
   function doDateThing(date: Date): JSX.Element {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const hour = date.toLocaleString('en-us', {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true
-    });
+    const x = formatDateToTime(date);
 
     return (
       <span>
-        <span className="font-semibold">
-          {month}/{day}/{year}
-        </span>
+        <span className="font-semibold">{x[0]}</span>
         <br />
-        {hour}
+        {x[1]}
       </span>
     );
   }
