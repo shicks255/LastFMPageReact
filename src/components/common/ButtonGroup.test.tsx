@@ -16,9 +16,7 @@ test.skip('should handle clicking button', async () => {
   customRender(<ButtonGroup />);
 
   const buttons = await screen.findAllByRole('button');
-  //   console.log(buttons);
   userEvent.click(buttons[1]);
 
-  //   screen.debug();
   expect(await screen.findByText('Ranks')).toHaveClass('font-semibold');
 });

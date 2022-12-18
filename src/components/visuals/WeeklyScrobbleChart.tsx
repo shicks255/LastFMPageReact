@@ -12,9 +12,9 @@ const WeeklyScrobbleChart: React.FC = () => {
 
   const isMobile = useIsMobile();
 
-  const x = getDateRangeFromTimeFrame('7day');
+  const { start, end } = getDateRangeFromTimeFrame('7day');
 
-  const scrobbles = useScrobblesGrouped(state.userName, 'DAY', x[0], x[1]);
+  const scrobbles = useScrobblesGrouped(state.userName, 'DAY', start, end);
 
   if (!scrobbles.data || scrobbles.data.length === 0) {
     return null;

@@ -6,7 +6,7 @@ import { cColors, getDateRangeFromTimeFrame, trimString } from '../../../utils';
 import Loader from '../../common/Loader';
 import NoData from '../../common/NoData';
 import TimeFrameSelect from '../../common/TimeFrameSelect';
-import VisualTitle from '../common/VisualTitle';
+import VisualTitle from '../../common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -15,7 +15,7 @@ const SunburstChart: React.FC<Record<string, void>> = (): JSX.Element => {
   const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('7day');
 
-  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+  const { start, end } = getDateRangeFromTimeFrame(timeFrame);
   const scrobbles = useScrobblesArtistOrAlbumGrouped(
     'albumsGrouped',
     state.userName,

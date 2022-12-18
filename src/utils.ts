@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { parse } from 'query-string';
 
-export const musicApi = 'http://localhost:8686/api/v1';
-// export const musicApi = 'https://musicapi.shicks255.com/api/v1';
+// export const musicApi = 'http://localhost:8686/api/v1';
+export const musicApi = 'https://musicapi.shicks255.com/api/v1';
 
 export const timeFrames = {
   '7day': '7 Days',
@@ -134,7 +134,12 @@ export const months = {
   Dec: 12
 };
 
-export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
+interface IDateRange {
+  start: string;
+  end: string;
+}
+
+export function getDateRangeFromTimeFrame(timeFrame: string): IDateRange {
   const from: Date = new Date();
   const to: Date = new Date();
 
@@ -176,7 +181,10 @@ export function getDateRangeFromTimeFrame(timeFrame: string): Array<string> {
   const fromString = `${from.getFullYear()}-${fromMonth}-${fromDay}`;
   const toString = `${to.getFullYear()}-${toMonth}-${toDay}`;
 
-  return [fromString, toString];
+  return {
+    start: fromString,
+    end: toString
+  };
 }
 
 export function getTimeGroupFromTimeFrame(timeFrame: string): string {
@@ -205,10 +213,11 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
 }
 
 const fanartKey = process.env.REACT_APP_FANART_KEY;
+
 export const noImageUrl =
   'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png';
 
-function getMusicBrainzId(artistName) {
+export function getMusicBrainzId(artistName) {
   const fullName = encodeURI(artistName);
   return fetch(`https://musicbrainz.org/ws/2/artist/?query=${fullName}&fmt=json`, {
     headers: {
@@ -226,7 +235,7 @@ function getMusicBrainzId(artistName) {
     });
 }
 
-function getFanArtImage(mbid, artistName, secondTry) {
+export function getFanArtImage(mbid, artistName, secondTry) {
   let imageUrl = '';
   const url = `https://webservice.fanart.tv/v3/music/${mbid}?api_key=${fanartKey}&format=json`;
   return fetch(url)

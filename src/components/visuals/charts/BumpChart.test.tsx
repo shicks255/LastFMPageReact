@@ -17,5 +17,4 @@ test('should render bump chart for albums', async () => {
   userEvent.selectOptions(select[1], 'Albums');
 
   expect(await screen.findByText('Album Rank By Day')).toBeInTheDocument();
-  screen.debug(undefined, 55555);
 });

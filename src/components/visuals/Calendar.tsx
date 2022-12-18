@@ -4,9 +4,9 @@ import { years } from 'utils';
 
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
+import VisualTitle from '../common/VisualTitle';
+import UserYearSelect from '../common/YearSelect';
 import CalendarChart from './charts/CalendarChart';
-import VisualTitle from './common/VisualTitle';
-import UserYearSelect from './common/YearSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 import useIsMobile from '@/hooks/useIsMobile';

@@ -5,8 +5,8 @@ import { generateLineChart, getDateRangeFromTimeFrame, getTimeGroupFromTimeFrame
 import Loader from '../common/Loader';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from '../common/VisualTitle';
 import LineChart from './charts/LineChart';
-import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
@@ -16,7 +16,7 @@ const Line: React.FC = () => {
   const [timeFrame, setTimeFrame] = useState('7day');
 
   const resource = resourceType === 'artist' ? 'artistsGrouped' : 'albumsGrouped';
-  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+  const { start, end } = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
   const scrobbles = useScrobblesArtistOrAlbumGrouped(
     resource,

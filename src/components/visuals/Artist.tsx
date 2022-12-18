@@ -16,10 +16,10 @@ import {
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from '../common/VisualTitle';
+import UserYearSelect from '../common/YearSelect';
 import CalendarChart from './charts/CalendarChart';
 import LineChart from './charts/LineChart';
-import VisualTitle from './common/VisualTitle';
-import UserYearSelect from './common/YearSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useArtistStats from '@/hooks/api/musicApi/useArtistStats';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
@@ -57,7 +57,7 @@ const StatItem: React.FC<IStatItemProps> = ({
 const ArtistStats = () => {
   const { state } = useContext(LocalStateContext);
   const [timeFrame, setTimeFrame] = useState('7day');
-  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+  const { start, end } = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
   const [artist, setArtist] = useState<string | undefined>(undefined);

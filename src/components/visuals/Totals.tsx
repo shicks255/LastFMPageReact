@@ -3,8 +3,8 @@ import React, { useContext } from 'react';
 import { formatNumber } from 'utils';
 
 import Loader from '../common/Loader';
+import VisualTitle from '../common/VisualTitle';
 import LineChart from './charts/LineChart';
-import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobbleTotals from '@/hooks/api/musicApi/useScrobbleTotals';
 

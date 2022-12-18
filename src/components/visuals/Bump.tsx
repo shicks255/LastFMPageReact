@@ -9,15 +9,15 @@ import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import ResourceSelect from '../common/ResourceSelect';
 import TimeFrameSelect from '../common/TimeFrameSelect';
+import VisualTitle from '../common/VisualTitle';
 import BumpChart from './charts/BumpChart';
-import VisualTitle from './common/VisualTitle';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
 
 const Bump: React.FC = () => {
   const [timeFrame, setTimeFrame] = useState('7day');
   const [resourceType, setResourceType] = useState<string>('artist');
-  const [start, end] = getDateRangeFromTimeFrame(timeFrame);
+  const { start, end } = getDateRangeFromTimeFrame(timeFrame);
   const timeGroup = getTimeGroupFromTimeFrame(timeFrame);
 
   const { state } = useContext(LocalStateContext);

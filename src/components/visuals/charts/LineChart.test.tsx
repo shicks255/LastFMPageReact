@@ -8,8 +8,6 @@ import customRender from '@/mocks/utils';
 test('should render line graph', async () => {
   customRender(<Line />);
 
-  screen.debug();
-
   expect(await screen.findByText('Scrobbles Line Chart')).toBeInTheDocument();
 });
 
