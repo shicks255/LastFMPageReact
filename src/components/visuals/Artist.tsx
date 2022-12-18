@@ -19,6 +19,7 @@ import TimeFrameSelect from '../common/TimeFrameSelect';
 import CalendarChart from './charts/CalendarChart';
 import LineChart from './charts/LineChart';
 import VisualTitle from './common/VisualTitle';
+import UserYearSelect from './common/YearSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useArtistStats from '@/hooks/api/musicApi/useArtistStats';
 import useScrobblesArtistOrAlbumGrouped from '@/hooks/api/musicApi/useScrobblesArtistOrAlbumGrouped';
@@ -78,19 +79,6 @@ const ArtistStats = () => {
   );
   const lineChart = generateLineChart(lineChartData, timeFrame, 'artist');
 
-  const year = years[timeFrame2];
-  const calendarChartData = useScrobblesArtistOrAlbumGrouped(
-    'artistsGrouped',
-    state.userName,
-    'DAY',
-    year[0],
-    year[1],
-    undefined,
-    artist ? [artist] : undefined,
-    !!artist
-  );
-  const calendarChart = generateCalendarChart2(calendarChartData);
-
   const pieChartData = useScrobblesArtistOrAlbumGrouped(
     'albumsGrouped',
     state.userName,
@@ -103,18 +91,22 @@ const ArtistStats = () => {
   );
   const pieChart = generatePieChart(pieChartData);
 
-  const artistStats = useArtistStats(state.userName, artist || '');
+  const artistStats = useArtistStats(state.userName, encodeURIComponent(artist || ''));
 
   const response = useSuggestArtist(state.userName, search);
 
-  const currentYear = new Date().getFullYear();
-  const timeFrameSelects = Object.keys(years)
-    .filter((year) => year <= `${currentYear}`)
-    .map((key) => (
-      <option value={key} key={key}>
-        {key}
-      </option>
-    ));
+  const calendarChartData = useScrobblesArtistOrAlbumGrouped(
+    'artistsGrouped',
+    state.userName,
+    'DAY',
+    years[timeFrame2][0],
+    years[timeFrame2][1],
+    undefined,
+    artist ? [artist] : undefined,
+    !!artist
+  );
+
+  const calendarChart = generateCalendarChart2(calendarChartData);
 
   const handleClick = (item: string) => {
     setArtist(item);
@@ -272,19 +264,19 @@ const ArtistStats = () => {
                 <VisualTitle title="Scrobble Calendar" />
                 <div>
                   <div>
-                    <select
-                      className="px-3 py-1.5 md:w-32 w-full
-                rounded border border-solid
-                border-gray-300 transition ease-in-out bg-white"
-                      value={timeFrame2}
-                      onChange={(event) => setTimeFrame2(event.target.value)}
-                    >
-                      {timeFrameSelects}
-                    </select>
+                    <UserYearSelect
+                      setYear={setTimeFrame2}
+                      year={timeFrame2}
+                      userName={state.userName}
+                    />
                   </div>
                 </div>
                 {calendarChart && (
-                  <CalendarChart from={year[2]} to={year[1]} chartData={calendarChart} />
+                  <CalendarChart
+                    from={years[timeFrame2][2]}
+                    to={years[timeFrame2][1]}
+                    chartData={calendarChart}
+                  />
                 )}
               </div>
             </div>

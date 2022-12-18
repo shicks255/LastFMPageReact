@@ -32,7 +32,8 @@ const CalendarChart: React.FC<IProps> = ({ chartData, from, to }: IProps) => {
       yearSpacing={40}
       monthSpacing={4}
       monthBorderColor="#ffffff"
-      maxValue={75}
+      maxValue="auto"
+      minValue="auto"
       dayBorderWidth={2}
       dayBorderColor="#ffffff"
       yearLegendPosition="before"

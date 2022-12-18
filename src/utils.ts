@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { parse } from 'query-string';
 
-// export const musicApi = 'http://localhost:8686/api/v1';
-export const musicApi = 'https://musicapi.shicks255.com/api/v1';
+export const musicApi = 'http://localhost:8686/api/v1';
+// export const musicApi = 'https://musicapi.shicks255.com/api/v1';
 
 export const timeFrames = {
   '7day': '7 Days',
@@ -108,6 +108,16 @@ export const years = {
   2024: ['2024-01-01', '2024-12-31', '2024-01-02'],
   2025: ['2025-01-01', '2025-12-31', '2025-01-02']
 };
+
+export function getYearsFromUserYears(userYears: string[]) {
+  const toReturn = {};
+
+  userYears.forEach((year) => {
+    toReturn[Number(year)] = years[year];
+  });
+
+  return toReturn;
+}
 
 export const months = {
   Jan: 1,

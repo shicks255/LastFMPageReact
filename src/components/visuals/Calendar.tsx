@@ -4,9 +4,9 @@ import { years } from 'utils';
 
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
-import YearSelect from '../common/YearSelect';
 import CalendarChart from './charts/CalendarChart';
 import VisualTitle from './common/VisualTitle';
+import UserYearSelect from './common/YearSelect';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useScrobblesGrouped from '@/hooks/api/musicApi/useScrobblesGrouped';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -41,7 +41,7 @@ const Calendar: React.FC = () => {
   return (
     <div className="mb-12 mt-4 pl-4 pr-4" style={{ height: boxHeight, fontWeight: 'bold' }}>
       <VisualTitle title="Scrobble Calendar" />
-      <YearSelect value={timeFrame} setYearSelect={setTimeFrame} />
+      <UserYearSelect userName={state.userName} setYear={setTimeFrame} year={timeFrame} />
       <CalendarChart chartData={chartData} from={year[1]} to={year[2]} />
     </div>
   );
