@@ -10,3 +10,9 @@ export function sendChangeView(view: string) {
     item: view
   });
 }
+
+export function sendChangeVisual(visual: string) {
+  window.gtag('event', 'visual_click', {
+    item: visual
+  });
+}
