@@ -15,7 +15,7 @@ import Totals from './Totals';
 import Tree from './Tree';
 import UserStats from './UserStats';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
-import { sendChangeView } from '@/hooks/useAnalytics';
+import { sendChangeView, sendChangeVisual } from '@/hooks/useAnalytics';
 
 interface ILoadStatus {
   currentPage: number;
@@ -92,7 +92,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'tree' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('tree')}
+            onClick={() => sendChangeVisual('tree')}
           >
             <span className={visual === 'tree' ? selectedButtonClass : ''}>Tree</span>
           </Link>
@@ -101,7 +101,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'line' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('line')}
+            onClick={() => sendChangeVisual('line')}
           >
             <span className={visual === 'line' ? selectedButtonClass : ''}>Line</span>
           </Link>
@@ -110,7 +110,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'totals' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('totals')}
+            onClick={() => sendChangeVisual('totals')}
           >
             <span className={visual === 'totals' ? selectedButtonClass : ''}>Totals</span>
           </Link>
@@ -119,7 +119,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-top mt-1 ${
               visual === 'sunburst' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('sunburst')}
+            onClick={() => sendChangeVisual('sunburst')}
           >
             <span className={visual === 'sunburst' ? selectedButtonClass : ''}>Sunburst</span>
           </Link>
@@ -128,7 +128,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'bump' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('bump')}
+            onClick={() => sendChangeVisual('bump')}
           >
             <span className={visual === 'bump' ? selectedButtonClass : ''}>Bump</span>
           </Link>
@@ -137,7 +137,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'calendar' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('calendar')}
+            onClick={() => sendChangeVisual('calendar')}
           >
             <span className={visual === 'calendar' ? selectedButtonClass : ''}>Calendar</span>
           </Link>
@@ -146,7 +146,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'radar' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('radar')}
+            onClick={() => sendChangeVisual('radar')}
           >
             <span className={visual === 'radar' ? selectedButtonClass : ''}>Radar</span>
           </Link>
@@ -155,7 +155,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'stats' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('stats')}
+            onClick={() => sendChangeVisual('stats')}
           >
             <span className={visual === 'stats' ? selectedButtonClass : ''}>User Stats</span>
           </Link>
@@ -164,7 +164,7 @@ const Visuals: React.FC = () => {
             className={`font-semibold px-8 py-4 border-r-2 rounded-t mt-1 ${
               visual === 'artist' ? selectedTabClass : 'bg-slate-300'
             }`}
-            onClick={() => sendChangeView('artistStats')}
+            onClick={() => sendChangeVisual('artistStats')}
           >
             <span className={visual === 'artist' ? selectedButtonClass : ''}>Artist</span>
           </Link>
