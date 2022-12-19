@@ -3,7 +3,11 @@ import {
   getDateRangeFromTimeFrame,
   getActualArtistUrl,
   getMusicBrainzId,
-  getFanArtImage
+  getFanArtImage,
+  stripPageQueryParam,
+  stripTimeFrameQueryParam,
+  convertDurationToTimestamp,
+  trimString
 } from './utils';
 
 describe('utils tests', () => {
@@ -81,7 +85,9 @@ describe('utils tests', () => {
     expect(Date.parse(x.start)).toBeLessThan(Date.parse(x.end));
   });
 
-  test.skip('should get artist image', () => {
+  jest.setTimeout(15000);
+
+  test.skip('should get artist image', async () => {
     // global.fetch = jest.fn(() =>
     //   Promise.resolve({
     //     json: () => Promise.resolve({ test: 'test' })
@@ -96,8 +102,47 @@ describe('utils tests', () => {
       };
     });
 
-    const x = getFanArtImage('123', 'Pink Floyd', false);
+    const x = await getFanArtImage('123', 'Pink Floyd', false);
+    console.log(x);
 
-    expect(getMusicBrainzId).toHaveBeenCalled();
+    // expect(getMusicBrainzId).toHaveBeenCalled();
+  });
+
+  test('should strip page query params', () => {
+    const pageNumber = stripPageQueryParam('?type=reverse&page=1');
+    expect(pageNumber).toBe(1);
+
+    const pageNumber2 = stripPageQueryParam('?page=1');
+    expect(pageNumber2).toBe(1);
+
+    const notRealNumber = stripPageQueryParam('?page=one');
+    expect(notRealNumber).toBe(1);
+  });
+
+  test('should strip timeFrame query params', () => {
+    const timeFrame = stripTimeFrameQueryParam('?timeFrame=7day');
+    expect(timeFrame).toBe('7day');
+
+    const timeFrame2 = stripTimeFrameQueryParam('?timeFrame=12month');
+    expect(timeFrame2).toBe('12month');
+
+    const timeFrame3 = stripTimeFrameQueryParam('?timeFrame=undefined');
+    expect(timeFrame3).toBe('7day');
+  });
+
+  test('should convert duration to timestamp', () => {
+    const x = convertDurationToTimestamp(222);
+    expect(x).toBe('3:42');
+
+    const y = convertDurationToTimestamp(121);
+    expect(y).toBe('2:01');
+  });
+
+  test('should trim string', () => {
+    const x = trimString('test');
+    expect(x).toBe('test');
+
+    const y = trimString('test of a much longer word');
+    expect(y).toBe('test of a much longer wor...');
   });
 });

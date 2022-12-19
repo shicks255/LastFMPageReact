@@ -270,6 +270,7 @@ export function stripPageQueryParam(search: string): number {
 export function stripTimeFrameQueryParam(search: string): string {
   const parsed = parse(search.slice(1));
   const maybeTimeFrame = parsed.timeFrame as string;
+  console.log(parsed);
   if (!Object.keys(timeFrames).includes(maybeTimeFrame)) {
     return '7day';
   }
