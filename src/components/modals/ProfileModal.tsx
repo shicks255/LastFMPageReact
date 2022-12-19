@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { LocalStateContext } from '@/contexts/LocalStateContext';
+import { sendChangeUsername } from '@/hooks/useAnalytics';
 import useClickOutside from '@/hooks/useClickOutside';
 import useLockBodyScroll from '@/hooks/useLockBodyScroll';
 import { checkUserName } from '@/service/api';
@@ -17,6 +18,7 @@ function ProfileModal(): JSX.Element {
   });
 
   const submitUsername = useCallback(() => {
+    sendChangeUsername();
     if (tempUserName === state.userName) return;
     if (tempUserName.length === 0) {
       actions.setModalErrorMessage('Enter a new username');

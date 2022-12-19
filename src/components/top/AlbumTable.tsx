@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import useTopAlbums from '../../hooks/api/lastFm/useTopAlbums';
 import { trimString } from '../../utils';
@@ -8,8 +8,12 @@ import NoData from '../common/NoData';
 import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
+import { sendChangeRankStrategy } from '@/hooks/useAnalytics';
 
 const AlbumTable: React.FC<Record<string, void>> = () => {
+  useEffect(() => {
+    sendChangeRankStrategy('album');
+  }, []);
   const { topItemsTimeFrame, topItemsPage } = useApiState();
   const { isLoading, error, data } = useTopAlbums(topItemsTimeFrame, topItemsPage);
 

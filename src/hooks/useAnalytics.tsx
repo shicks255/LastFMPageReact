@@ -16,3 +16,13 @@ export function sendChangeVisual(visual: string) {
     visualItem: visual
   });
 }
+
+export function sendChangeUsername() {
+  window.gtag('event', 'username_submit');
+}
+
+export function sendChangeRankStrategy(strategy: string) {
+  window.gtag('event', 'rank_strategy_click', {
+    rankStrategy: strategy
+  });
+}

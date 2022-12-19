@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { trimString } from '../../utils';
 import ArtistImage from '../common/ArtistImage';
@@ -8,8 +8,12 @@ import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useTopArtists from '@/hooks/api/lastFm/useTopArtists';
+import { sendChangeRankStrategy } from '@/hooks/useAnalytics';
 
 const ArtistTable: React.FC<Record<string, void>> = () => {
+  useEffect(() => {
+    sendChangeRankStrategy('artist');
+  }, []);
   const { topItemsTimeFrame, topItemsPage } = useApiState();
   const { isLoading, error, data } = useTopArtists(topItemsTimeFrame, topItemsPage);
 

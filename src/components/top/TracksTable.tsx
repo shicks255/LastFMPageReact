@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { convertDurationToTimestamp, trimString } from '../../utils';
 import ArtistImage from '../common/ArtistImage';
@@ -8,9 +8,13 @@ import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useTopTracks from '@/hooks/api/lastFm/useTopTracks';
+import { sendChangeRankStrategy } from '@/hooks/useAnalytics';
 import useIsMobile from '@/hooks/useIsMobile';
 
 const TracksTable: React.FC<Record<string, void>> = (): JSX.Element => {
+  useEffect(() => {
+    sendChangeRankStrategy('track');
+  }, []);
   const { topItemsTimeFrame, topItemsPage } = useApiState();
   const { isLoading, error, data } = useTopTracks(topItemsTimeFrame, topItemsPage);
   const isMobile = useIsMobile();
