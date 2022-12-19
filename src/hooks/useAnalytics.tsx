@@ -7,12 +7,12 @@ declare global {
 
 export function sendChangeView(view: string) {
   window.gtag('event', 'nav_click', {
-    item: view
+    navItem: view
   });
 }
 
 export function sendChangeVisual(visual: string) {
   window.gtag('event', 'visual_click', {
-    item: visual
+    visualItem: visual
   });
 }
