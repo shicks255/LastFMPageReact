@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,9 +9,13 @@ import Pagination from '../common/Pagination';
 import ErrorMessage from '../ErrorMessage';
 import { useApiState } from '@/contexts/ApiContext';
 import useRecentTracks from '@/hooks/api/lastFm/useRecentTracks';
+import { sendChangeView } from '@/hooks/useAnalytics';
 import useRecentTracksNavPageSync from '@/hooks/useRecentTracksNavPageSync';
 
 const RecentTracksTable: React.FC<Record<string, void>> = () => {
+  useEffect(() => {
+    sendChangeView('recent');
+  }, []);
   useRecentTracksNavPageSync();
   const { recentTracksPage } = useApiState();
   const { isLoading, error, data } = useRecentTracks(recentTracksPage);

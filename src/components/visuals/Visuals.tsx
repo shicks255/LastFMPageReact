@@ -15,6 +15,7 @@ import Totals from './Totals';
 import Tree from './Tree';
 import UserStats from './UserStats';
 import { LocalStateContext } from '@/contexts/LocalStateContext';
+import { sendChangeView } from '@/hooks/useAnalytics';
 
 interface ILoadStatus {
   currentPage: number;
@@ -23,6 +24,9 @@ interface ILoadStatus {
 }
 
 const Visuals: React.FC = () => {
+  useEffect(() => {
+    sendChangeView('visuals');
+  }, []);
   const match = useRouteMatch('/visuals/:visual');
   const { path } = useRouteMatch();
 
