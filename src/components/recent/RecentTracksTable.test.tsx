@@ -3,6 +3,13 @@ import { screen } from '@testing-library/react';
 import RecentTracksTable from '@/components/recent/RecentTracksTable';
 import customRender from '@/mocks/utils';
 
+beforeAll(() => {
+  Object.defineProperty(window, 'gtag', {
+    writable: true,
+    value: jest.fn().mockImplementation((t) => {})
+  });
+});
+
 test('should render recent tracks table', async () => {
   customRender(<RecentTracksTable />);
 
