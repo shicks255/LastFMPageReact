@@ -8,6 +8,7 @@ import TreeMap from './charts/TreeMap';
 import { useApiDispatch, useApiState } from '@/contexts/ApiContext';
 import useTopAlbums from '@/hooks/api/lastFm/useTopAlbums';
 import useTopArtists from '@/hooks/api/lastFm/useTopArtists';
+import { sendChangeTimeFrame } from '@/hooks/useAnalytics';
 
 const Tree: React.FC = () => {
   const { timeFrame, page } = useApiState();
@@ -19,6 +20,11 @@ const Tree: React.FC = () => {
   if (topAlbums.isLoading || topArtists.isLoading) {
     return <Loader />;
   }
+
+  const sendEventAndChangeTimeFrame = (value: string) => {
+    sendChangeTimeFrame(value);
+    setTimeFrame(value);
+  };
 
   const albumChartData = topAlbums?.data?.topalbums.album.map((item) => {
     return {
@@ -57,7 +63,7 @@ const Tree: React.FC = () => {
                     rounded border border-solid
                     border-gray-300 transition ease-in-out bg-white"
                   value={timeFrame}
-                  onChange={(event) => setTimeFrame(event.target.value)}
+                  onChange={(event) => sendEventAndChangeTimeFrame(event.target.value)}
                 >
                   {timeFrameSelects}
                 </select>
