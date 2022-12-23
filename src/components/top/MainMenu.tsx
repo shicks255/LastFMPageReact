@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { strategies, timeFrames } from '../../utils';
 import { useApiState } from '@/contexts/ApiContext';
+import { sendChangeTimeFrame } from '@/hooks/useAnalytics';
 
 const MainMenu: React.FC<Record<string, void>> = () => {
   const history = useHistory();
@@ -34,15 +35,17 @@ const MainMenu: React.FC<Record<string, void>> = () => {
       {strategies[value]}
     </option>
   ));
-  const timeFrameSelects = Object.keys(timeFrames).map((value) => (
-    <option
-      key={value}
-      value={value}
-      className={topItemsTimeFrame === value ? 'font-semibold' : ''}
-    >
-      {timeFrames[value]}
-    </option>
-  ));
+  const timeFrameSelects = Object.keys(timeFrames)
+    .filter((value) => value != '2year' && value != '3year')
+    .map((value) => (
+      <option
+        key={value}
+        value={value}
+        className={topItemsTimeFrame === value ? 'font-semibold' : ''}
+      >
+        {timeFrames[value]}
+      </option>
+    ));
 
   const handleStrategySelect = (selection: string) => {
     switch (selection) {
@@ -61,6 +64,7 @@ const MainMenu: React.FC<Record<string, void>> = () => {
   };
 
   const handleTimeFrameSelect = (selection: string) => {
+    sendChangeTimeFrame(selection);
     switch (selection) {
       case '7day':
         history.push(`${pathname}?timeFrame=7day`);

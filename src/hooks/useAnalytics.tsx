@@ -26,3 +26,9 @@ export function sendChangeRankStrategy(strategy: string) {
     rankStrategy: strategy
   });
 }
+
+export function sendChangeTimeFrame(timeFrame: string) {
+  window.gtag('event', 'time_frame_click', {
+    timeFrame: timeFrame
+  });
+}
