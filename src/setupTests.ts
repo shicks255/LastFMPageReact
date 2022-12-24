@@ -19,6 +19,9 @@ class ResizeObserver {
 
 beforeAll(() => {
   window.ResizeObserver = ResizeObserver;
+  window.dataLayer = {
+    push: () => null
+  };
   server.listen();
 });
 
