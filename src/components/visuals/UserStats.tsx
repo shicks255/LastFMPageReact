@@ -5,6 +5,11 @@ import { LocalStateContext } from '@/contexts/LocalStateContext';
 import useUserStats from '@/hooks/api/musicApi/useUserStats';
 import useIsMobile from '@/hooks/useIsMobile';
 
+// Future Ideas
+// first artist to 100 plays
+// first artist to 1000 plays
+// same for album?
+
 const UserStats: React.FC<Record<string, void>> = () => {
   const { state } = useContext(LocalStateContext);
   const userStats = useUserStats(state.userName);

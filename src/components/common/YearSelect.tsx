@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const UserYearSelect: React.FC<IProps> = ({ userName, setYear, year }: IProps) => {
-  const yearss = useScrobblesGrouped(userName, 'YEAR', '2000-01-01', '2022-12-16');
+  const yearss = useScrobblesGrouped(userName, 'YEAR', '2000-01-01', '2029-12-16');
 
   if (!yearss.data || yearss.isLoading) {
     return null;

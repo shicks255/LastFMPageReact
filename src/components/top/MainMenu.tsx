@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { strategies, timeFrames } from '../../utils';
+import { internalTimeFrames, strategies, timeFrames } from '../../utils';
 import { useApiState } from '@/contexts/ApiContext';
 import { sendChangeTimeFrame } from '@/hooks/useAnalytics';
 
@@ -36,7 +36,7 @@ const MainMenu: React.FC<Record<string, void>> = () => {
     </option>
   ));
   const timeFrameSelects = Object.keys(timeFrames)
-    .filter((value) => value != '2year' && value != '3year')
+    .filter((value) => !internalTimeFrames.includes(value))
     .map((value) => (
       <option
         key={value}

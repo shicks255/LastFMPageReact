@@ -127,40 +127,80 @@ interface ILineChartData {
 }
 
 const LineChart: React.FC<IProps> = ({ chartData, timeFrame, options }: IProps) => {
-  let format1 = '%Y-%m-%d';
+  let format = '%Y-%m-%d';
   let precision: 'day' | 'month' | 'year' = 'day';
   let tickValues = 'every 1 day';
   let bottomXFormat = '%b %d';
 
-  if (timeFrame === '7day' || timeFrame === '1month') bottomXFormat = '%b %d';
-  if (
-    timeFrame === '6month' ||
-    timeFrame === '12month' ||
-    timeFrame === '2year' ||
-    timeFrame === '3year'
-  )
+  if (timeFrame === '7day') {
+    bottomXFormat = '%b %d';
+    format = '%Y-%m-%d';
+    precision = 'day';
+    tickValues = 'every 1 day';
+  }
+
+  if (timeFrame === '1month') {
+    bottomXFormat = '%b %d';
+    format = '%Y-%m-%d';
+    precision = 'day';
+    tickValues = 'every 3 days';
+  }
+
+  if (timeFrame === '6month') {
     bottomXFormat = '%b %Y';
-  if (timeFrame === '1year' || timeFrame === 'overall') bottomXFormat = '%Y';
-
-  if (timeFrame === '7day' || timeFrame === '1month') format1 = '%Y-%m-%d';
-  if (timeFrame === '6month' || timeFrame === '12month' || timeFrame === '2year') format1 = '%Y-%m';
-  if (timeFrame === '3year' || timeFrame === 'overall') format1 = '%Y';
-
-  if (timeFrame === '7day' || timeFrame === '1month') precision = 'day';
-  if (timeFrame === '6month' || timeFrame === '12month' || timeFrame === '2year')
+    format = '%Y-%m';
     precision = 'month';
-  if (timeFrame === '3year' || timeFrame === 'overall') precision = 'year';
+    tickValues = 'every 1 month';
+  }
 
-  if (timeFrame === '7day') tickValues = 'every 1 day';
-  if (timeFrame === '1month') tickValues = 'every 3 days';
-  if (timeFrame === '6month' || timeFrame === '12month') {
+  if (timeFrame === '12month' || timeFrame === '1year') {
+    bottomXFormat = '%b %Y';
+    format = '%Y-%m';
+    precision = 'month';
     tickValues = 'every 1 month';
   }
 
   if (timeFrame === '2year') {
+    bottomXFormat = '%b %Y';
+    format = '%Y-%m';
+    precision = 'month';
     tickValues = 'every 3 month';
   }
-  if (timeFrame === '3year' || timeFrame === 'overall') tickValues = 'every 1 year';
+
+  if (timeFrame === '3year') {
+    bottomXFormat = '%b %Y';
+    format = '%Y-%m';
+    precision = 'month';
+    tickValues = 'every 4 month';
+  }
+
+  if (timeFrame === '5year') {
+    bottomXFormat = '%Y';
+    format = '%Y';
+    precision = 'year';
+    tickValues = 'every 1 year';
+  }
+
+  if (timeFrame === '10year') {
+    bottomXFormat = '%Y';
+    format = '%Y';
+    precision = 'year';
+    tickValues = 'every 1 year';
+  }
+
+  if (timeFrame === '15year') {
+    bottomXFormat = '%Y';
+    format = '%Y';
+    precision = 'year';
+    tickValues = 'every 1 year';
+  }
+
+  if (timeFrame === 'overall') {
+    bottomXFormat = '%Y';
+    format = '%Y';
+    precision = 'year';
+    tickValues = 'every 1 year';
+  }
 
   if (timeFrame === 'overall' && chartData.length > 20) {
     tickValues = 'every 2 year';
@@ -168,7 +208,7 @@ const LineChart: React.FC<IProps> = ({ chartData, timeFrame, options }: IProps) 
 
   let xScale: IScaleType = {
     type: 'time',
-    format: format1,
+    format,
     useUTC: false,
     precision
   };

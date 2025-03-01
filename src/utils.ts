@@ -12,8 +12,13 @@ export const timeFrames = {
   '12month': '1 Year',
   '2year': '2 Years',
   '3year': '3 Years',
+  '5year': '5 Years',
+  '10year': '10 Years',
+  '15year': '15 Years',
   overall: 'All Time'
 };
+
+export const internalTimeFrames = ['2year', '3year', '5year', '10year', '15year'];
 
 export const strategies = {
   getTopArtists: 'Artists',
@@ -106,7 +111,13 @@ export const years = {
   2022: ['2022-01-01', '2022-12-31', '2022-01-02'],
   2023: ['2023-01-01', '2023-12-31', '2023-01-02'],
   2024: ['2024-01-01', '2024-12-31', '2024-01-02'],
-  2025: ['2025-01-01', '2025-12-31', '2025-01-02']
+  2025: ['2025-01-01', '2025-12-31', '2025-01-02'],
+  2026: ['2026-01-01', '2026-12-31', '2026-01-02'],
+  2027: ['2027-01-01', '2027-12-31', '2027-01-02'],
+  2028: ['2028-01-01', '2028-12-31', '2028-01-02'],
+  2029: ['2029-01-01', '2029-12-31', '2029-01-02'],
+  2030: ['2030-01-01', '2030-12-31', '2030-01-02'],
+  2031: ['2031-01-01', '2031-12-31', '2031-01-02']
 };
 
 export function getYearsFromUserYears(userYears: string[]) {
@@ -164,6 +175,15 @@ export function getDateRangeFromTimeFrame(timeFrame: string): IDateRange {
   if (timeFrame === '3year') {
     from.setFullYear(from.getFullYear() - 3);
   }
+  if (timeFrame === '5year') {
+    from.setFullYear(from.getFullYear() - 5);
+  }
+  if (timeFrame === '10year') {
+    from.setFullYear(from.getFullYear() - 10);
+  }
+  if (timeFrame === '15year') {
+    from.setFullYear(from.getFullYear() - 15);
+  }
   if (timeFrame === 'overall') {
     from.setFullYear(from.getFullYear() - 20);
   }
@@ -205,7 +225,12 @@ export function getTimeGroupFromTimeFrame(timeFrame: string): string {
   if (timeFrame === '12month' || timeFrame === '2year' || timeFrame === '3year') {
     timeGroup = 'MONTH';
   }
-  if (timeFrame === '3year' || timeFrame === 'overall') {
+  if (
+    timeFrame === '5year' ||
+    timeFrame === '10year' ||
+    timeFrame === '15year' ||
+    timeFrame === 'overall'
+  ) {
     timeGroup = 'YEAR';
   }
 
@@ -270,7 +295,6 @@ export function stripPageQueryParam(search: string): number {
 export function stripTimeFrameQueryParam(search: string): string {
   const parsed = parse(search.slice(1));
   const maybeTimeFrame = parsed.timeFrame as string;
-  console.log(parsed);
   if (!Object.keys(timeFrames).includes(maybeTimeFrame)) {
     return '7day';
   }

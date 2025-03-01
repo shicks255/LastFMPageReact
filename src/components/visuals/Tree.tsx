@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { timeFrames } from '../../utils';
+import { internalTimeFrames, timeFrames } from '../../utils';
 import Loader from '../common/Loader';
 import NoData from '../common/NoData';
 import VisualTitle from '../common/VisualTitle';
@@ -44,11 +44,13 @@ const Tree: React.FC = () => {
     return <NoData />;
   }
 
-  const timeFrameSelects = Object.keys(timeFrames).map((value) => (
-    <option value={value} key={value}>
-      {timeFrames[value]}
-    </option>
-  ));
+  const timeFrameSelects = Object.keys(timeFrames)
+    .filter((key) => !internalTimeFrames.includes(key))
+    .map((value) => (
+      <option value={value} key={value}>
+        {timeFrames[value]}
+      </option>
+    ));
   return (
     <>
       <hr />

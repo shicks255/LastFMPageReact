@@ -61,10 +61,9 @@ const WeeklyScrobbleChart: React.FC = () => {
             tickValues: 2
           },
           axisBottom: {
+            tickPadding: 8,
             tickValues: 'every 1 day',
-            format: (value) => {
-              return value.getMonth() + 1 + '-' + value.getDate();
-            }
+            format: '%b %d'
           }
         }}
       />
