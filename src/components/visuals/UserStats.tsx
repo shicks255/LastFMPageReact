@@ -11,17 +11,12 @@ const UserStats: React.FC<Record<string, void>> = () => {
   const userStats = useUserStats(state.userName);
   const isMobile = useIsMobile();
 
-  const build = (key1: string | undefined) => {
-    if (!userStats || userStats.isLoading || !userStats.data) {
-      return <span className={styles.skeletonLoader} />;
-    }
-    return key1;
-  };
-
-  const firstCellClass = 'flex-auto font-semibold w-2 mx-4 my-auto';
-  const secondCellClass = 'flex-auto p-2 m-auto';
-  const desktopThirdClass = 'flex-none w-32 text-center';
-  const mobileLastClass = 'flex-auto m-auto text-right';
+  // const build = (key1: string | undefined) => {
+  //   if (!userStats || userStats.isLoading || !userStats.data) {
+  //     return <span className={styles.skeletonLoader} />;
+  //   }
+  //   return key1;
+  // };
 
   const makeRow = (name: string, dateLabels: string[], timeStat?: IUserStat) => {
     if (!userStats || userStats.isLoading || !userStats.data) {
