@@ -27,35 +27,23 @@ interface ITimeStat {
   difference: IDifference;
 }
 
-interface IOldestAndNewestStat {
+interface IUserStat {
   name: string;
-  extra: string;
-  timeStat: ITimeStat;
-}
-
-interface ILongestDormancyArtist {
-  name: string;
-  extra: string;
-  timeStat: ITimeStat;
-}
-
-interface IOldestAndNewestAlbum {
-  name: string;
-  extra: string;
-  timeStat: ITimeStat;
-}
-
-interface ILongestDormancyAlbum {
-  name: string;
-  extra: string;
+  extra?: string;
   timeStat: ITimeStat;
 }
 
 export default interface IUserStats {
-  oldestAndNewestArtist: IOldestAndNewestStat;
-  longestDormancyArtist: ILongestDormancyArtist;
-  oldestAndNewestAlbum: IOldestAndNewestAlbum;
-  longestDormancyAlbum: ILongestDormancyAlbum;
+  oldestAndNewestArtist: IUserStat;
+  longestDormancyArtist: IUserStat;
+  oldestAndNewestAlbum: IUserStat;
+  longestDormancyAlbum: IUserStat;
+  firstTo100Album: IUserStat;
+  firstTo1000Album: IUserStat;
+  firstTo100Artist: IUserStat;
+  firstTo1000Artist: IUserStat;
+  firstTo100Song: IUserStat;
+  firstTo200Song: IUserStat;
 }
 
-export type { IDifference };
+export type { IDifference, IUserStat };

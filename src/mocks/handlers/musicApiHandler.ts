@@ -143,6 +143,60 @@ const getUserStats = rest.get(`${musicApi}/user/stats`, (req, res, ctx) => {
         oldest: 'test',
         difference: timestate
       }
+    },
+    firstTo1000Album: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
+    },
+    firstTo1000Artist: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
+    },
+    firstTo100Artist: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
+    },
+    firstTo100Album: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
+    },
+    firstTo100Song: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
+    },
+    firstTo200Song: {
+      name: 'test',
+      extra: 'test',
+      timeStat: {
+        newest: 'test',
+        oldest: 'test',
+        difference: timestate
+      }
     }
   };
 });
