@@ -201,7 +201,12 @@ const getUserStats = rest.get(`${musicApi}/user/stats`, (req, res, ctx) => {
   };
 });
 
+const loadUser = rest.post(`${musicApi}/user/load`, (req, res, ctx) => {
+  return res(ctx.status(200), ctx.json({}));
+});
+
 const musicApiHandlers = [
+  loadUser,
   getScrobbles,
   getScrobblesGrouped,
   getScrobblesGroupedAlbum,
