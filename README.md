@@ -1,71 +1,61 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b5ce25fe-3f90-494e-980d-0402b34fd721/deploy-status)](https://app.netlify.com/sites/compassionate-roentgen-0f4e10/deploys)
+# Last.fm dashboard
 
+A React dashboard for Last.fm listening history, top artists and albums, and listening charts. Built with React 17, TypeScript, Create React App, and CRACO.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## First-time setup
 
-## Available Scripts
+Use Node **24.21.0**, pinned in `.nvmrc`.
 
-In the project directory, you can run:
+```powershell
+nvm install 24.21.0
+nvm use 24.21.0
+npm.cmd ci
+Copy-Item .env.example .env.local
+```
 
-### `npm start`
+If Node is already installed, skip `nvm install`. On Windows, `npm.cmd` works even when PowerShell blocks `npm.ps1`; other shells can use `npm`.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The checked-in `.npmrc` enables legacy peer dependency resolution for the existing dependency tree. Installation automatically runs the React Spring patch used by the charts. No deployment runs during installation.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Fill in `.env.local` with your existing API keys:
 
-### `npm test`
+| Variable | Used for |
+| --- | --- |
+| `REACT_APP_LAST_FM_KEY` | Last.fm profile and listening data |
+| `REACT_APP_FANART_KEY` | Artist artwork from Fanart.tv |
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`.env.local` is ignored by Git. React embeds these values in the browser bundle, so they must not be private server credentials. Restart the development server after changing them.
 
-### `npm run build`
+```powershell
+npm.cmd run dev
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Open http://localhost:3000. The page reloads when source files change.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Some charts also use `https://musicapi.shicks255.com/api/v1`, currently configured in `src/utils.ts`. That backend must be reachable for those features. This repository contains the frontend only.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Checks
 
-### `npm run eject`
+### Editor setup
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+VS Code workspace settings enable Prettier formatting and ESLint automatic fixes on explicit save (`Ctrl+S`). Install the recommended **Prettier - Code formatter** and **ESLint** extensions when prompted. Formatting uses the project's local Prettier version and `.prettierrc.json`; ESLint uses `.eslintrc.json` and reports remaining issues in the Problems panel as you type. Rules without automatic fixes still need manual changes.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If an already-open editor does not pick up the settings, run **Developer: Reload Window** from the Command Palette.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Command-line checks
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```powershell
+npm.cmd run typecheck
+npm.cmd run lint
+npm.cmd run lint:style
+npm.cmd run test:ci
+npm.cmd run build
+```
 
-## Learn More
+`test:ci` runs tests once with coverage and enforces the existing coverage thresholds. `npm.cmd test` runs the interactive test watcher. The production build is written to `build/`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Maintenance notes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- The current CRACO package declares React Scripts 4 compatibility, while this app uses React Scripts 5. Legacy peer resolution preserves the existing installation; aligning or replacing the build tooling is a follow-up task.
+- The existing tests include skipped cases, and code linting currently reports warnings. A passing test run does not verify live API availability.
+- `npm.cmd run patch` can reapply the React Spring workaround if dependencies were installed with scripts disabled.

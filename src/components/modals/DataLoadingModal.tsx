@@ -10,6 +10,7 @@ interface IProps {
 
 const DataLoadingModal: React.FC<IProps> = (props: IProps) => {
   const { done, total, message } = props;
+
   return (
     <div>
       <div style={{ color: '#C3073F' }}>

@@ -12,7 +12,9 @@
 /build
 
 /.idea
-/.vscode
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/extensions.json
 
 # misc
 .DS_Store

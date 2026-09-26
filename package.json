@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "craco start",
+    "dev": "craco start",
     "patch": "node ./scripts/patch-react-spring.js",
+    "postinstall": "node ./scripts/patch-react-spring.js",
     "build": "craco build",
     "test": "craco test --runInBand",
-    "test:ci": "npm test -- --coverage --watchAll=false",
+    "test:ci": "craco test --runInBand --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
     "lint:fix": "eslint src --fix",
-    "lint:style": "stylelint ./src/**/*.css",
-    "install": "copyfiles -u 1 ./build/* ./build/static/css/* ./build/static/js/* \\\\thinkcentre\\caddy\\lastFm\\"
+    "lint:style": "stylelint ./src/**/*.css"
   },
   "dependencies": {
     "@nivo/bump": "0.79.1",
